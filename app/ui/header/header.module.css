@@ -1,0 +1,9 @@
+.header {
+  text-align: center;
+  border-bottom: solid 1px black;
+}
+
+.title {
+  letter-spacing: 2.5px;
+  text-shadow: 0.5px 1px black;
+}

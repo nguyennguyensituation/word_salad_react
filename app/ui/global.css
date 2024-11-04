@@ -1,0 +1,23 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1, h2 {
+  font-family: var(--font-bevan);
+}
+
+.violet {
+  color: rgb(186, 129, 197);
+}
+
+.green {
+  color: rgb(106, 170, 100);
+}
+
+.blue {
+  color: #a7d8ff;
+}
+
+.yellow {
+  color: #ffda00;
+}
