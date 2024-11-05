@@ -1,4 +1,4 @@
-import Message from '@/app/ui/game/Message';
+import Message from '@/app/components/Message';
 const gameStatus = 'cardsNotSolved';
 
 export default function Page() {

@@ -1,4 +1,4 @@
-import styles from '@/app/ui/game/Message.module.css';
+import styles from '@/app/components/Message.module.css';
 
 const MESSAGES = {
   cardsNotSolved: 'First, solve the puzzles on the blank cards to reveal the missing words...',
