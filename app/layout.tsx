@@ -1,6 +1,6 @@
 import { bevan } from '@/app/ui/fonts';
 import '@/app/ui/global.css';
-import Header from '@/app/ui/header/header';
+import Header from '@/app/ui/Header';
 
 export default function RootLayout({
   children,

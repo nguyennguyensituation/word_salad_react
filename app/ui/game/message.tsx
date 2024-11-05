@@ -1,5 +1,4 @@
-import styles from '@/app/ui/game/message.module.css';
-import React, { FC } from 'react';
+import styles from '@/app/ui/game/Message.module.css';
 
 const MESSAGES = {
   cardsNotSolved: 'First, solve the puzzles on the blank cards to reveal the missing words...',
