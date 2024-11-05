@@ -14,7 +14,9 @@ export default function Header() {
         <span className="yellow">a</span>
         <span className="green">D</span>
       </h1>
-      <p>The New York Times Connections, Crossword, and Wordle...all at the same time!</p>
+      <p>The New York Times Connections, Crossword, and Wordle&hellip;
+         all at the same time!
+      </p>
     </header>
   );
 }

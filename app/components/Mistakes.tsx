@@ -1,7 +1,7 @@
 import styles from '@/app/components/Mistakes.module.css';
 
 function Dot() {
-  return <span className={styles.dot}></span>
+  return <span className={styles.dot}></span>;
 }
 
 export default function Mistakes(props: {
@@ -9,8 +9,8 @@ export default function Mistakes(props: {
 }) {
   const dots = [];
 
-  for (let i = 0; i < props.remainingMistakes; i++) {
-    dots.push(<Dot key={i}/>)
+  for (let id = 0; id < props.remainingMistakes; id++) {
+    dots.push(<Dot key={id}/>);
   }
 
   return (

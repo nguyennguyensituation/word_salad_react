@@ -11,12 +11,12 @@ export default function Page() {
   const [gameStatus, setGameStatus] = useState<GameStatus>('cardsNotSolved');
   const [mistakesCounter, setMistakesCounter] = useState(4);
 
-  function decrementMistakes() {
-    setMistakesCounter(mistakesCounter - 1);
-  }
-
   function updateStatus(status: GameStatus) {
     setGameStatus(status);
+  }
+
+  function decrementMistakes() {
+    setMistakesCounter(mistakesCounter - 1);
   }
 
   return (

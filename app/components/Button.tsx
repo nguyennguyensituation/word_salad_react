@@ -6,11 +6,11 @@ export default function Button(props: {
   disabled?: boolean,
 }) {
   return (
-    <input 
-      id={props.id + "-btn"} 
-      type="button" 
-      value={props.value} 
-      disabled={props.disabled} 
+    <input
+      id={props.id + "-btn"}
+      type="button"
+      value={props.value}
+      disabled={props.disabled}
       className={styles.button}
     />
   );

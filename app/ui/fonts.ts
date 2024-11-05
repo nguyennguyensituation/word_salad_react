@@ -1,8 +1,8 @@
-import { Bevan } from 'next/font/google'
+import { Bevan } from 'next/font/google';
 
-export const bevan = Bevan({ 
+export const bevan = Bevan({
   weight: '400',
   subsets: ['latin'],
   style: 'normal',
   variable: '--font-bevan',
- });
+});
