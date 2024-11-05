@@ -1,6 +1,7 @@
 import styles from '@/app/components/Message.module.css';
+import { GameStatus } from '../lib/definitions';
 
-const MESSAGES = {
+const MESSAGES: Record<GameStatus, string> = {
   cardsNotSolved: 'First, solve the puzzles on the blank cards to reveal the missing words...',
   cardsSolved: 'All the cards have been solved! Now, create four groups of four!',
   gameWon: 'You found all the categories! Great job!',
@@ -8,7 +9,7 @@ const MESSAGES = {
 };
 
 export default function Message(props: {
-  status: 'cardsNotSolved' | 'cardsSolved' | 'gameWon' | 'gameLost'
+  status: GameStatus
 }) {
   const messageContent: string = MESSAGES[props.status];
 
