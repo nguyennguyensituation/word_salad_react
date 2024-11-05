@@ -7,18 +7,3 @@
   grid-template-columns: auto auto auto auto;
   gap: 8px;
 }
-
-.card {
-  background-color: rgb(239, 239, 230);
-  width: 150px;
-  height: 80px;
-  border-radius: 6px;
-  justify-content: center;
-  align-content: center;
-  display: flex;
-  flex-wrap: wrap;
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  text-transform: uppercase;
-}

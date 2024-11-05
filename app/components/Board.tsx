@@ -1,12 +1,5 @@
 import styles from '@/app/components/Board.module.css';
-
-function Card() {
-  return (
-    <article className={styles.card}>
-      <p>TK Word</p>
-    </article>
-  );
-}
+import Card from '@/app/components/Card';
 
 export default function Board() {
   return (
