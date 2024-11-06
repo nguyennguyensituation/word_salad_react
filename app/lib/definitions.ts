@@ -1,11 +1,18 @@
 export type GameStatus = 'cardsNotSolved' | 'cardsSolved' | 'gameWon' | 'gameLost';
 
 export type CardData = {
-  id: number;
-  categoryName: string;
-  word: string;
-  puzzleId: number | null;
-  puzzleType: 'crossword' | 'wordle' | null;
+  word: string,
+  puzzleType?: 'crossword' | 'wordle'
+  crosswordClue?: string
 }
 
-export type DeckData = CardData[];
+export type CategoryData = {
+  difficulty: number,
+  categoryName: string,
+  categoryWords: CardData[],
+}
+
+export type DeckData = {
+  id: number,
+  categories: CategoryData[],
+}

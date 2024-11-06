@@ -1,120 +1,48 @@
 // TODO: Delete after database is set up
-import { DeckData } from '@/app/lib/definitions';
+import { DeckData } from "@/app/lib/definitions";
 
-export const tempDeckData: DeckData = [
+export const tempDeckData: DeckData = {
+  id: 1,
+  categories: [
     {
-      id: 0,
-      categoryName: 'cat1',
-      word: 'word1',
-      puzzleId: null,
-      puzzleType: null,
+      difficulty: 1,
+      categoryName: "core",
+      categoryWords: [
+        { word: 'crux', puzzleType: 'crossword', crosswordClue: "Gist"},
+        { word: 'essence'},
+        { word: 'heart', puzzleType: 'wordle' },
+        { word: 'substance'},
+      ]
     },
     {
-      id: 1,
-      categoryName: 'cat2',
-      word: 'word2',
-      puzzleId: null,
-      puzzleType: null,
+      difficulty: 2,
+      categoryName: "complicated",
+      categoryWords: [
+        { word: 'baroque', puzzleType: 'crossword', crosswordClue: "Music style popularized by Bach" },
+        { word: 'complex'},
+        { word: 'elaborate'},
+        { word: 'messy', puzzleType: 'wordle'},
+      ]
     },
     {
-      id: 2,
-      categoryName: 'cat3',
-      word: 'word3',
-      puzzleId: null,
-      puzzleType: 'wordle',
+      difficulty: 3,
+      categoryName: "symbols used in making lists",
+      categoryWords: [
+        { word: 'arrow', puzzleType: 'wordle'},
+        { word: 'bullet', puzzleType: 'crossword', crosswordClue: "Muggsy Bogues or Manute Bol, once" },
+        { word: 'checkbox' },
+        { word: 'hyphen' },
+      ]
     },
     {
-      id: 3,
-      categoryName: 'cat4',
-      word: 'word4',
-      puzzleId: null,
-      puzzleType: 'crossword',
+      difficulty: 4,
+      categoryName: "what 'cross' might mean",
+      categoryWords: [
+        { word: 'angry', puzzleType: 'wordle'},
+        { word: 'betray'},
+        { word: 'crucifix', puzzleType: 'crossword', crosswordClue: "One of those 'T' necklaces, maybe" },
+        { word: 'hybrid'},
+      ]
     },
-    {
-      id: 5,
-      categoryName: 'cat1',
-      word: 'word5',
-      puzzleId: null,
-      puzzleType: null,
-    },
-    {
-      id: 6,
-      categoryName: 'cat2',
-      word: 'word6',
-      puzzleId: null,
-      puzzleType: null,
-    },
-    {
-      id: 7,
-      categoryName: 'cat3',
-      word: 'word7',
-      puzzleId: null,
-      puzzleType: 'wordle',
-    },
-    {
-      id: 8,
-      categoryName: 'cat4',
-      word: 'word8',
-      puzzleId: null,
-      puzzleType: 'crossword',
-    },
-    {
-      id: 9,
-      categoryName: 'cat1',
-      word: 'word9',
-      puzzleId: null,
-      puzzleType: null,
-    },
-    {
-      id: 10,
-      categoryName: 'cat2',
-      word: 'word10',
-      puzzleId: null,
-      puzzleType: null,
-    },
-    {
-      id: 11,
-      categoryName: 'cat3',
-      word: 'word11',
-      puzzleId: null,
-      puzzleType: 'wordle',
-    },
-    {
-      id: 12,
-      categoryName: 'cat4',
-      word: 'word12',
-      puzzleId: null,
-      puzzleType: 'crossword',
-    },
-    {
-      id: 13,
-      categoryName: 'cat1',
-      word: 'word13',
-      puzzleId: null,
-      puzzleType: null,
-    },
-    {
-      id: 14,
-      categoryName: 'cat2',
-      word: 'word14',
-      puzzleId: null,
-      puzzleType: null,
-    },
-    {
-      id: 15,
-      categoryName: 'cat3',
-      word: 'word15',
-      puzzleId: null,
-      puzzleType: 'wordle',
-    },
-    {
-      id: 16,
-      categoryName: 'cat4',
-      word: 'word16',
-      puzzleId: null,
-      puzzleType: 'crossword',
-    }
-]
-
-
-
+  ]
+}
