@@ -45,4 +45,4 @@ export const tempDeckData: GameData = {
       ]
     },
   ]
-}
+};

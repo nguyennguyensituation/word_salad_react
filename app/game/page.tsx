@@ -13,8 +13,9 @@ export default function Page() {
   const [gameData, setGameData] = useState<GameData>(tempDeckData);
   const [gameStatus, setGameStatus] = useState<GameStatus>('cardsNotSolved');
   const [mistakesCounter, setMistakesCounter] = useState(4);
-  const [deck, setDeck] = useState<DeckData>(gameData.categories.map(category => category.categoryWords)
-  .flat());
+  const [deck, setDeck] = useState<DeckData>(gameData.categories.map(cat => {
+    return cat.categoryWords;
+  }).flat());
 
   function updateStatus(status: GameStatus) {
     setGameStatus(status);

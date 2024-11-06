@@ -8,7 +8,7 @@ export default function Board(props: {deck: DeckData}) {
   return (
     <article className={styles.board}>
       {deck.map(card => {
-        return <Card card={card} key={card.word}/>
+        return <Card card={card} key={card.word}/>;
       })}
     </article>
   );
