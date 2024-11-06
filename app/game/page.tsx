@@ -4,6 +4,7 @@ import { useState } from "react";
 import { GameStatus } from '../lib/definitions';
 import Message from '@/app/components/messages/Message';
 import Board from '@/app/components/board/Board';
+import Categories from '@/app/components/board/Categories';
 import Mistakes from '@/app/components/board/Mistakes';
 import Controller from '@/app/components/controls/Controller';
 
@@ -26,6 +27,7 @@ export default function Page() {
     <main>
       <Message status={gameStatus} />
       <Board />
+      {/* <Categories /> */}
       <Mistakes remainingMistakes={mistakesCounter}/>
       <Controller />
     </main>

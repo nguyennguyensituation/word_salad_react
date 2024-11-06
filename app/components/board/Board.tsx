@@ -4,22 +4,10 @@ import Card from '@/app/components/board/Card';
 export default function Board() {
   return (
     <article className={styles.board}>
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+      <Card /><Card /><Card /><Card />
+      <Card /><Card /><Card /><Card />
+      <Card /><Card /><Card /><Card />
+      <Card /><Card /><Card /><Card />
     </article>
   );
 }

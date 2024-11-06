@@ -1,0 +1,42 @@
+.categories {
+  display: grid;
+  width: calc(3 * 8px + 4 * 150px);
+  margin: auto;
+  margin-bottom: 8px;
+  grid-template-columns: auto;
+  gap: 8px;
+  border: none;
+}
+
+.category {
+  height: 80px;
+  border-radius: 6px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.category p {
+  font-size: 20px;
+  line-height: 6px;
+}
+
+.category p:first-child {
+  font-weight: 700;
+  padding-top: 5px;
+}
+
+#difficulty-1 {
+  background-color: rgb(249, 223, 109);
+}
+
+#difficulty-2 {
+  background-color: rgb(160, 195, 90);
+}
+
+#difficulty-3 {
+  background-color: rgb(176, 196, 239);
+}
+
+#difficulty-4 {
+  background-color: rgb(186, 129, 197);
+}
