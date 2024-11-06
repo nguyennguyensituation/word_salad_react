@@ -1,4 +1,4 @@
-import styles from '@/app/components/Mistakes.module.css';
+import styles from '@/app/components/board/Mistakes.module.css';
 
 function Dot() {
   return <span className={styles.dot}></span>;

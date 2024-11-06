@@ -1,4 +1,4 @@
-import styles from '@/app/components/Card.module.css';
+import styles from '@/app/components/board/Card.module.css';
 
 export default function Card() {
   return (

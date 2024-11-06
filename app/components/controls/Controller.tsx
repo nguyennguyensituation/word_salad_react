@@ -1,5 +1,5 @@
-import styles from '@/app/components/Controller.module.css';
-import Button from '@/app/components/Button';
+import styles from '@/app/components/controls/Controller.module.css';
+import Button from '@/app/components/controls/Button';
 
 export default function Controller() {
   return (

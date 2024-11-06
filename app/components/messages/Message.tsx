@@ -1,5 +1,5 @@
-import styles from '@/app/components/Message.module.css';
-import { GameStatus } from '../lib/definitions';
+import styles from '@/app/components/messages/Message.module.css';
+import { GameStatus } from '../../lib/definitions';
 
 const MESSAGES: Record<GameStatus, string> = {
   cardsNotSolved: 'First, solve the puzzles on the blank cards to reveal the missing words...',
