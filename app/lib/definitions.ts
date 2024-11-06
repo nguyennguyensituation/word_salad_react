@@ -12,7 +12,9 @@ export type CategoryData = {
   categoryWords: CardData[],
 }
 
-export type DeckData = {
+export type GameData = {
   id: number,
   categories: CategoryData[],
 }
+
+export type DeckData = CardData[];

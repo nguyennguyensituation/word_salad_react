@@ -9,6 +9,7 @@ export default function Card(props: {card: CardData}) {
   const [isSelected, setIsSelected] = useState(false);
   const [puzzlePlayed, setPuzzlePlayed] = useState(!puzzleType);
   const [puzzleSolved, setPuzzleSolved] = useState(!puzzleType);
+  const cardStyle = [styles.card];
 
   function handleClick(e: React.MouseEvent<HTMLElement>) {
     toggleSelection();
@@ -17,8 +18,6 @@ export default function Card(props: {card: CardData}) {
   function toggleSelection() {
     setIsSelected(!isSelected);
   }
-
-  const cardStyle = [styles.card];
 
   function setStyles() {
     if (isSelected) {
@@ -29,10 +28,13 @@ export default function Card(props: {card: CardData}) {
       cardStyle.push(puzzleType === 'wordle' ? styles.wordle : styles.crossword);
     }
   }
+
+  setStyles();
   
   return (
     <article className={cardStyle.join(' ')} onClick={handleClick}>
-      <p>{word}</p>
+      {!puzzleType && <p>{word}</p>}
+      
     </article>
   );
 }

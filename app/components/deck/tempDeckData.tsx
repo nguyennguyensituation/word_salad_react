@@ -1,7 +1,7 @@
 // TODO: Delete after database is set up
-import { DeckData } from "@/app/lib/definitions";
+import { GameData } from "@/app/lib/definitions";
 
-export const tempDeckData: DeckData = {
+export const tempDeckData: GameData = {
   id: 1,
   categories: [
     {
