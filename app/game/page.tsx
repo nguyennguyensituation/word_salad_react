@@ -7,13 +7,14 @@ import Board from '@/app/components/board/Board';
 // import Categories from '@/app/components/board/Categories';
 import Mistakes from '@/app/components/board/Mistakes';
 import Controller from '@/app/components/controls/Controller';
-import { deckData } from "@/app/components/deck/tempDeckData";
-import {CardData} from '@/app/lib/definitions';
+import { DeckData } from '@/app/lib/definitions';
+// TODO: Set up database
+import { tempDeckData } from "@/app/components/deck/tempDeckData";
 
 export default function Page() {
   const [gameStatus, setGameStatus] = useState<GameStatus>('cardsNotSolved');
   const [mistakesCounter, setMistakesCounter] = useState(4);
-  const [deck, setDeck] = useState<CardData[]>(deckData);
+  const [deck, setDeck] = useState<DeckData>(tempDeckData);
 
   function updateStatus(status: GameStatus) {
     setGameStatus(status);

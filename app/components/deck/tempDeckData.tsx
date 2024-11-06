@@ -1,5 +1,7 @@
 // TODO: Delete after database is set up
-export const deckData = [
+import { DeckData } from '@/app/lib/definitions';
+
+export const tempDeckData: DeckData = [
     {
       id: 0,
       categoryName: 'cat1',
