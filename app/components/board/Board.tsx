@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import styles from '@/app/components/board/Board.module.css';
-import Card from '@/app/components/board/Card';
+import Card from '@/app/components/board/card/Card';
 // import Categories from '@/app/components/board/Categories';
 import Mistakes from '@/app/components/board/Mistakes';
 import Controller from '@/app/components/controls/Controller';
@@ -12,10 +12,7 @@ export default function Board(props: {deck: DeckData}) {
   const [mistakesCounter, setMistakesCounter] = useState(4);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
 
-  function handleCardSelection(
-    card: CardData,
-    cardAction: string,
-  ) {
+  function handleCardSelection(card: CardData, cardAction: string) {
     if (cardAction === 'addCard' && !selectedCards.includes(card.word)) {
       setSelectedCards([...selectedCards, card.word]);
     } else if (cardAction === 'removeCard') {

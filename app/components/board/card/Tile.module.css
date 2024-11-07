@@ -1,0 +1,36 @@
+
+.tile {
+  background-color: white;
+  border: solid 1px black;
+  border-left: none;
+  text-align: center;
+  width: 16px;
+  height: 18px;
+  font-size: 0.8em;
+  text-transform: uppercase;
+}
+
+.tile:first-of-type {
+  border-left: solid 1px black;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.tile:last-of-type {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.wordle .tile {
+  background-color: black;
+  color: white;
+  border: solid 1px white;
+}
+
+.crossword .tile {
+  color: black;
+}
+
+.tile.reveal {
+  color: tomato;
+}
