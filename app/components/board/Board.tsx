@@ -5,27 +5,41 @@ import Card from '@/app/components/board/Card';
 // import Categories from '@/app/components/board/Categories';
 import Mistakes from '@/app/components/board/Mistakes';
 import Controller from '@/app/components/controls/Controller';
-import { DeckData } from '@/app/lib/definitions';
+import { CardData, DeckData } from '@/app/lib/definitions';
 
 export default function Board(props: {deck: DeckData}) {
   const deck = props.deck;
   const [mistakesCounter, setMistakesCounter] = useState(4);
-  const [selectedCards, setSelectedCArds] = useState([]);
-
+  const [selectedCards, setSelectedCards] = useState<String[]>([]);
+  
   function decrementMistakes() {
     setMistakesCounter(mistakesCounter - 1);
+  }
+
+  function handleCardSelection(
+    card: CardData,
+    mode: String,
+  ) {
+    if (mode === 'addCard' && !selectedCards.includes(card.word)) {
+      setSelectedCards([...selectedCards, card.word]);
+    } else if (mode === 'removeCard'){
+      setSelectedCards(selectedCards.filter(word => word !== card.word));
+    }
   }
 
   return (
     <>
     <article className={styles.board}>
       {deck.map(card => {
-        return <Card card={card} key={card.word}/>;
+        return <Card card={card} key={card.word} onSelection={handleCardSelection} numSelectedCards={selectedCards.length}/>;
       })}
     </article>
     {/* <Categories /> */}
     <Mistakes remainingMistakes={mistakesCounter}/>
     <Controller />
+    <ul>
+      {selectedCards.map((word, idx) => <li key={idx}>{word}</li>)}
+    </ul>
     </>
   );
 }

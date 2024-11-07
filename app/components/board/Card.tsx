@@ -6,32 +6,39 @@ import {CardData} from '@/app/lib/definitions';
 
 export default function Card(props: {
   card: CardData,
+  onSelection: Function,
+  numSelectedCards: number,
 }) {
   const {word, puzzleType, crosswordClue} = props.card;
+  const handleCardSelection = props.onSelection;
+  const numSelectedCards = props.numSelectedCards;
   const [isSelected, setIsSelected] = useState(false);
-  const [puzzlePlayed, setPuzzlePlayed] = useState(!puzzleType);
+  const [isSelectable, setIsSelectable] = useState(!puzzleType);
   const [puzzleSolved, setPuzzleSolved] = useState(!puzzleType);
   const cardClasses = `${styles.card} 
     ${isSelected ? styles.selected : ''} 
     ${puzzleType === 'wordle' ? styles.wordle : ''} 
     ${puzzleType === 'crossword' ? styles.crossword : ''}`;
 
-  function handleClick() {
-    if (puzzleType && puzzlePlayed === false) {
-      alert('open puzzle');
+  function selectCard() {
+    const card = {word, puzzleType, crosswordClue};
+
+    if (isSelectable) {
+       if (isSelected) {
+        setIsSelected(false);
+        handleCardSelection(card, 'removeCard');
+       } else if (numSelectedCards < 4) {
+        setIsSelected(true);
+        handleCardSelection(card, 'addCard');
+       }
     } else {
-      toggleSelection();
+      console.log("Open puzzle from Card!");
     }
   }
 
-  function toggleSelection() {
-    setIsSelected(!isSelected);
-  }
-
   return (
-    <article className={cardClasses} onClick={handleClick}>
+    <article className={cardClasses} onClick={selectCard}>
       {!puzzleType && <p>{word}</p>}
-
     </article>
   );
 }
