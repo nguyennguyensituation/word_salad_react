@@ -10,36 +10,37 @@ import { CardData, DeckData } from '@/app/lib/definitions';
 export default function Board(props: {deck: DeckData}) {
   const deck = props.deck;
   const [mistakesCounter, setMistakesCounter] = useState(4);
-  const [selectedCards, setSelectedCards] = useState<String[]>([]);
-  
-  function decrementMistakes() {
-    setMistakesCounter(mistakesCounter - 1);
-  }
+  const [selectedCards, setSelectedCards] = useState<string[]>([]);
 
   function handleCardSelection(
     card: CardData,
-    mode: String,
+    cardAction: string,
   ) {
-    if (mode === 'addCard' && !selectedCards.includes(card.word)) {
+    if (cardAction === 'addCard' && !selectedCards.includes(card.word)) {
       setSelectedCards([...selectedCards, card.word]);
-    } else if (mode === 'removeCard'){
+    } else if (cardAction === 'removeCard') {
       setSelectedCards(selectedCards.filter(word => word !== card.word));
     }
   }
 
+  function decrementMistakes() {
+    setMistakesCounter(mistakesCounter - 1);
+  }
+
   return (
     <>
-    <article className={styles.board}>
-      {deck.map(card => {
-        return <Card card={card} key={card.word} onSelection={handleCardSelection} numSelectedCards={selectedCards.length}/>;
-      })}
-    </article>
-    {/* <Categories /> */}
-    <Mistakes remainingMistakes={mistakesCounter}/>
-    <Controller />
-    <ul>
-      {selectedCards.map((word, idx) => <li key={idx}>{word}</li>)}
-    </ul>
+      <article className={styles.board}>
+        {deck.map(card => {
+          return <Card
+            card={card}
+            key={card.word}
+            onSelection={handleCardSelection}
+            numSelectedCards={selectedCards.length}/>;
+        })}
+      </article>
+      {/* <Categories /> */}
+      <Mistakes remainingMistakes={mistakesCounter} />
+      <Controller  disableSubmit={selectedCards.length !== 4}/>
     </>
   );
 }

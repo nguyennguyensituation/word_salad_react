@@ -9,7 +9,7 @@ import { tempDeckData } from "@/app/components/deck/tempDeckData";
 export default function Page() {
   const [gameData, setGameData] = useState<GameData>(tempDeckData);
   const [gameStatus, setGameStatus] = useState<GameStatus>('cardsNotSolved');
-  
+
   const [deck, setDeck] = useState<DeckData>(gameData.categories.map(cat => {
     return cat.categoryWords;
   }).flat());
@@ -22,7 +22,7 @@ export default function Page() {
     <main>
       <Message status={gameStatus} />
       <Board deck={deck}/>
-      
+
     </main>
   );
 }

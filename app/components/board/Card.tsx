@@ -13,7 +13,6 @@ export default function Card(props: {
   const handleCardSelection = props.onSelection;
   const numSelectedCards = props.numSelectedCards;
   const [isSelected, setIsSelected] = useState(false);
-  const [isSelectable, setIsSelectable] = useState(!puzzleType);
   const [puzzleSolved, setPuzzleSolved] = useState(!puzzleType);
   const cardClasses = `${styles.card} 
     ${isSelected ? styles.selected : ''} 
@@ -23,16 +22,12 @@ export default function Card(props: {
   function selectCard() {
     const card = {word, puzzleType, crosswordClue};
 
-    if (isSelectable) {
-       if (isSelected) {
-        setIsSelected(false);
-        handleCardSelection(card, 'removeCard');
-       } else if (numSelectedCards < 4) {
-        setIsSelected(true);
-        handleCardSelection(card, 'addCard');
-       }
-    } else {
-      console.log("Open puzzle from Card!");
+    if (puzzleSolved && (numSelectedCards < 4 || isSelected)) {
+      const cardAction = isSelected ? 'removeCard' : 'addCard';
+      setIsSelected(!isSelected);
+      handleCardSelection(card, cardAction);
+    } else if (!puzzleSolved) {
+      console.log("Open puzzle");
     }
   }
 
