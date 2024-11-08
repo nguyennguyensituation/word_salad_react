@@ -36,7 +36,8 @@ export default function Card(props: {
       {!puzzleType && <p>{word}</p>}
       {puzzleType && <Tile word={word}
         puzzlePlayed={puzzlePlayed}
-        puzzleSolved={puzzleSolved} />}
+        puzzleSolved={puzzleSolved}
+        puzzleType={puzzleType} />}
     </article>
   );
 }

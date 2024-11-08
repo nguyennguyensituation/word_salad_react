@@ -21,16 +21,16 @@
   border-bottom-right-radius: 3px;
 }
 
-.wordle .tile {
+.wordle {
   background-color: black;
   color: white;
   border: solid 1px white;
 }
 
-.crossword .tile {
+.crossword  {
   color: black;
 }
 
-.tile.reveal {
+.reveal {
   color: tomato;
 }
