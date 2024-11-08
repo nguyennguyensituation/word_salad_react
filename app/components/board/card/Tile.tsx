@@ -1,12 +1,8 @@
 import styles from '@/app/components/board/card/Tile.module.css';
+import { TileData } from '@/app/lib/definitions';
 
-export default function Tile(props: {
-  word: string,
-  puzzleType: string,
-  puzzlePlayed: boolean,
-  puzzleSolved: boolean,
-}) {
-  const {word, puzzlePlayed, puzzleSolved, puzzleType} = props;
+export default function Tile(props: { tileData: TileData}) {
+  const {word, puzzlePlayed, puzzleSolved, puzzleType} = props.tileData;
 
   return (
     <>

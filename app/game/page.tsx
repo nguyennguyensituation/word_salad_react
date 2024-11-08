@@ -7,22 +7,17 @@ import Board from '@/app/components/board/Board';
 import { tempDeckData } from "@/app/components/deck/tempDeckData";
 
 export default function Page() {
-  const [gameData, setGameData] = useState<GameData>(tempDeckData);
-  const [gameStatus, setGameStatus] = useState<GameStatus>('cardsNotSolved');
-
-  const [deck, setDeck] = useState<DeckData>(gameData.categories.map(cat => {
-    return cat.categoryWords;
-  }).flat());
-
-  function updateStatus(status: GameStatus) {
-    setGameStatus(status);
-  }
+  const [gameData] = useState<GameData>(tempDeckData);
+  const [gameStatus] = useState<GameStatus>('cardsNotSolved');
+  const [deckData] = useState<DeckData>(gameData.categories
+    .map(cat => {
+      return cat.categoryWords;
+    }).flat());
 
   return (
     <main>
       <Message status={gameStatus} />
-      <Board deck={deck}/>
-
+      <Board deckData={deckData}/>
     </main>
   );
 }

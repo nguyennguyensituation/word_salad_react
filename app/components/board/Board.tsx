@@ -5,19 +5,26 @@ import Card from '@/app/components/board/card/Card';
 // import Categories from '@/app/components/board/Categories';
 import Mistakes from '@/app/components/board/Mistakes';
 import Controller from '@/app/components/controls/Controller';
-import { CardData, DeckData } from '@/app/lib/definitions';
+import { DeckData } from '@/app/lib/definitions';
+import createDeck from '@/app/helpers/createDeck';
 
-export default function Board(props: {deck: DeckData}) {
-  const deck = props.deck;
+export default function Board(props: {deckData: DeckData}) {
+  const [deck] = useState(createDeck(props.deckData));
   const [mistakesCounter, setMistakesCounter] = useState(4);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
 
-  function handleCardSelection(card: CardData, cardAction: string) {
-    if (cardAction === 'addCard' && !selectedCards.includes(card.word)) {
-      setSelectedCards([...selectedCards, card.word]);
+  function handleCardSelection(word: string, cardAction: string) {
+    if (cardAction === 'addCard' && !selectedCards.includes(word)) {
+      setSelectedCards([...selectedCards, word]);
     } else if (cardAction === 'removeCard') {
-      setSelectedCards(selectedCards.filter(word => word !== card.word));
+      setSelectedCards(selectedCards.filter(card => card !== word));
     }
+    toggleCardSelection(word);
+  }
+
+  function toggleCardSelection(word: string) {
+    const idx = deck.findIndex(card => card.word === word);
+    deck[idx].isSelected = !deck[idx].isSelected;
   }
 
   function decrementMistakes() {
@@ -29,7 +36,7 @@ export default function Board(props: {deck: DeckData}) {
       <article className={styles.board}>
         {deck.map(card => {
           return <Card
-            card={card}
+            CardState={card}
             key={card.word}
             onSelection={handleCardSelection}
             numSelectedCards={selectedCards.length}/>;

@@ -6,6 +6,8 @@ export type CardData = {
   crosswordClue?: string
 }
 
+export type DeckData = CardData[];
+
 export type CategoryData = {
   difficulty: number,
   categoryName: string,
@@ -17,4 +19,15 @@ export type GameData = {
   categories: CategoryData[],
 }
 
-export type DeckData = CardData[];
+export type CardState = CardData & {
+  isSelected: boolean,
+  puzzlePlayed: boolean,
+  puzzleSolved: boolean,
+}
+
+export type TileData = {
+  word: string,
+  puzzleType?: string,
+  puzzlePlayed: boolean,
+  puzzleSolved: boolean,
+}
