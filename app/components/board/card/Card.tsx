@@ -4,7 +4,7 @@ import Tile from '@/app/components/board/card/Tile';
 
 export default function Card(props: {
   CardState: CardState,
-  onSelection: Function,
+  onSelection: (word: string, cardAction: string) => void;
   numSelectedCards: number,
 }) {
   const {word,

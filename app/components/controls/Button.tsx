@@ -4,6 +4,7 @@ export default function Button(props: {
   id: string,
   value: string,
   disabled?: boolean,
+  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void,
 }) {
   return (
     <input
@@ -11,6 +12,7 @@ export default function Button(props: {
       type="button"
       value={props.value}
       disabled={props.disabled}
+      onClick={props.onClick}
       className={styles.button}
     />
   );

@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import styles from '@/app/components/board/Board.module.css';
 import Card from '@/app/components/board/card/Card';
 // import Categories from '@/app/components/board/Categories';
@@ -7,9 +6,10 @@ import Mistakes from '@/app/components/board/Mistakes';
 import Controller from '@/app/components/controls/Controller';
 import { DeckData } from '@/app/lib/definitions';
 import createDeck from '@/app/helpers/createDeck';
+import shuffle from '@/app/helpers/shuffle';
 
 export default function Board(props: {deckData: DeckData}) {
-  const [deck] = useState(createDeck(props.deckData));
+  const [deck, setDeck] = useState((createDeck(props.deckData)));
   const [mistakesCounter, setMistakesCounter] = useState(4);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
 
@@ -31,6 +31,15 @@ export default function Board(props: {deckData: DeckData}) {
     setMistakesCounter(mistakesCounter - 1);
   }
 
+  function handleShuffle() {
+    setDeck(shuffle(deck));
+  }
+
+  function handleDeselect() {
+    selectedCards.forEach(word => toggleCardSelection(word));
+    setSelectedCards([]);
+  }
+
   return (
     <>
       <article className={styles.board}>
@@ -44,7 +53,9 @@ export default function Board(props: {deckData: DeckData}) {
       </article>
       {/* <Categories /> */}
       <Mistakes remainingMistakes={mistakesCounter} />
-      <Controller  disableSubmit={selectedCards.length !== 4}/>
+      <Controller disableSubmit={selectedCards.length !== 4}
+        handleShuffle={handleShuffle}
+        handleDeselect={handleDeselect}/>
     </>
   );
 }
