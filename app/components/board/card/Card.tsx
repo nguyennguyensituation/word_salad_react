@@ -26,7 +26,7 @@ export default function Card(props: {
       const cardAction = isSelected ? 'removeCard' : 'addCard';
       handleCardSelection(word, cardAction);
     } else if (!puzzleSolved) {
-      alert("Open puzzle");
+      handleCardSelection(word, 'playPuzzle');
     }
   }
 

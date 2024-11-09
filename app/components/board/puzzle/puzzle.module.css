@@ -1,0 +1,38 @@
+.puzzle {
+  width: 80%;
+  max-width: 800px;
+  height: 800px;
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid black;
+  position: fixed;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.puzzle header {
+  border-bottom: solid 1px black;
+  margin-bottom: 0px;
+  display: grid;
+  grid-template: auto 70px;
+}
+
+.puzzle header section {
+  display: grid;
+  grid-template-columns: auto 50px;
+}
+
+.title {
+  text-transform: capitalize;
+  padding-left: 14px;
+}
+
+.instructions, .clue, .message {
+  padding-left: 1em;
+}
+
+.puzzle fieldset {
+  border: none;
+}
