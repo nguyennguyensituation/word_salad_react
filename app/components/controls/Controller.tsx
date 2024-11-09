@@ -1,10 +1,11 @@
 import styles from '@/app/components/controls/Controller.module.css';
 import Button from '@/app/components/controls/Button';
+import { ClickHandler } from '@/app/lib/definitions';
 
 export default function Controller(props: {
   disableSubmit: boolean,
-  handleShuffle: (event: React.MouseEvent<HTMLInputElement>) => void,
-  handleDeselect: (event: React.MouseEvent<HTMLInputElement>) => void,
+  handleShuffle: ClickHandler,
+  handleDeselect: ClickHandler,
 }) {
 
   return (

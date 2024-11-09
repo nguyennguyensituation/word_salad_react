@@ -31,3 +31,5 @@ export type TileData = {
   puzzlePlayed: boolean,
   puzzleSolved: boolean,
 }
+
+export type ClickHandler = (event: React.MouseEvent<HTMLInputElement>) => void;
