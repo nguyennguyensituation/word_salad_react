@@ -1,4 +1,4 @@
-import styles from '@/app/components/messages/Message.module.css';
+import styles from '@/app/components/message/Message.module.css';
 import { GameStatus } from '../../lib/definitions';
 import { GAME_STATUSES } from '@/app/lib/messages';
 

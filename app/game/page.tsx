@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { GameStatus, GameData, DeckData } from '../lib/definitions';
-import Message from '@/app/components/messages/Message';
+import Message from '@/app/components/message/Message';
 import Board from '@/app/components/board/Board';
 import { tempDeckData } from "@/app/components/deck/tempDeckData";
 
 export default function Page() {
   const [gameData] = useState<GameData>(tempDeckData);
   const [gameStatus] = useState<GameStatus>('cardsNotSolved');
-  const [deckData, setDeckData] = useState<DeckData>(gameData.categories
+  const [deckData] = useState<DeckData>(gameData.categories
     .map(cat => {
       return cat.categoryWords;
     }).flat());

@@ -11,7 +11,7 @@ import Puzzle from "@/app/components/board/puzzle/Puzzle";
 
 export default function Board(props: {deckData: DeckData}) {
   const [deck, setDeck] = useState((createDeck(props.deckData)));
-  const [mistakesCounter, setMistakesCounter] = useState(4);
+  const [mistakesCounter] = useState(4);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
   const [currentPuzzle, setCurrentPuzzle] = useState<CardState>();
 
@@ -33,10 +33,6 @@ export default function Board(props: {deckData: DeckData}) {
   function toggleCardSelection(word: string) {
     const idx = deck.findIndex(card => card.word === word);
     deck[idx].isSelected = !deck[idx].isSelected;
-  }
-
-  function decrementMistakes() {
-    setMistakesCounter(mistakesCounter - 1);
   }
 
   function handleShuffle() {
