@@ -9,6 +9,10 @@
   display: inline-block;
 }
 
+.mistakes.puzzle {
+  text-align: left;
+}
+
 .dot {
   height: 16px;
   width: 16px;
@@ -17,4 +21,8 @@
   display: inline-block;
   vertical-align: text-top;
   margin: 0 3px;
+}
+
+.puzzle > .dot {
+  vertical-align: middle;
 }

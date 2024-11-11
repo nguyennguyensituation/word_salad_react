@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from '@/app/components/board/Board.module.css';
 import Card from '@/app/components/board/card/Card';
 // import Categories from '@/app/components/board/Categories';
-import Mistakes from '@/app/components/board/Mistakes';
+import Mistakes from '@/app/components/board/mistakes/Mistakes';
 import Controller from '@/app/components/controls/Controller';
 import { DeckData, CardState } from '@/app/lib/definitions';
 import createDeck from '@/app/helpers/createDeck';
@@ -60,7 +60,7 @@ export default function Board(props: {deckData: DeckData}) {
         })}
       </article>
       {/* <Categories /> */}
-      <Mistakes remainingMistakes={mistakesCounter} />
+      <Mistakes remainingMistakes={mistakesCounter} puzzle={false}/>
       <Controller disableSubmit={selectedCards.length !== 4}
         handleShuffle={handleShuffle}
         handleDeselect={handleDeselect}/>

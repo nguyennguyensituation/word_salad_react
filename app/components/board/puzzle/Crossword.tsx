@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from '@/app/components/board/puzzle/Crossword.module.css';
 import { CrosswordCells } from '@/app/components/board/puzzle/Cells';
 import { CardState } from '@/app/lib/definitions';
+import Mistakes from '../mistakes/Mistakes';
 
 export default function Crossword(props: { card: CardState }) {
   const { word, crosswordClue } = props.card;
@@ -13,13 +14,7 @@ export default function Crossword(props: { card: CardState }) {
     <>
       <p className={styles.clue}>{crosswordClue}</p>
       <CrosswordCells letters={letters}/>
-      <fieldset>
-        <div>
-          <p>Mistakes remaining:</p>
-          <p>TK dots: {mistakesCounter}</p>
-        </div>
-        <button>Submit</button>
-      </fieldset>
+      <Mistakes remainingMistakes={mistakesCounter} puzzle={true}/>
       <div className={styles.message}>{message}</div>
     </>
   );
