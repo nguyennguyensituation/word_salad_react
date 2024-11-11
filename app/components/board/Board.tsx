@@ -7,7 +7,7 @@ import Controller from '@/app/components/controls/Controller';
 import { DeckData, CardState } from '@/app/lib/definitions';
 import createDeck from '@/app/helpers/createDeck';
 import shuffle from '@/app/helpers/shuffle';
-import Puzzle from '@/app/components/board/puzzle/Puzzle';
+import Puzzle from "@/app/components/board/puzzle/Puzzle";
 
 export default function Board(props: {deckData: DeckData}) {
   const [deck, setDeck] = useState((createDeck(props.deckData)));
