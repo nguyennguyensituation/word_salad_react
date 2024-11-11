@@ -7,7 +7,7 @@ import Controller from '@/app/components/controls/Controller';
 import { DeckData } from '@/app/lib/definitions';
 import createDeck from '@/app/helpers/createDeck';
 import shuffle from '@/app/helpers/shuffle';
-import Puzzle from '@/app/components/board/puzzle/puzzle';
+import Puzzle from '@/app/components/board/puzzle/Puzzle';
 
 export default function Board(props: {deckData: DeckData}) {
   const [deck, setDeck] = useState((createDeck(props.deckData)));
@@ -57,7 +57,10 @@ export default function Board(props: {deckData: DeckData}) {
       <Controller disableSubmit={selectedCards.length !== 4}
         handleShuffle={handleShuffle}
         handleDeselect={handleDeselect}/>
-       <Puzzle hide={false} word={'test'}/>
+       <Puzzle hide={false}
+        word={'crumb'}
+        puzzleType="crossword"
+        crosswordClue="The soft part of bread"/>
     </>
   );
 }

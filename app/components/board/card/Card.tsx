@@ -1,6 +1,6 @@
 import styles from '@/app/components/board/card/Card.module.css';
 import { CardState, TileData } from '@/app/lib/definitions';
-import Tile from '@/app/components/board/card/Tile';
+import Tiles from '@/app/components/board/card/Tiles';
 
 export default function Card(props: {
   CardState: CardState,
@@ -33,7 +33,7 @@ export default function Card(props: {
   return (
     <article className={cardClasses} onClick={selectCard}>
       {!puzzleType && <p>{word}</p>}
-      {puzzleType && <Tile tileData={tileData} />}
+      {puzzleType && <Tiles tileData={tileData} />}
     </article>
   );
 }

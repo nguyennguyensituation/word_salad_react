@@ -1,32 +1,25 @@
-import styles from '@/app/components/board/puzzle/puzzle.module.css';
+import styles from '@/app/components/board/puzzle/Puzzle.module.css';
+import Crossword from '@/app/components/board/puzzle/Crossword';
 
 export default function Puzzle(props: {
+  puzzleType: string,
   word: string;
-  hide: boolean;
+  crosswordClue: string;
 }) {
+  const {puzzleType, word, crosswordClue} = props;
+  const puzzleClasses = `${styles.title} ${puzzleType === 'crossword' ? 'blue' : 'green'}`;
+  const instructions = puzzleType === 'crossword' ? "Try to guess the word in 4 tries." : "TK Wordle";
+
   return (
     <article className={styles.puzzle}>
       <header>
         <section>
-          <h2 className={`${styles.title} blue`}>Crossword</h2>
+          <h2 className={puzzleClasses}>{puzzleType}</h2>
           <button>&#215;</button>
         </section>
-        <p className={styles.instructions}><b>How to play:</b> Try to guess the word in 4 tries.</p>
+        <p className={styles.instructions}><b>How to play: </b> {instructions}</p>
       </header>
-      <p className={styles.clue}>TK Crossword clue</p>
-      <section>
-       {/* TK tiles */}
-      </section>
-      <fieldset>
-        <section>
-          <p>Mistakes remaining:</p>
-          {/* TK mistake dots */}
-        </section>
-        
-        <button>Submit</button>
-      </fieldset>
-
-      <div className={styles.message}>TK puzzle message</div>
+      {puzzleType === 'crossword' && <Crossword word={word} crosswordClue={crosswordClue}/>}
     </article>
   );
 }
