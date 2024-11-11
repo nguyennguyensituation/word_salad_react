@@ -5,7 +5,9 @@ export function CrosswordCells(props: {
 }) {
   return (
     <section className={styles.crossword}>
-      {props.letters.map((ltr, idx) => <div className={styles.cell} key={idx}>{ltr}</div>)}
+      {props.letters.map((ltr, idx) => {
+        return <div className={styles.cell} key={idx}>{ltr}</div>;
+      })}
     </section>
   );
 }

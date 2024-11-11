@@ -4,7 +4,7 @@ import Card from '@/app/components/board/card/Card';
 // import Categories from '@/app/components/board/Categories';
 import Mistakes from '@/app/components/board/Mistakes';
 import Controller from '@/app/components/controls/Controller';
-import { DeckData } from '@/app/lib/definitions';
+import { DeckData, CardState } from '@/app/lib/definitions';
 import createDeck from '@/app/helpers/createDeck';
 import shuffle from '@/app/helpers/shuffle';
 import Puzzle from '@/app/components/board/puzzle/Puzzle';
@@ -13,14 +13,21 @@ export default function Board(props: {deckData: DeckData}) {
   const [deck, setDeck] = useState((createDeck(props.deckData)));
   const [mistakesCounter, setMistakesCounter] = useState(4);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
+  const [currentPuzzle, setCurrentPuzzle] = useState<CardState>();
 
-  function handleCardSelection(word: string, cardAction: string) {
-    if (cardAction === 'addCard' && !selectedCards.includes(word)) {
-      setSelectedCards([...selectedCards, word]);
-    } else if (cardAction === 'removeCard') {
-      setSelectedCards(selectedCards.filter(card => card !== word));
+  function handleCardSelection(
+    card: CardState,
+    cardAction: string) {
+    if (cardAction === 'playPuzzle') {
+      setCurrentPuzzle(card);
+    } else {
+      if (cardAction === 'addCard' && !selectedCards.includes(card.word)) {
+        setSelectedCards([...selectedCards, card.word]);
+      } else if (cardAction === 'removeCard') {
+        setSelectedCards(selectedCards.filter(word => word !== card.word));
+      }
+      toggleCardSelection(card.word);
     }
-    toggleCardSelection(word);
   }
 
   function toggleCardSelection(word: string) {
@@ -46,7 +53,7 @@ export default function Board(props: {deckData: DeckData}) {
       <article className={styles.board}>
         {deck.map(card => {
           return <Card
-            CardState={card}
+            card={card}
             key={card.word}
             onSelection={handleCardSelection}
             numSelectedCards={selectedCards.length}/>;
@@ -57,10 +64,7 @@ export default function Board(props: {deckData: DeckData}) {
       <Controller disableSubmit={selectedCards.length !== 4}
         handleShuffle={handleShuffle}
         handleDeselect={handleDeselect}/>
-       <Puzzle hide={false}
-        word={'crumb'}
-        puzzleType="crossword"
-        crosswordClue="The soft part of bread"/>
+      { currentPuzzle && <Puzzle card={currentPuzzle}/>}
     </>
   );
 }
