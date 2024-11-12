@@ -1,5 +1,6 @@
 import styles from '@/app/components/board/puzzle/Puzzle.module.css';
 import Crossword from '@/app/components/board/puzzle/Crossword';
+import Wordle from '@/app/components/board/puzzle/Wordle';
 import { CardState } from '@/app/lib/definitions';
 import { PUZZLE_INSTRUCTIONS } from '@/app/components/board/puzzle/messages';
 
@@ -20,6 +21,7 @@ export default function Puzzle(props: {card: CardState}) {
         </p>
       </header>
       {puzzleType === 'crossword' && <Crossword card={props.card}/>}
+      {puzzleType === 'wordle' && <Wordle card={props.card}/>}
     </article>
   );
 }

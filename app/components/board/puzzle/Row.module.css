@@ -1,0 +1,39 @@
+.row {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  column-gap: 5px;
+}
+
+.tile {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  text-align: center;
+  border: solid 2px rgb(211, 214, 218);
+  height: 30px;
+  width: 30px;
+  font-size: 32px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+/* 
+.tile-focus {
+  scale: 1.1;
+}
+
+.correct {
+  background-color: rgb(106, 170, 100);
+  border: solid 2px rgb(106, 170, 100);
+  color: white;
+}
+
+.incorrect-position {
+  background-color: rgb(201, 180, 88);
+  border: solid 2px rgb(201, 180, 88);
+  color: white;
+}
+
+.incorrect-letter {
+  background-color: rgb(120, 124, 126);
+  border: solid 2px rgb(120, 124, 126);
+  color: white;
+} */
