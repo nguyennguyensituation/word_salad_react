@@ -7,7 +7,7 @@ export default function Card(props: {
   onSelection: (card: CardState, cardAction: string) => void;
   numSelectedCards: number,
 }) {
-  const {word, puzzleType, isSelected, puzzleSolved} = props.card;
+  const {word, puzzleType, isSelected, puzzlePlayed} = props.card;
   const cardClasses = `${styles.card} 
     ${isSelected ? styles.selected : ''} 
     ${puzzleType === 'wordle' ? styles.wordle : ''} 
@@ -16,7 +16,7 @@ export default function Card(props: {
   function selectCard() {
     let cardAction = '';
 
-    if (!puzzleSolved) {
+    if (!puzzlePlayed) {
       cardAction = 'playPuzzle';
     } else if (isSelected) {
       cardAction = 'removeCard';

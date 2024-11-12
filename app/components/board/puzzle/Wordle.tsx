@@ -15,7 +15,7 @@ export default function Wordle(props: { card: CardState }) {
         })}
       </section>
       <section>
-        {message && 
+        {message &&
           <p className={styles.message}>{message}</p>
         }
       </section>

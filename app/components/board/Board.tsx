@@ -13,7 +13,7 @@ export default function Board(props: {deckData: DeckData}) {
   const [deck, setDeck] = useState((createDeck(props.deckData)));
   const [mistakesCounter] = useState(4);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
-  const [currentPuzzle, setCurrentPuzzle] = useState<CardState>();
+  const [currentPuzzle, setCurrentPuzzle] = useState<CardState | null>(null);
 
   function handleCardSelection(
     card: CardState,
@@ -30,18 +30,25 @@ export default function Board(props: {deckData: DeckData}) {
     }
   }
 
+  // Card functions
   function toggleCardSelection(word: string) {
     const idx = deck.findIndex(card => card.word === word);
     deck[idx].isSelected = !deck[idx].isSelected;
   }
 
+  //Deck functions
   function handleShuffle() {
     setDeck(shuffle(deck));
   }
 
-  function handleDeselect() {
+  function handleDeselectAll() {
     selectedCards.forEach(word => toggleCardSelection(word));
     setSelectedCards([]);
+  }
+
+  function closePuzzle(card: CardState) {
+    card.puzzlePlayed = true;
+    setCurrentPuzzle(null);
   }
 
   return (
@@ -59,8 +66,9 @@ export default function Board(props: {deckData: DeckData}) {
       <Mistakes remainingMistakes={mistakesCounter} puzzle={false}/>
       <Controller disableSubmit={selectedCards.length !== 4}
         handleShuffle={handleShuffle}
-        handleDeselect={handleDeselect}/>
-      { currentPuzzle && <Puzzle card={currentPuzzle}/>}
+        handleDeselectAll={handleDeselectAll}/>
+      { currentPuzzle && <Puzzle card={currentPuzzle}
+        closePuzzle={closePuzzle} />}
     </>
   );
 }

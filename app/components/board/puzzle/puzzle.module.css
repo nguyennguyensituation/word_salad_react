@@ -36,3 +36,14 @@
 .puzzle fieldset {
   border: none;
 }
+
+.closeBtn {
+  background-color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: none;
+  font-size: 2em;
+  cursor: pointer;
+  justify-self: right;
+}
