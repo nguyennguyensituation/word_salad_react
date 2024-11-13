@@ -15,4 +15,5 @@ export const PUZZLE_MESSAGES = {
   crossword: "You haven't finished solving this Crossword yet. Are you sure you want to quit this puzzle?",
   match: "You solved this crossword!",
   noMatch: "The correct word is ",
+  duplicateGuess: "You already guessed that word!",
 };

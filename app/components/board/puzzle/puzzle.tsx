@@ -4,9 +4,8 @@ import Wordle from '@/app/components/board/puzzle/Wordle';
 import { CardState } from '@/app/lib/definitions';
 import { PUZZLE_INSTRUCTIONS, PUZZLE_MESSAGES } from '@/app/lib/messages';
 
-function confirmClose(card: CardState,
-  closePuzzle: () => void) {
-  const {puzzlePlayed, puzzleType} = card;
+function confirmClose(card: CardState, closePuzzle: () => void) {
+  const { puzzlePlayed, puzzleType } = card;
 
   if (!puzzlePlayed && puzzleType && confirm(PUZZLE_MESSAGES[puzzleType])) {
     card.puzzlePlayed = true;
@@ -16,19 +15,16 @@ function confirmClose(card: CardState,
   }
 }
 
-export default function Puzzle(props: {
-  card: CardState,
-  closePuzzle: (card: CardState) => void,
-}) {
+export default function Puzzle(props: { card: CardState,
+  closePuzzle: (card: CardState) => void}) {
   const {card, closePuzzle} = props;
   const puzzleType = card.puzzleType;
-  const puzzleClasses = `${styles.title} ${puzzleType === 'crossword' ? 'blue' : 'green'}`;
 
   return (
     <article className={styles.puzzle}>
       <header>
         <section>
-          <h2 className={puzzleClasses}>{puzzleType}</h2>
+          <h2 className={`${styles.title} ${puzzleType === 'crossword' ? 'blue' : 'green'}`}>{puzzleType}</h2>
           <button className={styles.closeBtn} onClick={() => {
             confirmClose(card, closePuzzle);
           }}>

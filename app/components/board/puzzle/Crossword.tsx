@@ -3,49 +3,48 @@ import styles from '@/app/components/board/puzzle/Crossword.module.css';
 import { CrosswordCells } from '@/app/components/board/puzzle/Cells';
 import { CardState } from '@/app/lib/definitions';
 import Mistakes from '../mistakes/Mistakes';
-import { getMove,
-  updateCrosswordCell,
-  isWinner,
-  showWin,
-  showLoss } from '@/app/helpers/crosswordHelpers';
+import xWordUtils from '@/app/helpers/xWordUtils';
+import { PUZZLE_MESSAGES } from '@/app/lib/messages';
 
 export default function Crossword(props: { card: CardState }) {
   const card = props.card;
   const word = card.word;
   const [letters, setLetters] = useState<string[]>(new Array(word.length).fill(''));
-  const [mistakesCounter, setMistakesCounter] = useState<number>(4);
+  const [mistakesCount, setMistakesCount] = useState<number>(4);
   const [message, setMessage] = useState<string>('');
-  const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
+  const [prevGuesses, setPrevGuesses] = useState<string[]>([]);
 
   useEffect(() => {
+    if (card.puzzlePlayed) return;
+
     const handleKeyDown = (event: KeyboardEvent): void => {
       const input = event.key;
-      const move = getMove(input, letters, word);
+      const move = xWordUtils.getMove(input, letters, word);
 
-      if (move === 'addLetter' || move === 'deleteLetter') { 
-        updateCrosswordCell(move, input, letters, word, setLetters);
-      } else if (move === 'checkGuess' && isWinner(word, letters)){
-        showWin(card, setMessage);
+      xWordUtils.resetMessage(message, setMessage);
+
+      if (move === 'addLetter' || move === 'deleteLetter') {
+        xWordUtils.updateCell(move, input, letters, word, setLetters);
       } else if (move === 'checkGuess') {
-        setMistakesCounter(mistakesCounter - 1);
-        if (mistakesCounter === 1) { 
-          showLoss(card, setMessage);
+        if (xWordUtils.isValidGuess(letters, prevGuesses)) {
+          xWordUtils.checkGuess(card, letters, prevGuesses, mistakesCount,
+            setMessage, setPrevGuesses, setMistakesCount);
+        } else {
+          setMessage(PUZZLE_MESSAGES['duplicateGuess']);
         }
       }
-    }
+    };
 
     window.addEventListener('keydown', handleKeyDown);
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, letters);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [letters, card.puzzlePlayed]);
 
   return (
     <>
       <p className={styles.clue}>{card.crosswordClue}</p>
       <CrosswordCells letters={letters}/>
-      <Mistakes remainingMistakes={mistakesCounter} puzzle={true}/>
+      <Mistakes remainingMistakes={mistakesCount} puzzle={true}/>
       {message && <div className={styles.message}>{message}</div>}
     </>
   );
