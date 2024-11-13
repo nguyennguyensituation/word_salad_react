@@ -5,9 +5,8 @@ import Card from '@/app/components/board/card/Card';
 import Mistakes from '@/app/components/board/mistakes/Mistakes';
 import Controller from '@/app/components/controls/Controller';
 import { DeckData, CardState } from '@/app/lib/definitions';
-import { createDeck } from '@/app/helpers/cardUtils';
-import shuffle from '@/app/helpers/shuffle';
 import Puzzle from "@/app/components/board/puzzle/Puzzle";
+import { createDeck, handleShuffle, handleDeselectAll, closePuzzle, toggleCardSelection } from "@/app/helpers/boardUtils";
 
 export default function Board(props: {deckData: DeckData}) {
   const [deck, setDeck] = useState<CardState[]>((createDeck(props.deckData)));
@@ -21,31 +20,13 @@ export default function Board(props: {deckData: DeckData}) {
     if (cardAction === 'playPuzzle') {
       setCurrentPuzzle(card);
     } else {
-      if (cardAction === 'addCard' && !selectedCards.includes(card.word)) {
-        setSelectedCards([...selectedCards, card.word]);
-      } else if (cardAction === 'removeCard') {
+      if (cardAction === 'removeCard') {
         setSelectedCards(selectedCards.filter(word => word !== card.word));
-      }
-      toggleCardSelection(card.word);
+      } else if (cardAction === 'addCard' && !selectedCards.includes(card.word)) {
+        setSelectedCards([...selectedCards, card.word]);
+      } 
+      toggleCardSelection(card.word, deck);
     }
-  }
-
-  function toggleCardSelection(word: string) {
-    const idx = deck.findIndex(card => card.word === word);
-    deck[idx].isSelected = !deck[idx].isSelected;
-  }
-
-  function handleShuffle() {
-    setDeck(shuffle(deck));
-  }
-
-  function handleDeselectAll() {
-    selectedCards.forEach(word => toggleCardSelection(word));
-    setSelectedCards([]);
-  }
-
-  function closePuzzle() {
-    setCurrentPuzzle(null);
   }
 
   return (
@@ -62,10 +43,12 @@ export default function Board(props: {deckData: DeckData}) {
       {/* <Categories /> */}
       <Mistakes remainingMistakes={mistakesCounter} puzzle={false}/>
       <Controller disableSubmit={selectedCards.length !== 4}
-        handleShuffle={handleShuffle}
-        handleDeselectAll={handleDeselectAll}/>
+        handleShuffle={() => handleShuffle(deck, setDeck)}
+        handleDeselectAll={() => handleDeselectAll(selectedCards,
+          deck,
+          setSelectedCards)}/>
       { currentPuzzle && <Puzzle card={currentPuzzle}
-        closePuzzle={closePuzzle} />}
+        closePuzzle={() => closePuzzle(setCurrentPuzzle)} />}
     </>
   );
 }

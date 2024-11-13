@@ -1,4 +1,5 @@
 import { DeckData, CardState } from '@/app/lib/definitions';
+import shuffle from '@/app/helpers/shuffle';
 
 export function createDeck(deckData: DeckData): CardState[] {
   return deckData.map(card => {
@@ -30,4 +31,27 @@ export function selectCard(card: CardState,
   if (cardAction) {
     onSelection(card, cardAction);
   }
+}
+
+export function handleShuffle(deck: CardState[],
+  setDeck: (deck: CardState[]) => void) {
+  setDeck(shuffle(deck));
+}
+
+export function toggleCardSelection(word: string,
+  deck: CardState[]) {
+  const idx = deck.findIndex(card => card.word === word);
+  deck[idx].isSelected = !deck[idx].isSelected;
+}
+
+export function handleDeselectAll(selectedCards: string[],
+  deck: CardState[],
+  setSelectedCards: (selection: string[]) => void) {
+  selectedCards.forEach(word => toggleCardSelection(word, deck));
+  setSelectedCards([]);
+}
+
+export function closePuzzle(
+  setCurrentPuzzle: (puzzle: CardState | null) => void) {
+  setCurrentPuzzle(null);
 }

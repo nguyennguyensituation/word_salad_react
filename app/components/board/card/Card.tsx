@@ -1,7 +1,7 @@
 import styles from '@/app/components/board/card/Card.module.css';
 import { CardState } from '@/app/lib/definitions';
 import Tiles from '@/app/components/board/card/Tiles';
-import { selectCard } from '@/app/helpers/cardUtils';
+import { selectCard } from '@/app/helpers/boardUtils';
 
 export default function Card(props: {
   card: CardState,
