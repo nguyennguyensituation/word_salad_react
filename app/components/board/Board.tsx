@@ -45,8 +45,7 @@ export default function Board(props: {deckData: DeckData}) {
     setSelectedCards([]);
   }
 
-  function closePuzzle(card: CardState) {
-    card.puzzlePlayed = true;
+  function closePuzzle() {
     setCurrentPuzzle(null);
   }
 

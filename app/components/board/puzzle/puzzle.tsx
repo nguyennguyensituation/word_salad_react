@@ -4,10 +4,15 @@ import Wordle from '@/app/components/board/puzzle/Wordle';
 import { CardState } from '@/app/lib/definitions';
 import { PUZZLE_INSTRUCTIONS, PUZZLE_MESSAGES } from '@/app/lib/messages';
 
-function confirmClose(card: CardState, closePuzzle: (card: CardState) => void) {
+function confirmClose(card: CardState,
+  closePuzzle: () => void) {
   const {puzzlePlayed, puzzleType} = card;
+
   if (!puzzlePlayed && puzzleType && confirm(PUZZLE_MESSAGES[puzzleType])) {
-    closePuzzle(card);
+    card.puzzlePlayed = true;
+    closePuzzle();
+  } else if (puzzlePlayed) {
+    closePuzzle();
   }
 }
 
