@@ -15,9 +15,9 @@ export default function Crossword(props: { card: CardState }) {
   const [prevGuesses, setPrevGuesses] = useState<string[]>([]);
 
   useEffect(() => {
-    if (card.puzzlePlayed) return;
-
     const handleKeyDown = (event: KeyboardEvent): void => {
+      if (card.puzzlePlayed) return;
+
       const input = event.key;
       const move = xWordUtils.getMove(input, letters, word);
 
@@ -38,7 +38,7 @@ export default function Crossword(props: { card: CardState }) {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [letters, card.puzzlePlayed]);
+  }, [letters]);
 
   return (
     <>

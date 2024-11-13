@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from '@/app/components/board/Board.module.css';
 import Card from '@/app/components/board/card/Card';
 // import Categories from '@/app/components/board/Categories';
 import Mistakes from '@/app/components/board/mistakes/Mistakes';
 import Controller from '@/app/components/controls/Controller';
 import { DeckData, CardState } from '@/app/lib/definitions';
-import createDeck from '@/app/helpers/createDeck';
+import { createDeck } from '@/app/helpers/cardUtils';
 import shuffle from '@/app/helpers/shuffle';
 import Puzzle from "@/app/components/board/puzzle/Puzzle";
 
@@ -35,7 +35,6 @@ export default function Board(props: {deckData: DeckData}) {
     deck[idx].isSelected = !deck[idx].isSelected;
   }
 
-  //Deck functions
   function handleShuffle() {
     setDeck(shuffle(deck));
   }
