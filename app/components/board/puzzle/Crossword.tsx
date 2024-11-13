@@ -3,11 +3,11 @@ import styles from '@/app/components/board/puzzle/Crossword.module.css';
 import { CrosswordCells } from '@/app/components/board/puzzle/Cells';
 import { CardState } from '@/app/lib/definitions';
 import Mistakes from '../mistakes/Mistakes';
-import { getCrosswordMove,
+import { getMove,
   updateCrosswordCell,
   isWinner,
-  crosswordWin,
-  crosswordLoss } from '@/app/helpers/crosswordHelpers';
+  showWin,
+  showLoss } from '@/app/helpers/crosswordHelpers';
 
 export default function Crossword(props: { card: CardState }) {
   const card = props.card;
@@ -15,19 +15,22 @@ export default function Crossword(props: { card: CardState }) {
   const [letters, setLetters] = useState<string[]>(new Array(word.length).fill(''));
   const [mistakesCounter, setMistakesCounter] = useState<number>(4);
   const [message, setMessage] = useState<string>('');
+  const [previousGuesses, setPreviousGuesses] = useState<string[]>([]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
       const input = event.key;
-      const move = getCrosswordMove(input, letters, word);
+      const move = getMove(input, letters, word);
 
       if (move === 'addLetter' || move === 'deleteLetter') { 
         updateCrosswordCell(move, input, letters, word, setLetters);
       } else if (move === 'checkGuess' && isWinner(word, letters)){
-        crosswordWin(card, setMessage);
+        showWin(card, setMessage);
       } else if (move === 'checkGuess') {
         setMistakesCounter(mistakesCounter - 1);
-        if (mistakesCounter === 1) { crosswordLoss(card, setMessage);}
+        if (mistakesCounter === 1) { 
+          showLoss(card, setMessage);
+        }
       }
     }
 

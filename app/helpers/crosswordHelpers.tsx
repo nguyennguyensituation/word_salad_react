@@ -5,32 +5,32 @@ export function isLetter(input: string) {
   return !!(input.length === 1 && input.match(/[a-zA-Z]/));
 }
 
-export function getCrosswordMove(input: string,
+export function getMove(input: string,
   letters: string[],
   word: string) {
-  const allCellsFilled = letters.join('').length === word.length;
+  const rowIsComplete = letters.join('').length === word.length;
 
-  if (isLetter(input) && !allCellsFilled) {
+  if (isLetter(input) && !rowIsComplete) {
     return 'addLetter';
   } else if (input === 'Backspace') {
     return 'deleteLetter';
-  } else if (input === 'Enter' && allCellsFilled) {
+  } else if (input === 'Enter' && rowIsComplete) {
     return 'checkGuess';
   }
-  return '';
+  return 'invalid';
 }
 
-export function getCrosswordCell(move: string,
+export function getCellIdx(move: string,
   letters: string[],
   word: string) {
   const firstEmptyIdx = letters.findIndex(char => char === '');
   const lastIdx = word.length - 1;
-  const cell = firstEmptyIdx >= 0 ? firstEmptyIdx : lastIdx;
+  const idx = firstEmptyIdx !== -1 ? firstEmptyIdx : lastIdx;
 
   if (move === 'deleteLetter') {
-    return (cell === 0 || letters[cell] !== '') ? cell : cell - 1;
+    return (idx === 0 || letters[idx] !== '') ? idx : idx - 1;
   }
-  return cell;
+  return idx;
 }
 
 export function updateCrosswordCell(move: string,
@@ -38,12 +38,10 @@ export function updateCrosswordCell(move: string,
   letters: string[],
   word: string,
   setLetters: (newLetters: string[]) => void) {
-  const activeCell = getCrosswordCell(move, letters, word);
+  const activeCell = getCellIdx(move, letters, word);
   const lettersCopy = [...letters];
-  if ( move === 'deleteLetter') {
-    input = '';
-  }
-  lettersCopy[activeCell] = input;
+
+  lettersCopy[activeCell] = move === 'deleteLetter' ? '' : input;
   setLetters(lettersCopy);
 }
 
@@ -51,14 +49,14 @@ export function isWinner(word: string, letters: string[]) {
   return word === letters.join('');
 }
 
-export function crosswordWin(card: CardState,
+export function showWin(card: CardState,
   setMessage: (message: string) => void) {
   card.puzzleSolved = true;
   card.puzzlePlayed = true;
   setMessage(PUZZLE_MESSAGES['match']);
 }
 
-export function crosswordLoss(card: CardState,
+export function showLoss(card: CardState,
   setMessage: (message: string) => void) {
   card.puzzleSolved = false;
   card.puzzlePlayed = true;
