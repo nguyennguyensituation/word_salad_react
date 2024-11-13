@@ -13,4 +13,6 @@ export const GAME_STATUSES = {
 export const PUZZLE_MESSAGES = {
   wordle: "You haven't finished solving this Wordle yet. Are you sure you want to quit this puzzle?",
   crossword: "You haven't finished solving this Crossword yet. Are you sure you want to quit this puzzle?",
+  winner: "You solved this crossword!",
+  loser: "The correct word is ",
 };

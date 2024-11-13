@@ -1,3 +1,14 @@
 .clue, .message {
   padding-left: 1em;
 }
+
+.message {
+  width: 200px;
+  padding: 10px;
+  margin: auto;
+  margin-top: 50px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+}

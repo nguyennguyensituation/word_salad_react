@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from '@/app/components/board/Board.module.css';
 import Card from '@/app/components/board/card/Card';
 // import Categories from '@/app/components/board/Categories';
@@ -10,7 +10,7 @@ import shuffle from '@/app/helpers/shuffle';
 import Puzzle from "@/app/components/board/puzzle/Puzzle";
 
 export default function Board(props: {deckData: DeckData}) {
-  const [deck, setDeck] = useState((createDeck(props.deckData)));
+  const [deck, setDeck] = useState<CardState[]>((createDeck(props.deckData)));
   const [mistakesCounter] = useState(4);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
   const [currentPuzzle, setCurrentPuzzle] = useState<CardState | null>(null);
@@ -30,7 +30,6 @@ export default function Board(props: {deckData: DeckData}) {
     }
   }
 
-  // Card functions
   function toggleCardSelection(word: string) {
     const idx = deck.findIndex(card => card.word === word);
     deck[idx].isSelected = !deck[idx].isSelected;
