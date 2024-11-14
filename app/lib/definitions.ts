@@ -1,5 +1,7 @@
 export type GameStatus = 'cardsNotSolved' | 'cardsSolved' | 'gameWon' | 'gameLost';
 
+export type Move = 'addLetter' | 'deleteLetter' | 'checkGuess' | 'invalid';
+
 export type CardData = {
   word: string,
   puzzleType?: 'crossword' | 'wordle'

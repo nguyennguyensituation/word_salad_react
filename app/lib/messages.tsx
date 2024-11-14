@@ -16,4 +16,5 @@ export const PUZZLE_MESSAGES = {
   match: "You solved this crossword!",
   noMatch: "The correct word is ",
   duplicateGuess: "You already guessed that word!",
+  invalidWordle: "That word is not in the Wordle dictionary."
 };

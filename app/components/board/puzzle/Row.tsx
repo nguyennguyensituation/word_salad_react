@@ -4,12 +4,17 @@ function Cell(props: {key: string, ltr: string}) {
   return <div className={styles.cell}>{props.ltr}</div>;
 }
 
-export default function Row(props: {row: string[], idx: number}) {
+
+export default function Row(props: {row: string[], idx: number, word: string}) {
   return (
     <div className={styles.row} key={`row-${props.idx}`}>
-      {props.row.map((ltr, rowIdx) => {
-        return <Cell key={`${props.idx}-${rowIdx}`} ltr={ltr}/>;
-      })}
+      { props.row.map((ltr, rowIdx) => {
+          return <Cell
+            key={`${props.idx}-${rowIdx}`}
+            ltr={ltr}
+          />;
+        })
+      }
     </div>
   );
 }
