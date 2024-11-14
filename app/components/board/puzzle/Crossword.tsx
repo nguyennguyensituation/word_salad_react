@@ -43,7 +43,7 @@ export default function Crossword(props: { card: CardState }) {
   return (
     <>
       <p className={styles.clue}>{card.crosswordClue}</p>
-      <CrosswordCells letters={letters}/>
+      <CrosswordCells letters={letters} puzzleSolved={card.puzzleSolved}/>
       <Mistakes remainingMistakes={mistakesCount} puzzle={true}/>
       {message && <div className={styles.message}>{message}</div>}
     </>

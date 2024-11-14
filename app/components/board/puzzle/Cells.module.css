@@ -15,3 +15,7 @@
   padding: 10px 0px;
 }
 
+.cell.solved {
+  background-color: #a7d8ff;
+}
+
