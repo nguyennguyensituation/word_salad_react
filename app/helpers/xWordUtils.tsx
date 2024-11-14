@@ -12,9 +12,9 @@ function getMove(input: string,
 
   if (isLetter(input) && !rowIsComplete) {
     return 'addLetter';
-  } else if (input === 'Backspace') {
+  } else if (input === 'backspace') {
     return 'deleteLetter';
-  } else if (input === 'Enter' && rowIsComplete) {
+  } else if (input === 'enter' && rowIsComplete) {
     return 'checkGuess';
   }
   return 'invalid';
@@ -41,7 +41,7 @@ function updateCell(move: string,
   const activeCell = getCellIdx(move, letters, word);
   const lettersCopy = [...letters];
 
-  lettersCopy[activeCell] = move === 'deleteLetter' ? '' : input.toLowerCase();
+  lettersCopy[activeCell] = move === 'deleteLetter' ? '' : input;
   setLetters(lettersCopy);
 }
 

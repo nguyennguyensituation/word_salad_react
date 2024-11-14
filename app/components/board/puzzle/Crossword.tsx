@@ -18,7 +18,7 @@ export default function Crossword(props: { card: CardState }) {
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (card.puzzlePlayed) return;
 
-      const input = event.key;
+      const input = event.key.toLowerCase();
       const move = xWordUtils.getMove(input, letters, word);
 
       xWordUtils.resetMessage(message, setMessage);
