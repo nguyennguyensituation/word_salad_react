@@ -1,5 +1,4 @@
 import styles from '@/app/components/board/puzzle/Row.module.css';
-import { getLetterResults } from '@/app/helpers/wordleUtils';
 
 function Cell(props: {
   key: string,
