@@ -20,19 +20,19 @@
   scale: 1.1;
 }
 
-.correct-letter {
+.cell.correct {
   background-color: rgb(106, 170, 100);
   border: solid 2px rgb(106, 170, 100);
   color: white;
 }
 
-.incorrect-letter {
+.cell.incorrectPosition {
   background-color: rgb(201, 180, 88);
   border: solid 2px rgb(201, 180, 88);
   color: white;
 }
 
-.incorrect-letter {
+.cell.incorrectLetter {
   background-color: rgb(120, 124, 126);
   border: solid 2px rgb(120, 124, 126);
   color: white;

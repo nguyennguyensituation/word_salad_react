@@ -13,8 +13,10 @@ export const GAME_STATUSES = {
 export const PUZZLE_MESSAGES = {
   wordle: "You haven't finished solving this Wordle yet. Are you sure you want to quit this puzzle?",
   crossword: "You haven't finished solving this Crossword yet. Are you sure you want to quit this puzzle?",
-  match: "You solved this crossword!",
+
   noMatch: "The correct word is ",
   duplicateGuess: "You already guessed that word!",
-  invalidWordle: "That word is not in the Wordle dictionary."
+  invalidWordle: "That word is not in the Wordle dictionary.",
+  crosswordMatch: "You solved this crossword!",
+  wordleMatch: "You solved this Wordle!",
 };

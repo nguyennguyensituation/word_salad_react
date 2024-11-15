@@ -1,5 +1,5 @@
 import { Move, CardState } from '@/app/lib/definitions';
-import { act } from 'react';
+import { PUZZLE_MESSAGES } from '@/app/lib/messages';
 
 function resetMessage(message: string,
   setMessage: (message: string) => void): void {
@@ -47,7 +47,7 @@ function updateCell(move: string,
   setLetters: (row: string[]) => void): void {
   const activeCell = getActiveCell(move, letters, word);
   const lettersCopy = [...letters];
-  
+
   lettersCopy[activeCell] = move === 'deleteLetter' ? '' : input;
   setLetters(lettersCopy);
 }
@@ -60,11 +60,6 @@ function isUniqueWord(letters: string[],
 
 function isMatch(word: string, letters: string[]): boolean {
   return word === letters.join('');
-}
-
-function setWin(card: CardState): void {
-  card.puzzleSolved = true;
-  card.puzzlePlayed = true;
 }
 
 function updatePrevGuesses(letters: string[],
@@ -80,15 +75,32 @@ function decrementMistakes( mistakesCount: number,
   setMistakesCount(mistakesCount - 1);
 }
 
+function showWin(card: CardState,
+  setMessage: (message: string) => void): void {
+  const message = card.puzzleType === 'wordle' ? 'wordleMatch' : 'crosswordMatch';
+
+  setMessage(PUZZLE_MESSAGES[message]);
+  card.puzzleSolved = true;
+  card.puzzlePlayed = true;
+}
+
+function showLoss(card: CardState,
+  setMessage: (message: string) => void): void {
+  setMessage(`${PUZZLE_MESSAGES['noMatch']} ${card.word.toUpperCase()}`);
+  card.puzzleSolved = false;
+  card.puzzlePlayed = true;
+}
+
 const puzzUtils = {
   resetMessage,
   getMove,
   updateCell,
   isUniqueWord,
   isMatch,
-  setWin,
   updatePrevGuesses,
-  decrementMistakes
-}
+  decrementMistakes,
+  showWin,
+  showLoss,
+};
 
 export default puzzUtils;
