@@ -13,14 +13,13 @@ export default function Wordle(props: { card: CardState }) {
   const [currentRowIdx, setCurrentRowIdx] = useState<number>(0);
   const [prevGuesses, setPrevGuesses] = useState<string[]>([]);
   const [rowResults, setRowResults] = useState<string[][]>(new Array(6).fill([]));
-
-  function updateRow(row: string[]) {
+  
+  function updateRow(row: string[]): void {
     const rowsCopy = [...rows];
-    
     rowsCopy[currentRowIdx] = row;
     setRows(rowsCopy);
   }
-  
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (puzzlePlayed) return;
@@ -34,18 +33,20 @@ export default function Wordle(props: { card: CardState }) {
       if (move === 'addLetter' || move === 'deleteLetter') {
         puzzUtils.updateCell(move, input, activeRow, word, updateRow);
       } else if (move === 'checkGuess') {
+        const isValidWord = wordleUtils.isValidWord(activeRow);
         const isUnique = puzzUtils.isUniqueWord(activeRow, prevGuesses);
         const lastRow = currentRowIdx === 5;
 
-        if (!wordleUtils.isValidWord(activeRow)) {
+        if (!isValidWord) {
           setMessage(PUZZLE_MESSAGES['invalidWordle']);
         } else if (!isUnique) {
           setMessage(PUZZLE_MESSAGES['duplicateGuess']);
         } else {
-          const isMatch = puzzUtils.isMatch(word, activeRow);
           const results = wordleUtils.getLetterResults(word, activeRow);
+          const isMatch = puzzUtils.isMatch(word, activeRow);
 
-          wordleUtils.renderResults(results, rowResults,currentRowIdx, setRowResults);     
+          wordleUtils.renderResults(results, rowResults,currentRowIdx, setRowResults);   
+
           if (isMatch) {
             puzzUtils.showWin(props.card,setMessage);       
           } else {

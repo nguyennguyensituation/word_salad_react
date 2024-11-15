@@ -1,6 +1,7 @@
 import VALID_WORDLE_WORDS from '@/app/lib/wordleDictionary';
+import { WordleResult } from '../lib/definitions';
 
-export function isValidWord(letters: string[]): boolean {
+function isValidWord(letters: string[]): boolean {
   const word = letters.join('');
   let left = 0;
   let right = VALID_WORDLE_WORDS.length - 1;
@@ -19,45 +20,38 @@ export function isValidWord(letters: string[]): boolean {
   return false;
 }
 
-// Return array of results for each guessed letter
-export function getLetterResults(word: string,
-  row: string[],): string[] {
-  const winningLetters = word.split('');
+function getLetterResults(word: string, row: string[],): WordleResult[] {
+  const letters = word.split('');
 
-  // Get initial results
+  // First pass: find correct and incorrect positions
   const results = row.map((ltr, idx) => {
-    if (ltr === '') {
-      return "empty";
-    } else if (ltr === winningLetters[idx]) {
-      winningLetters[idx] = '';
+    if (ltr === letters[idx]) {
+      letters[idx] = '';
       return 'correct';
-    } else if (!winningLetters.includes(ltr)) {
-      return 'incorrectLetter';
     } else {
-      return 'incorrectPosition';
+      return !letters.includes(ltr) ? 'incorrectLetter' : 'incorrectPosition';
     }
   });
 
-  // Handle duplicate letters
+  // Second pass: adjust for duplicate letters
   results.forEach((result, idx) => {
     if (result === 'incorrectPosition') {
-      if (winningLetters.includes(row[idx])) {
-        const wordIdx = winningLetters.findIndex( ltr => ltr === row[idx]);
-        winningLetters[wordIdx] = '';
+      if (letters.includes(row[idx])) {
+        const wordIdx = letters.findIndex( ltr => ltr === row[idx]);
+        letters[wordIdx] = '';
       } else {
         results[idx] = 'incorrectLetter';
       }
     }
-  });
+  })
 
   return results;
 }
 
-export function renderResults(results: string[],
+function renderResults(results: string[],
   rowResults: string[][],
   currentRowIdx: number,
-  setRowResults: (row: string[][]) => void,
-) {
+  setRowResults: (row: string[][]) => void): void {
   const resultsCopy = [...rowResults];
   resultsCopy[currentRowIdx] = results;
   setRowResults(resultsCopy);
@@ -66,7 +60,7 @@ export function renderResults(results: string[],
 const wordleUtils = {
   isValidWord,
   getLetterResults,
-  renderResults
+  renderResults,
 };
 
 export default wordleUtils;

@@ -2,6 +2,8 @@ export type GameStatus = 'cardsNotSolved' | 'cardsSolved' | 'gameWon' | 'gameLos
 
 export type Move = 'addLetter' | 'deleteLetter' | 'checkGuess' | 'invalid';
 
+export type WordleResult = 'correct' | 'incorrectLetter' | 'incorrectPosition';
+
 export type CardData = {
   word: string,
   puzzleType?: 'crossword' | 'wordle'
