@@ -3,7 +3,7 @@ import styles from '@/app/components/board/puzzle/Crossword.module.css';
 import { CrosswordCells } from '@/app/components/board/puzzle/Cells';
 import { CardState } from '@/app/lib/definitions';
 import Mistakes from '../mistakes/Mistakes';
-import xWordUtils from '@/app/helpers/xWordUtils';
+import puzzUtils from '@/app/helpers/puzzleUtils';
 import { PUZZLE_MESSAGES } from '@/app/lib/messages';
 
 export default function Crossword(props: { card: CardState }) {
@@ -19,18 +19,28 @@ export default function Crossword(props: { card: CardState }) {
       if (card.puzzlePlayed) return;
 
       const input = event.key.toLowerCase();
-      const move = xWordUtils.getMove(input, letters, word);
+      const move = puzzUtils.getMove(input, letters, word);
 
-      xWordUtils.resetMessage(message, setMessage);
+      puzzUtils.resetMessage(message, setMessage);
 
       if (move === 'addLetter' || move === 'deleteLetter') {
-        xWordUtils.updateCell(move, input, letters, word, setLetters);
+        puzzUtils.updateCell(move, input, letters, word, setLetters);
       } else if (move === 'checkGuess') {
-        if (xWordUtils.isValidGuess(letters, prevGuesses)) {
-          xWordUtils.checkGuess(card, letters, prevGuesses, mistakesCount,
-            setMessage, setPrevGuesses, setMistakesCount);
-        } else {
+        const isUnique = puzzUtils.isUniqueWord(letters, prevGuesses);
+        const isMatch = puzzUtils.isMatch(word, letters);
+        const lastGuess = mistakesCount === 1;
+
+        if (!isUnique) {
           setMessage(PUZZLE_MESSAGES['duplicateGuess']);
+        } else {
+          if (isMatch) {
+            puzzUtils.showWin(card, setMessage);
+          } else {
+            puzzUtils.updatePrevGuesses(letters, prevGuesses, setPrevGuesses);
+            puzzUtils.decrementMistakes(mistakesCount, setMistakesCount);
+        
+            if (lastGuess) puzzUtils.showLoss(card, setMessage);
+          }
         }
       }
     };

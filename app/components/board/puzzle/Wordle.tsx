@@ -13,7 +13,7 @@ export default function Wordle(props: { card: CardState }) {
   const [currentRowIdx, setCurrentRowIdx] = useState<number>(0);
   const [prevGuesses, setPrevGuesses] = useState<string[]>([]);
   const [rowResults, setRowResults] = useState<string[][]>(new Array(6).fill([]));
-  
+
   function updateRow(row: string[]): void {
     const rowsCopy = [...rows];
     rowsCopy[currentRowIdx] = row;
@@ -45,10 +45,11 @@ export default function Wordle(props: { card: CardState }) {
           const results = wordleUtils.getLetterResults(word, activeRow);
           const isMatch = puzzUtils.isMatch(word, activeRow);
 
-          wordleUtils.renderResults(results, rowResults,currentRowIdx, setRowResults);   
+          wordleUtils.renderResults(results, rowResults,currentRowIdx,
+            setRowResults);
 
           if (isMatch) {
-            puzzUtils.showWin(props.card,setMessage);       
+            puzzUtils.showWin(props.card,setMessage);
           } else {
             puzzUtils.updatePrevGuesses(activeRow, prevGuesses, setPrevGuesses);
             setCurrentRowIdx(currentRowIdx + 1);

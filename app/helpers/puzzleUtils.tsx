@@ -3,9 +3,7 @@ import { PUZZLE_MESSAGES } from '@/app/lib/messages';
 
 function resetMessage(message: string,
   setMessage: (message: string) => void): void {
-  if (message !== '') {
-    setMessage('');
-  }
+  if (message !== '') setMessage('');
 }
 
 function isLetter(input: string): boolean {
@@ -37,6 +35,7 @@ export function getActiveCell(move: string,
   if (move === 'deleteLetter') {
     return (idx === 0 || letters[idx] !== '') ? idx : idx - 1;
   }
+
   return idx;
 }
 
@@ -55,6 +54,7 @@ function updateCell(move: string,
 function isUniqueWord(letters: string[],
   prevGuesses: string[]): boolean {
   const guess = letters.join('');
+
   return !prevGuesses.includes(guess);
 }
 
@@ -86,9 +86,10 @@ function showWin(card: CardState,
 
 function showLoss(card: CardState,
   setMessage: (message: string) => void): void {
-  setMessage(`${PUZZLE_MESSAGES['noMatch']} ${card.word.toUpperCase()}`);
   card.puzzleSolved = false;
   card.puzzlePlayed = true;
+
+  setMessage(`${PUZZLE_MESSAGES['noMatch']} ${card.word.toUpperCase()}`);
 }
 
 const puzzUtils = {

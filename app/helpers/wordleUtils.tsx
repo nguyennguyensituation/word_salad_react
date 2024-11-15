@@ -43,7 +43,7 @@ function getLetterResults(word: string, row: string[],): WordleResult[] {
         results[idx] = 'incorrectLetter';
       }
     }
-  })
+  });
 
   return results;
 }
