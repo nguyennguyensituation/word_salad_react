@@ -12,7 +12,7 @@ export default function Board(props: {deckData: DeckData}) {
   const [deck, setDeck] = useState<CardState[]>((createDeck(props.deckData)));
   const [mistakesCounter] = useState(4);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
-  const [currentPuzzle, setCurrentPuzzle] = useState<CardState | null>(null);
+  const [currentPuzzle, setCurrentPuzzle] = useState<CardState>();
 
   function handleCardSelection(
     card: CardState,

@@ -7,7 +7,8 @@ export type WordleResult = 'correct' | 'incorrectLetter' | 'incorrectPosition';
 export type CardData = {
   word: string,
   puzzleType?: 'crossword' | 'wordle'
-  crosswordClue?: string
+  crosswordClue?: string,
+  category: string,
 }
 
 export type DeckData = CardData[];
