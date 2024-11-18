@@ -16,7 +16,7 @@ function confirmClose(card: CardState, closePuzzle: () => void) {
 }
 
 export default function Puzzle(props: { card: CardState,
-  closePuzzle: (card: CardState) => void}) {
+  closePuzzle: () => void}) {
   const {card, closePuzzle} = props;
   const puzzleType = card.puzzleType;
 

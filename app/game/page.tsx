@@ -13,8 +13,8 @@ export default function Page() {
     return cat.categoryWords.map(word => {
       word.category = cat.categoryName;
       return word;
-    })
-   }).flat());
+    });
+  }).flat());
 
   return (
     <main>

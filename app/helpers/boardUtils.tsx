@@ -1,7 +1,7 @@
 import { DeckData, CardState } from '@/app/lib/definitions';
 import shuffle from '@/app/helpers/shuffle';
 
-export function createDeck(deckData: DeckData): CardState[] {
+function createDeck(deckData: DeckData): CardState[] {
   return deckData.map(card => {
     return {
       word: card.word,
@@ -13,6 +13,24 @@ export function createDeck(deckData: DeckData): CardState[] {
       puzzleSolved: !card.puzzleType,
     };
   });
+}
+
+function handleShuffle(deck: CardState[],
+  setDeck: (deck: CardState[]) => void) {
+  setDeck(shuffle(deck));
+}
+
+function toggleCardSelection(word: string,
+  deck: CardState[]) {
+  const idx = deck.findIndex(card => card.word === word);
+  deck[idx].isSelected = !deck[idx].isSelected;
+}
+
+function handleDeselectAll(selectedCards: CardState[],
+  deck: CardState[],
+  setSelectedCards: (selection: CardState[]) => void) {
+  selectedCards.forEach(word => toggleCardSelection(word, deck));
+  setSelectedCards([]);
 }
 
 export function selectCard(card: CardState,
@@ -34,25 +52,11 @@ export function selectCard(card: CardState,
   }
 }
 
-export function handleShuffle(deck: CardState[],
-  setDeck: (deck: CardState[]) => void) {
-  setDeck(shuffle(deck));
-}
+const boardUtils = {
+  createDeck,
+  handleShuffle,
+  handleDeselectAll,
+  toggleCardSelection,
+};
 
-export function toggleCardSelection(word: string,
-  deck: CardState[]) {
-  const idx = deck.findIndex(card => card.word === word);
-  deck[idx].isSelected = !deck[idx].isSelected;
-}
-
-export function handleDeselectAll(selectedCards: string[],
-  deck: CardState[],
-  setSelectedCards: (selection: string[]) => void) {
-  selectedCards.forEach(word => toggleCardSelection(word, deck));
-  setSelectedCards([]);
-}
-
-export function closePuzzle(
-  setCurrentPuzzle: (puzzle: CardState | null) => void) {
-  setCurrentPuzzle(null);
-}
+export default boardUtils;
