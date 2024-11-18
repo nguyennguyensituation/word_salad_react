@@ -11,7 +11,7 @@ import { createDeck, handleShuffle, handleDeselectAll, closePuzzle, toggleCardSe
 export default function Board(props: {deckData: DeckData}) {
   const [deck, setDeck] = useState<CardState[]>((createDeck(props.deckData)));
   const [mistakesCounter] = useState(4);
-  const [selectedCards, setSelectedCards] = useState<string[]>([]);
+  const [selectedCards, setSelectedCards] = useState<CardState[]>([]);
   const [currentPuzzle, setCurrentPuzzle] = useState<CardState>();
 
   function handleCardSelection(
@@ -21,9 +21,9 @@ export default function Board(props: {deckData: DeckData}) {
       setCurrentPuzzle(card);
     } else {
       if (cardAction === 'removeCard') {
-        setSelectedCards(selectedCards.filter(word => word !== card.word));
-      } else if (cardAction === 'addCard' && !selectedCards.includes(card.word)) {
-        setSelectedCards([...selectedCards, card.word]);
+        setSelectedCards(selectedCards.filter(selected => selected.word !== card.word));
+      } else if (cardAction === 'addCard') {
+        setSelectedCards([...selectedCards, card]);
       } 
       toggleCardSelection(card.word, deck);
     }

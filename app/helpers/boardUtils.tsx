@@ -7,6 +7,7 @@ export function createDeck(deckData: DeckData): CardState[] {
       word: card.word,
       puzzleType: card.puzzleType,
       crosswordClue: card.crosswordClue,
+      category: card.category,
       isSelected: false,
       puzzlePlayed: !card.puzzleType,
       puzzleSolved: !card.puzzleType,
