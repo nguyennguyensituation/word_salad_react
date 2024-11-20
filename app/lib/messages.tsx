@@ -10,6 +10,11 @@ export const GAME_STATUSES = {
   gameLost: 'Better luck next time!',
 };
 
+export const BOARD_MESSAGES = {
+  duplicateGuess: "Already guessed!",
+  oneAway: "One away!",
+};
+
 export const PUZZLE_MESSAGES = {
   wordle: "You haven't finished solving this Wordle yet. Are you sure you want to quit this puzzle?",
   crossword: "You haven't finished solving this Crossword yet. Are you sure you want to quit this puzzle?",

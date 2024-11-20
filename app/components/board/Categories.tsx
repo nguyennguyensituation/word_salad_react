@@ -1,25 +1,34 @@
 import styles from '@/app/components/board/Categories.module.css';
+import { CategoryDetail } from '@/app/lib/definitions';
 
-function Category(props: {
-  difficulty: string
+
+function Category(props: {name: string,
+  difficulty: number,
+  words: string[]
 }) {
-  const id = "difficulty-" + props.difficulty;
-
+  const difficultyLevel = "difficulty" + props.difficulty;
   return (
-    <div className={styles.category} id={styles[id]}>
-      <p>TK Category Name</p>
-      <p>TK Words</p>
+    <div className={`${styles.category} ${styles[difficultyLevel]}`}>
+      <p>{props.name}</p>
+      <p>{props.words.join(', ')}</p>
     </div>
   );
 }
 
-export default function Categories() {
+export default function Categories(props: {
+  categories: CategoryDetail[]
+}) {
   return (
-    <article className={styles.categories}>
-      <Category difficulty="1" />
-      <Category difficulty="2" />
-      <Category difficulty="3" />
-      <Category difficulty="4" />
-    </article>
+    <>
+      <article className={styles.categories}>
+        {props.categories.map((cat, idx) => {
+          return <Category
+            name={cat.name}
+            difficulty={cat.difficulty}
+            words={cat.words}
+            key={idx}/>;
+        }) }
+      </article>
+    </>
   );
 }

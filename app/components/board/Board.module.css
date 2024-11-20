@@ -1,9 +1,21 @@
 .board {
   display: grid;
   margin: auto;
-  padding: 20px;
   border: none;
   width: calc(3 * 8px + 4 * 150px);
   grid-template-columns: auto auto auto auto;
   gap: 8px;
+}
+
+.message {
+  top: 125px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  position: fixed;
+    text-align: center;
+  background-color: black;
+  color: white;
+  width: 200px;
+  padding: 10px;
+  border-radius: 6px;
 }

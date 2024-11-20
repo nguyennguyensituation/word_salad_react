@@ -37,4 +37,10 @@ export type TileData = {
   puzzleSolved: boolean,
 }
 
+export type CategoryDetail = {
+  name: string,
+  difficulty: number,
+  words: string[],
+}
+
 export type ClickHandler = (event: React.MouseEvent<HTMLInputElement>) => void;

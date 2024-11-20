@@ -1,4 +1,5 @@
 .categories {
+  padding-top: 20px;
   display: grid;
   width: calc(3 * 8px + 4 * 150px);
   margin: auto;
@@ -25,18 +26,18 @@
   padding-top: 5px;
 }
 
-#difficulty-1 {
+.difficulty1 {
   background-color: rgb(249, 223, 109);
 }
 
-#difficulty-2 {
+.difficulty2 {
   background-color: rgb(160, 195, 90);
 }
 
-#difficulty-3 {
+.difficulty3 {
   background-color: rgb(176, 196, 239);
 }
 
-#difficulty-4 {
+.difficulty4 {
   background-color: rgb(186, 129, 197);
 }
