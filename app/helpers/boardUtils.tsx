@@ -17,13 +17,24 @@ function createDeck(deckData: DeckData): CardState[] {
 
 function handleShuffle(deck: CardState[],
   setDeck: (deck: CardState[]) => void,
-  setMessage: (message: string) => void) {
+  setMessage: (message: string) => void): void {
   setMessage('');
   setDeck(shuffle(deck));
 }
 
-function toggleCardSelection(word: string,
-  deck: CardState[]) {
+function updateSelection(card: CardState,
+  cardAction: string,
+  selectedCards: CardState[],
+  setSelectedCards: (cards: CardState[]) => void): void {
+  const selection = (cardAction === 'removeCard') ?
+    selectedCards.filter(selected => selected.word !== card.word) :
+    [...selectedCards, card];
+
+  setSelectedCards(selection);
+}
+
+function toggleCardSelect(word: string,
+  deck: CardState[]): void {
   const idx = deck.findIndex(card => card.word === word);
   deck[idx].isSelected = !deck[idx].isSelected;
 }
@@ -31,15 +42,15 @@ function toggleCardSelection(word: string,
 function handleDeselectAll(selectedCards: CardState[],
   deck: CardState[],
   setSelectedCards: (selection: CardState[]) => void,
-  setMessage: (message: string) => void) {
+  setMessage: (message: string) => void): void {
   setMessage('');
-  selectedCards.forEach(card => toggleCardSelection(card.word, deck));
+  selectedCards.forEach(card => toggleCardSelect(card.word, deck));
   setSelectedCards([]);
 }
 
 export function selectCard(card: CardState,
   numSelectedCards: number,
-  onSelection: (card: CardState, cardAction: string) => void) {
+  onSelection: (card: CardState, cardAction: string) => void): void {
   const {puzzlePlayed, isSelected} = card;
   let cardAction = '';
 
@@ -51,46 +62,46 @@ export function selectCard(card: CardState,
     cardAction = 'addCard';
   }
 
-  if (cardAction) {
-    onSelection(card, cardAction);
-  }
+  if (cardAction) onSelection(card, cardAction);
 }
 
-function getCategory(name: string,
+function getCat(name: string,
   remainingCategories: CategoryDetail[]): CategoryDetail {
   return remainingCategories.filter(cat => cat.name === name)[0];
 }
 
-function addCategory(category: CategoryDetail,
-  foundCategories: CategoryDetail[],
-  setFoundCategories: (categories: CategoryDetail[]) => void): void {
-  setFoundCategories([...foundCategories, category]);
-}
-
-function removeCategory(currentCategory: CategoryDetail,
-  remainingCategories: CategoryDetail[],
-  setRemainingCategories: (categories: CategoryDetail[]) => void) {
-  const filtered = remainingCategories.filter(cat => cat.name !== currentCategory.name);
-  setRemainingCategories(filtered);
-}
-
-function removeCards(categoryName: string, deck: CardState[], setDeck: (deck: CardState[]) => void,
-setSelectedCards: (cards: CardState[]) => void) {
+function updateDeck(categoryName: string,
+  deck: CardState[],
+  setDeck: (deck: CardState[]) => void,
+  setSelectedCards: (cards: CardState[]) => void): void {
   const filtered = deck.filter(card => card.category !== categoryName);
 
   setDeck(filtered);
   setSelectedCards([]);
 }
 
+function updateCats(category: CategoryDetail,
+  foundCategories: CategoryDetail[],
+  remainingCategories: CategoryDetail[],
+  setFoundCategories: (categories: CategoryDetail[]) => void,
+  setRemainingCategories: (categories: CategoryDetail[]) => void): void {
+  const filtered = remainingCategories.filter(cat => {
+    return cat.name !== category.name;
+  });
+
+  setFoundCategories([...foundCategories, category]);
+  setRemainingCategories(filtered);
+}
+
 const boardUtils = {
   createDeck,
   handleShuffle,
+  updateSelection,
   handleDeselectAll,
-  toggleCardSelection,
-  getCategory,
-  addCategory,
-  removeCategory,
-  removeCards,
+  toggleCardSelect,
+  getCat,
+  updateCats,
+  updateDeck,
 };
 
 export default boardUtils;

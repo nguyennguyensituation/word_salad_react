@@ -12,14 +12,15 @@ import { BOARD_MESSAGES } from "@/app/lib/messages";
 export default function Board(props: {deckData: DeckData,
   categories: CategoryDetail[],
 }) {
-  const [deck, setDeck] = useState<CardState[]>((boardUtils.createDeck(props.deckData)));
+  const [deck, setDeck] =
+    useState<CardState[]>((boardUtils.createDeck(props.deckData)));
   const [mistakesCounter, setMistakesCounter] = useState(4);
-  const [selectedCards, setSelectedCards] = useState<CardState[]>([]);
+  const [selection, setSelection] = useState<CardState[]>([]);
   const [currentPuzzle, setCurrentPuzzle] = useState<CardState | null>();
   const [message, setMessage] = useState<string>();
-  const [remainingCategories, setRemainingCategories] = useState<CategoryDetail[]>(props.categories);
-  const [foundCategories, setFoundCategories] = useState<CategoryDetail[]>([]);
-  const [previousGuesses, setPreviousGuesses] = useState<CardState[][]>([]);
+  const [cats, setCats] = useState<CategoryDetail[]>(props.categories);
+  const [foundCats, setFoundCats] = useState<CategoryDetail[]>([]);
+  const [prevGuesses, setPrevGuesses] = useState<CardState[][]>([]);
 
   function handleCardSelection(card: CardState, cardAction: string) {
     if (message) setMessage('');
@@ -27,57 +28,55 @@ export default function Board(props: {deckData: DeckData,
     if (cardAction === 'playPuzzle') {
       setCurrentPuzzle(card);
     } else {
-      const selection = (cardAction === 'removeCard') ?
-      selectedCards.filter(selected => selected.word !== card.word) :
-      [...selectedCards, card];
-
-      setSelectedCards(selection);
-      boardUtils.toggleCardSelection(card.word, deck);
+      boardUtils.updateSelection(card, cardAction, selection, setSelection);
+      boardUtils.toggleCardSelect(card.word, deck);
     }
   }
 
   function submitCards() {
-    const cardCategories = [...new Set(selectedCards.map(card => card.category))];
+    const cardCats = [...new Set(selection.map(card => {
+      return card.category;
+    }))];
+    const allCardsMatch = cardCats.length === 1;
+    const isOneAway = cardCats.length === 2;
 
-    if (cardCategories.length === 1) {
-      const categoryMatch = boardUtils.getCategory(cardCategories[0], remainingCategories);
+    if (allCardsMatch) {
+      const catMatch = boardUtils.getCat(cardCats[0], cats);
 
-      boardUtils.addCategory(categoryMatch, foundCategories, setFoundCategories);
-      boardUtils.removeCategory(categoryMatch, remainingCategories, setRemainingCategories);
-      boardUtils.removeCards(categoryMatch.name, deck, setDeck, setSelectedCards);
+      boardUtils.updateCats(catMatch, foundCats, cats, setFoundCats, setCats);
+      boardUtils.updateDeck(catMatch.name, deck,setDeck, setSelection);
     } else {
-      if (cardCategories.length === 2) setMessage(BOARD_MESSAGES['oneAway']);
+      if (isOneAway) setMessage(BOARD_MESSAGES['oneAway']);
+
       setMistakesCounter(mistakesCounter - 1);
-      setPreviousGuesses([...previousGuesses, selectedCards]);
+      setPrevGuesses([...prevGuesses, selection]);
     }
   }
 
   return (
     <>
-      <Categories categories={foundCategories}/>
+      <Categories categories={foundCats}/>
       <article className={styles.board}>
         {deck.map(card => {
           return <Card
             card={card}
             key={card.word}
             onSelection={handleCardSelection}
-            numSelectedCards={selectedCards.length}/>;
+            numSelectedCards={selection.length}/>;
         })}
       </article>
-
       <section>
         {message && <p className={styles.message}>{message}</p>}
       </section>
       <Mistakes remainingMistakes={mistakesCounter} puzzle={false}/>
       <Controller
-        disableSubmit={selectedCards.length !== 4}
+        disableSubmit={selection.length !== 4}
         submitCards={submitCards}
         handleShuffle={() => {
           boardUtils.handleShuffle(deck, setDeck, setMessage);
         }}
-        handleDeselectAll={() => boardUtils.handleDeselectAll(selectedCards,
-          deck,
-          setSelectedCards, setMessage)}/>
+        handleDeselectAll={() => boardUtils.handleDeselectAll(selection,
+          deck, setSelection, setMessage)}/>
       {currentPuzzle && <Puzzle
         card={currentPuzzle}
         closePuzzle={() => setCurrentPuzzle(null)} />}

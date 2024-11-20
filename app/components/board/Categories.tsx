@@ -1,23 +1,20 @@
 import styles from '@/app/components/board/Categories.module.css';
 import { CategoryDetail } from '@/app/lib/definitions';
 
-
 function Category(props: {name: string,
   difficulty: number,
   words: string[]
 }) {
-  const difficultyLevel = "difficulty" + props.difficulty;
+  const difficultyClass = "difficulty" + props.difficulty;
   return (
-    <div className={`${styles.category} ${styles[difficultyLevel]}`}>
+    <div className={`${styles.category} ${styles[difficultyClass]}`}>
       <p>{props.name}</p>
       <p>{props.words.join(', ')}</p>
     </div>
   );
 }
 
-export default function Categories(props: {
-  categories: CategoryDetail[]
-}) {
+export default function Categories(props: {categories: CategoryDetail[]}) {
   return (
     <>
       <article className={styles.categories}>
