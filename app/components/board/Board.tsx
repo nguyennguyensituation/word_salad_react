@@ -22,26 +22,23 @@ export default function Board(props: {deckData: DeckData,
   const [previousGuesses, setPreviousGuesses] = useState<CardState[][]>([]);
 
   function handleCardSelection(card: CardState, cardAction: string) {
-    if (message) {
-      setMessage('');
-    }
+    if (message) setMessage('');
+
     if (cardAction === 'playPuzzle') {
       setCurrentPuzzle(card);
     } else {
-      if (cardAction === 'removeCard') {
-        setSelectedCards(selectedCards.filter(selected => {
-          return selected.word !== card.word;
-        }));
-      } else if (cardAction === 'addCard') {
-        setSelectedCards([...selectedCards, card]);
-      }
+      const selection = (cardAction === 'removeCard') ?
+      selectedCards.filter(selected => selected.word !== card.word) :
+      [...selectedCards, card];
+
+      setSelectedCards(selection);
       boardUtils.toggleCardSelection(card.word, deck);
     }
   }
 
   function submitCards() {
     const cardCategories = [...new Set(selectedCards.map(card => card.category))];
-    
+
     if (cardCategories.length === 1) {
       const categoryMatch = boardUtils.getCategory(cardCategories[0], remainingCategories);
 
@@ -67,7 +64,7 @@ export default function Board(props: {deckData: DeckData,
             numSelectedCards={selectedCards.length}/>;
         })}
       </article>
-     
+
       <section>
         {message && <p className={styles.message}>{message}</p>}
       </section>
