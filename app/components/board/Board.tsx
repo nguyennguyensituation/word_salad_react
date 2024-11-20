@@ -21,12 +21,17 @@ export default function Board(props: {deckData: DeckData,
   const [allCategories, setAllCategories] = useState<CategoryDetail[]>(props.categories);
   const [solvedCategories, setSolvedCategories] = useState<CategoryDetail[]>([]);
   const [prevGuesses, setPrevGuesses] = useState<string[][]>([]);
+  const [puzzleCount, setPuzzleCount] = useState<number>(0);
 
   function handleCardSelection(card: CardState, cardAction: string) {
     if (message) setMessage('');
 
     if (cardAction === 'playPuzzle') {
       setCurrentPuzzle(card);
+      setPuzzleCount(puzzleCount + 1);
+      if (puzzleCount === 7) {
+        props.setGameStatus('cardsSolved');
+      }
     } else {
       boardUtils.updateSelection(card, cardAction, selection, setSelection);
       boardUtils.toggleCardSelect(card.word, deck);
@@ -45,7 +50,8 @@ export default function Board(props: {deckData: DeckData,
       boardUtils.updateCategories(category, solvedCategories, allCategories,
         setSolvedCategories, setAllCategories);
       boardUtils.updateDeck(category.name, deck, setDeck, setSelection);
-      props.setGameStatus('gameWon');
+
+      if (solvedCategories.length === 3) props.setGameStatus('gameWon');
     } else {
       if (result === 'oneAway') setMessage(BOARD_MESSAGES['oneAway']);
 
