@@ -4,23 +4,23 @@ import Card from '@/app/components/board/card/Card';
 import Categories from '@/app/components/board/Categories';
 import Mistakes from '@/app/components/board/mistakes/Mistakes';
 import Controller from '@/app/components/controls/Controller';
-import { DeckData, CardState, CategoryDetail } from '@/app/lib/definitions';
+import { DeckData, GameStatus, CardState, CategoryDetail } from '@/app/lib/definitions';
 import Puzzle from "@/app/components/board/puzzle/Puzzle";
 import boardUtils from "@/app/helpers/boardUtils";
 import { BOARD_MESSAGES } from "@/app/lib/messages";
 
 export default function Board(props: {deckData: DeckData,
   categories: CategoryDetail[],
-}) {
+  setGameStatus: (status: GameStatus) => void}) {
   const [deck, setDeck] =
     useState<CardState[]>((boardUtils.createDeck(props.deckData)));
   const [mistakesCounter, setMistakesCounter] = useState(4);
   const [selection, setSelection] = useState<CardState[]>([]);
   const [currentPuzzle, setCurrentPuzzle] = useState<CardState | null>();
   const [message, setMessage] = useState<string>();
-  const [cats, setCats] = useState<CategoryDetail[]>(props.categories);
-  const [foundCats, setFoundCats] = useState<CategoryDetail[]>([]);
-  const [prevGuesses, setPrevGuesses] = useState<CardState[][]>([]);
+  const [allCategories, setAllCategories] = useState<CategoryDetail[]>(props.categories);
+  const [solvedCategories, setSolvedCategories] = useState<CategoryDetail[]>([]);
+  const [prevGuesses, setPrevGuesses] = useState<string[][]>([]);
 
   function handleCardSelection(card: CardState, cardAction: string) {
     if (message) setMessage('');
@@ -34,28 +34,31 @@ export default function Board(props: {deckData: DeckData,
   }
 
   function submitCards() {
-    const cardCats = [...new Set(selection.map(card => {
-      return card.category;
-    }))];
-    const allCardsMatch = cardCats.length === 1;
-    const isOneAway = cardCats.length === 2;
+    const result = boardUtils.checkSelection(selection, prevGuesses);
 
-    if (allCardsMatch) {
-      const catMatch = boardUtils.getCat(cardCats[0], cats);
+    if (result === 'duplicate') {
+      setMessage(BOARD_MESSAGES['duplicateGuess']);
+    } else if (result === 'solved') {
+      const category = boardUtils.getCategory(selection[0].category,
+        allCategories);
 
-      boardUtils.updateCats(catMatch, foundCats, cats, setFoundCats, setCats);
-      boardUtils.updateDeck(catMatch.name, deck,setDeck, setSelection);
+      boardUtils.updateCategories(category, solvedCategories, allCategories,
+        setSolvedCategories, setAllCategories);
+      boardUtils.updateDeck(category.name, deck, setDeck, setSelection);
+      props.setGameStatus('gameWon');
     } else {
-      if (isOneAway) setMessage(BOARD_MESSAGES['oneAway']);
+      if (result === 'oneAway') setMessage(BOARD_MESSAGES['oneAway']);
 
       setMistakesCounter(mistakesCounter - 1);
-      setPrevGuesses([...prevGuesses, selection]);
+      setPrevGuesses([...prevGuesses, selection.map(card => card.word)]);
+
+      if (mistakesCounter === 1) props.setGameStatus('gameLost');
     }
   }
 
   return (
     <>
-      <Categories categories={foundCats}/>
+      <Categories categories={solvedCategories}/>
       <article className={styles.board}>
         {deck.map(card => {
           return <Card

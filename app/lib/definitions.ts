@@ -4,6 +4,8 @@ export type Move = 'addLetter' | 'deleteLetter' | 'checkGuess' | 'invalid';
 
 export type WordleResult = 'correct' | 'incorrectLetter' | 'incorrectPosition';
 
+export type ConnectionsResult = 'duplicate' | 'noMatch' |'solved' |'oneAway';
+
 export type CardData = {
   word: string,
   puzzleType?: 'crossword' | 'wordle'

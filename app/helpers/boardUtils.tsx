@@ -1,4 +1,4 @@
-import { DeckData, CardState, CategoryDetail } from '@/app/lib/definitions';
+import { DeckData, CardState, CategoryDetail, ConnectionsResult } from '@/app/lib/definitions';
 import shuffle from '@/app/helpers/shuffle';
 
 function createDeck(deckData: DeckData): CardState[] {
@@ -24,13 +24,13 @@ function handleShuffle(deck: CardState[],
 
 function updateSelection(card: CardState,
   cardAction: string,
-  selectedCards: CardState[],
-  setSelectedCards: (cards: CardState[]) => void): void {
-  const selection = (cardAction === 'removeCard') ?
-    selectedCards.filter(selected => selected.word !== card.word) :
-    [...selectedCards, card];
+  selection: CardState[],
+  setSelection: (cards: CardState[]) => void): void {
+  const updated = (cardAction === 'removeCard') ?
+    selection.filter(selected => selected.word !== card.word) :
+    [...selection, card];
 
-  setSelectedCards(selection);
+  setSelection(updated);
 }
 
 function toggleCardSelect(word: string,
@@ -41,11 +41,11 @@ function toggleCardSelect(word: string,
 
 function handleDeselectAll(selectedCards: CardState[],
   deck: CardState[],
-  setSelectedCards: (selection: CardState[]) => void,
+  setSelection: (selection: CardState[]) => void,
   setMessage: (message: string) => void): void {
   setMessage('');
   selectedCards.forEach(card => toggleCardSelect(card.word, deck));
-  setSelectedCards([]);
+  setSelection([]);
 }
 
 export function selectCard(card: CardState,
@@ -65,32 +65,68 @@ export function selectCard(card: CardState,
   if (cardAction) onSelection(card, cardAction);
 }
 
-function getCat(name: string,
+function duplicateGuess(selection: CardState[],
+  prevGuesses: string[][]): boolean {
+  const wordString = selection.map(card => card.word).sort().join(',');
+
+  for (let guessIdx = 0; guessIdx < prevGuesses.length; guessIdx++) {
+    const guess = prevGuesses[guessIdx].sort().join(',');
+    if (guess === wordString) return true;
+  }
+  return false;
+}
+
+function checkSelection(selection: CardState[],
+  prevGuesses: string[][]): ConnectionsResult {
+  if (duplicateGuess(selection, prevGuesses)) return 'duplicate';
+
+  const categoryCount: { [key: string]: number} = {};
+  let result: ConnectionsResult = 'noMatch';
+
+  selection.forEach((card, idx) => {
+    const category = card.category;
+
+    if (categoryCount[category]) {
+      categoryCount[category] += 1;
+
+      if (categoryCount[category] === 4) {
+        result = 'solved';
+      } else if (categoryCount[category] === 3 && idx >= 2) {
+        result = 'oneAway';
+      }
+    } else {
+      categoryCount[category] = 1;
+    }
+  });
+  return result;
+}
+
+function getCategory(name: string,
   remainingCategories: CategoryDetail[]): CategoryDetail {
   return remainingCategories.filter(cat => cat.name === name)[0];
+}
+
+function updateCategories(category: CategoryDetail,
+  solvedCategories: CategoryDetail[],
+  allCategories: CategoryDetail[],
+  setSolvedCategories: (categories: CategoryDetail[]) => void,
+  setAllCategories: (categories: CategoryDetail[]) => void): void {
+  const filtered = allCategories.filter(cat => {
+    return cat.name !== category.name;
+  });
+
+  setSolvedCategories([...solvedCategories, category]);
+  setAllCategories(filtered);
 }
 
 function updateDeck(categoryName: string,
   deck: CardState[],
   setDeck: (deck: CardState[]) => void,
-  setSelectedCards: (cards: CardState[]) => void): void {
+  setSelection: (cards: CardState[]) => void): void {
   const filtered = deck.filter(card => card.category !== categoryName);
 
   setDeck(filtered);
-  setSelectedCards([]);
-}
-
-function updateCats(category: CategoryDetail,
-  foundCategories: CategoryDetail[],
-  remainingCategories: CategoryDetail[],
-  setFoundCategories: (categories: CategoryDetail[]) => void,
-  setRemainingCategories: (categories: CategoryDetail[]) => void): void {
-  const filtered = remainingCategories.filter(cat => {
-    return cat.name !== category.name;
-  });
-
-  setFoundCategories([...foundCategories, category]);
-  setRemainingCategories(filtered);
+  setSelection([]);
 }
 
 const boardUtils = {
@@ -99,8 +135,10 @@ const boardUtils = {
   updateSelection,
   handleDeselectAll,
   toggleCardSelect,
-  getCat,
-  updateCats,
+  duplicateGuess,
+  checkSelection,
+  getCategory,
+  updateCategories,
   updateDeck,
 };
 

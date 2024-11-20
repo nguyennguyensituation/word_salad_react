@@ -18,7 +18,7 @@ function getCategories(gameData: GameData): CategoryDetail[] {
 
 export default function Page() {
   const [gameData] = useState<GameData>(tempDeckData);
-  const [gameStatus] = useState<GameStatus>('cardsNotSolved');
+  const [gameStatus, setGameStatus] = useState<GameStatus>('cardsNotSolved');
   const [deckData] = useState<DeckData>(gameData.categories.map(category => {
     return category.categoryWords.map(wordArr => {
       wordArr.category = category.categoryName;
@@ -29,7 +29,9 @@ export default function Page() {
   return (
     <main>
       <Message status={gameStatus} />
-      <Board deckData={deckData} categories={getCategories(gameData)}/>
+      <Board deckData={deckData}
+        categories={getCategories(gameData)}
+        setGameStatus={(status: GameStatus) => setGameStatus(status)}/>
     </main>
   );
 }
