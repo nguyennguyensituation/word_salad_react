@@ -1,15 +1,16 @@
+import { LetterResult, CardState, WordleGuess} from '../lib/definitions';
 import WORDLE_DICTIONARY from '@/app/lib/wordleDictionary';
-import { WordleResult, CardState, WordleGuess} from '../lib/definitions';
-import puzzUtils from '@/app/helpers/puzzleUtils';
 import { PUZZLE_MESSAGES } from '@/app/lib/messages';
+import puzzUtils from '@/app/helpers/puzzleUtils';
 
 function updateRow(row: string[],
   rows: string[][],
   activeIdx: number,
   setRows: (rows: string[][]) => void): void {
-  const rowsCopy = [...rows];
-  rowsCopy[activeIdx] = row;
-  setRows(rowsCopy);
+  const updatedRows = [...rows];
+
+  updatedRows[activeIdx] = row;
+  setRows(updatedRows);
 }
 
 function updateCell(move: string,
@@ -26,8 +27,8 @@ function updateCell(move: string,
   updateRow(rowCopy, rows, activeIdx, setRows);
 }
 
-function isValidWord(letters: string[]): boolean {
-  const word = letters.join('');
+function isValidWord(activeRow: string[]): boolean {
+  const word = activeRow.join('');
   let left = 0;
   let right = WORDLE_DICTIONARY.length - 1;
 
@@ -46,7 +47,7 @@ function isValidWord(letters: string[]): boolean {
   return false;
 }
 
-function checkWord(word: string,
+function getWordResult(word: string,
   activeRow: string[],
   prevGuesses: string[]): {isValid: boolean,
     isUnique: boolean,
@@ -58,7 +59,7 @@ function checkWord(word: string,
   return { isValid, isUnique, isMatch };
 }
 
-function getLetterResults(letters: string[], row: string[],): WordleResult[] {
+function getLetterResults(letters: string[], row: string[],): LetterResult[] {
   // First pass: check letter position
   const results = row.map((ltr, idx) => {
     if (ltr === letters[idx]) {
@@ -102,10 +103,10 @@ function showLoss(card: CardState,
   setPrevGuesses: (guesses: string[]) => void,
   setCurrentRowIdx: (idx: number) => void,
   setMessage: (message: string) => void) {
+  const isLastRow = currentRowIdx === 5;
+
   puzzUtils.updatePrevGuesses(activeRow, prevGuesses, setPrevGuesses);
   setCurrentRowIdx(currentRowIdx + 1);
-
-  const isLastRow = currentRowIdx === 5;
 
   if (isLastRow) puzzUtils.showLoss(card, setMessage);
 }
@@ -114,16 +115,13 @@ function checkGuess(guess: WordleGuess): void {
   const { card, rows, activeIdx, prevGuesses, results,
     setActiveIdx, setPrevGuesses, setResults, setMessage } = guess;
   const activeRow = rows[activeIdx];
-  const { isValid, isUnique, isMatch } = checkWord(card.word, activeRow,
+  const { isValid, isUnique, isMatch } = getWordResult(card.word, activeRow,
     prevGuesses);
 
   if (!isValid || !isUnique) {
-    const message = !isValid ? 'invalid' : 'duplicate';
-
-    setMessage(PUZZLE_MESSAGES[message]);
+    setMessage(PUZZLE_MESSAGES[!isValid ? 'invalid' : 'duplicate']);
   } else {
-    updateLetterDisplay(card.word, activeRow, results,
-      activeIdx, setResults);
+    updateLetterDisplay(card.word, activeRow, results, activeIdx, setResults);
 
     if (isMatch) {
       puzzUtils.showWin(card, setMessage);
@@ -137,17 +135,19 @@ function checkGuess(guess: WordleGuess): void {
 export default function wordleKeyDown(event: KeyboardEvent,
   setRows: (rows: string[][]) => void,
   guess: WordleGuess): void {
-  if (guess.card.puzzlePlayed) return;
+  const { card, rows, activeIdx, setMessage } = guess;
+  const { puzzlePlayed, word } = card;
 
-  puzzUtils.resetMessage('', guess.setMessage);
+  if (puzzlePlayed) return;
+
+  puzzUtils.resetMessage('', setMessage);
 
   const input = event.key.toLowerCase();
-  const activeRow = guess.rows[guess.activeIdx];
-  const move = puzzUtils.getMove(input, activeRow, guess.card.word);
+  const activeRow = rows[activeIdx];
+  const move = puzzUtils.getMove(input, activeRow, word);
 
   if (move === 'addLetter' || move === 'deleteLetter') {
-    updateCell(move, input, activeRow, guess.activeIdx, guess.rows,
-      guess.card.word, setRows);
+    updateCell(move, input, activeRow, activeIdx, rows, word, setRows);
   } else if (move === 'checkGuess') {
     checkGuess(guess);
   }
