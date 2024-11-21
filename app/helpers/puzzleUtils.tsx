@@ -1,6 +1,17 @@
 import { Move, CardState } from '@/app/lib/definitions';
 import { PUZZLE_MESSAGES } from '@/app/lib/messages';
 
+export function confirmClose(card: CardState, closePuzzle: () => void) {
+  const { puzzlePlayed, puzzleType } = card;
+
+  if (!puzzlePlayed && puzzleType && confirm(PUZZLE_MESSAGES[puzzleType])) {
+    card.puzzlePlayed = true;
+    closePuzzle();
+  } else if (puzzlePlayed) {
+    closePuzzle();
+  }
+}
+
 function resetMessage(message: string,
   setMessage: (message: string) => void): void {
   if (message !== '') setMessage('');
@@ -93,6 +104,7 @@ function showLoss(card: CardState,
 }
 
 const puzzUtils = {
+  confirmClose,
   resetMessage,
   getMove,
   getActiveCell,
