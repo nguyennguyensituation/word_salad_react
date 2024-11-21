@@ -45,4 +45,16 @@ export type CategoryDetail = {
   words: string[],
 }
 
+export type WordleGuess = {
+  card: CardState,
+  rows: string[][],
+  activeIdx: number,
+  prevGuesses: string[],
+  results: string[][],
+  setActiveIdx: (idx: number) => void,
+  setPrevGuesses: (guesses: string[]) => void,
+  setResults: (results: string[][]) => void,
+  setMessage: (message: string) => void
+}
+
 export type ClickHandler = (event: React.MouseEvent<HTMLInputElement>) => void;

@@ -2,64 +2,21 @@ import { useState, useEffect } from 'react';
 import styles from '@/app/components/board/puzzle/Wordle.module.css';
 import { CardState } from '@/app/lib/definitions';
 import Row from '@/app/components/board/puzzle/Row';
-import puzzUtils from '@/app/helpers/puzzleUtils';
-import wordleUtils from '@/app/helpers/wordleUtils';
-import { PUZZLE_MESSAGES } from '@/app/lib/messages';
+import wordleKeyDown from '@/app/helpers/wordleUtils';
 
 export default function Wordle(props: { card: CardState }) {
-  const { word, puzzlePlayed } = props.card;
   const [message, setMessage] = useState<string>('');
   const [rows, setRows] = useState<string[][]>(new Array(6).fill(['', '', '', '', '']));
-  const [currentRowIdx, setCurrentRowIdx] = useState<number>(0);
+  const [activeIdx, setActiveIdx] = useState<number>(0);
   const [prevGuesses, setPrevGuesses] = useState<string[]>([]);
-  const [rowResults, setRowResults] = useState<string[][]>(new Array(6).fill([]));
-
-  function updateRow(row: string[]): void {
-    const rowsCopy = [...rows];
-    rowsCopy[currentRowIdx] = row;
-    setRows(rowsCopy);
-  }
+  const [results, setResults] = useState<string[][]>(new Array(6).fill([]));
+  const handleKeyDown = (event: KeyboardEvent): void => {
+    wordleKeyDown(event, setRows, { card: props.card, rows, activeIdx,
+      prevGuesses, results, setActiveIdx, setPrevGuesses, setResults,
+      setMessage });
+  };
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent): void => {
-      if (puzzlePlayed) return;
-
-      const activeRow = rows[currentRowIdx];
-      const input = event.key.toLowerCase();
-      const move = puzzUtils.getMove(input, activeRow, word);
-
-      puzzUtils.resetMessage(message, setMessage);
-
-      if (move === 'addLetter' || move === 'deleteLetter') {
-        puzzUtils.updateCell(move, input, activeRow, word, updateRow);
-      } else if (move === 'checkGuess') {
-        const isValidWord = wordleUtils.isValidWord(activeRow);
-        const isUnique = puzzUtils.isUniqueWord(activeRow, prevGuesses);
-        const lastRow = currentRowIdx === 5;
-
-        if (!isValidWord) {
-          setMessage(PUZZLE_MESSAGES['invalidWordle']);
-        } else if (!isUnique) {
-          setMessage(PUZZLE_MESSAGES['duplicateGuess']);
-        } else {
-          const results = wordleUtils.getLetterResults(word, activeRow);
-          const isMatch = puzzUtils.isMatch(word, activeRow);
-
-          wordleUtils.renderResults(results, rowResults,currentRowIdx,
-            setRowResults);
-
-          if (isMatch) {
-            puzzUtils.showWin(props.card,setMessage);
-          } else {
-            puzzUtils.updatePrevGuesses(activeRow, prevGuesses, setPrevGuesses);
-            setCurrentRowIdx(currentRowIdx + 1);
-
-            if (lastRow) puzzUtils.showLoss(props.card, setMessage);
-          }
-        }
-      }
-    };
-
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -67,10 +24,8 @@ export default function Wordle(props: { card: CardState }) {
 
   return (
     <>
-      <section className={styles.wordleContainer}>
-        {rows.map((row, idx) => {
-          return <Row row={row} idx={idx} key={`row-${idx}`} results={rowResults[idx]}/>;
-        })}
+      <section className={styles.container}>
+        {rows.map((row, idx) => <Row row={row} idx={idx} key={`row-${idx}`} results={results[idx]}/>)}
       </section>
       <section>
         {message && <p className={styles.message}>{message}</p>}

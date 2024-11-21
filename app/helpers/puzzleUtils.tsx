@@ -95,6 +95,7 @@ function showLoss(card: CardState,
 const puzzUtils = {
   resetMessage,
   getMove,
+  getActiveCell,
   updateCell,
   isUniqueWord,
   isMatch,

@@ -31,7 +31,7 @@ export default function Crossword(props: { card: CardState }) {
         const lastGuess = mistakesCount === 1;
 
         if (!isUnique) {
-          setMessage(PUZZLE_MESSAGES['duplicateGuess']);
+          setMessage(PUZZLE_MESSAGES['duplicate']);
         } else {
           if (isMatch) {
             puzzUtils.showWin(card, setMessage);

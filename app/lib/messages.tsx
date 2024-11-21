@@ -20,8 +20,8 @@ export const PUZZLE_MESSAGES = {
   crossword: "You haven't finished solving this Crossword yet. Are you sure you want to quit this puzzle?",
 
   noMatch: "The correct word is ",
-  duplicateGuess: "You already guessed that word!",
-  invalidWordle: "That word is not in the Wordle dictionary.",
+  duplicate: "You already guessed that word!",
+  invalid: "That word is not in the Wordle dictionary.",
   crosswordMatch: "You solved this crossword!",
   wordleMatch: "You solved this Wordle!",
 };
