@@ -1,16 +1,17 @@
-import VALID_WORDLE_WORDS from '@/app/lib/wordleDictionary';
+import WORDLE_DICTIONARY from '@/app/lib/wordleDictionary';
 import { WordleResult } from '../lib/definitions';
 
 function isValidWord(letters: string[]): boolean {
   const word = letters.join('');
   let left = 0;
-  let right = VALID_WORDLE_WORDS.length - 1;
+  let right = WORDLE_DICTIONARY.length - 1;
 
   while (left <= right) {
     const mid = Math.floor((left + right) / 2);
-    if (VALID_WORDLE_WORDS[mid] === word) {
+
+    if (WORDLE_DICTIONARY[mid] === word) {
       return true;
-    } else if (VALID_WORDLE_WORDS[mid] < word) {
+    } else if (WORDLE_DICTIONARY[mid] < word) {
       left = mid + 1;
     } else {
       right = mid - 1;
@@ -23,7 +24,7 @@ function isValidWord(letters: string[]): boolean {
 function getLetterResults(word: string, row: string[],): WordleResult[] {
   const letters = word.split('');
 
-  // First pass: find correct and incorrect positions
+  // First pass: check letter position
   const results = row.map((ltr, idx) => {
     if (ltr === letters[idx]) {
       letters[idx] = '';
@@ -37,8 +38,7 @@ function getLetterResults(word: string, row: string[],): WordleResult[] {
   results.forEach((result, idx) => {
     if (result === 'incorrectPosition') {
       if (letters.includes(row[idx])) {
-        const wordIdx = letters.findIndex( ltr => ltr === row[idx]);
-        letters[wordIdx] = '';
+        letters[letters.findIndex( ltr => ltr === row[idx])] = '';
       } else {
         results[idx] = 'incorrectLetter';
       }
@@ -53,6 +53,7 @@ function renderResults(results: string[],
   currentRowIdx: number,
   setRowResults: (row: string[][]) => void): void {
   const resultsCopy = [...rowResults];
+
   resultsCopy[currentRowIdx] = results;
   setRowResults(resultsCopy);
 }
