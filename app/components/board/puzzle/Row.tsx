@@ -14,12 +14,12 @@ export default function Row(props: {row: string[],
   return (
     <div className={styles.row} key={`row-${props.idx}`}>
       { props.row.map((ltr, rowIdx) => {
-          return <Cell
-            key={`${props.idx}-${rowIdx}`}
-            ltr={ltr}
-            result={props.results && props.results[rowIdx]}
-          />;
-        })
+        return <Cell
+          key={`${props.idx}-${rowIdx}`}
+          ltr={ltr}
+          result={props.results && props.results[rowIdx]}
+        />;
+      })
       }
     </div>
   );
