@@ -103,21 +103,21 @@ function checkSelection(selection: CardState[],
 }
 
 function getCategory(name: string,
-  remainingCategories: CategoryDetail[]): CategoryDetail {
-  return remainingCategories.filter(cat => cat.name === name)[0];
+  allCtgs: CategoryDetail[]): CategoryDetail {
+  return allCtgs.filter(cat => cat.name === name)[0];
 }
 
 function updateCategories(category: CategoryDetail,
-  solvedCategories: CategoryDetail[],
-  allCategories: CategoryDetail[],
-  setSolvedCategories: (categories: CategoryDetail[]) => void,
-  setAllCategories: (categories: CategoryDetail[]) => void): void {
-  const filtered = allCategories.filter(cat => {
+  solvedCtgs: CategoryDetail[],
+  allCtgs: CategoryDetail[],
+  setSolvedCtgs: (categories: CategoryDetail[]) => void,
+  setAllCtgs: (categories: CategoryDetail[]) => void): void {
+  const filtered = allCtgs.filter(cat => {
     return cat.name !== category.name;
   });
 
-  setSolvedCategories([...solvedCategories, category]);
-  setAllCategories(filtered);
+  setSolvedCtgs([...solvedCtgs, category]);
+  setAllCtgs(filtered);
 }
 
 function updateDeck(categoryName: string,
@@ -152,12 +152,23 @@ function showLoss(selection: CardState[],
   prevGuesses: string[][],
   mistakesCounter: number,
   setMistakesCounter: (count: number) => void,
-  setPrevGuesses: (guesses: string[][]) => void,
-  setGameStatus: (status: GameStatus) => void): void {
-  setMistakesCounter(mistakesCounter - 1);
-  setPrevGuesses([...prevGuesses, selection.map(card => card.word)]);
+  setPrevGuesses: (guesses: string[][]) => void): void {
+  const guess = selection.map(card => card.word);
 
-  if (mistakesCounter === 1) setGameStatus('gameLost');
+  setPrevGuesses([...prevGuesses, guess]);
+  setMistakesCounter(mistakesCounter - 1);
+}
+
+function revealCategories(solvedCtgs: CategoryDetail[],
+  allCtgs: CategoryDetail[],
+  setSolvedCtgs: (categories: CategoryDetail[]) => void,
+  setGameStatus: (status: GameStatus) => void,
+  setDeck: (deck: CardState[]) => void): void {
+  const revealedCtgs = [...solvedCtgs, allCtgs].flat();
+
+  setSolvedCtgs(revealedCtgs);
+  setGameStatus('gameLost');
+  setDeck([]);
 }
 
 function checkCards(connectionsState: ConnectionsState): void {
@@ -169,29 +180,26 @@ function checkCards(connectionsState: ConnectionsState): void {
   if (result === 'duplicate') {
     setMessage(BOARD_MESSAGES['duplicateGuess']);
   } else if (result === 'solved') {
-    showWin(selection, allCtgs, solvedCtgs, deck,
-      setSelection, setAllCtgs, setSolvedCtgs, setDeck, setGameStatus);
+    showWin(selection, allCtgs, solvedCtgs, deck, setSelection, setAllCtgs,
+      setSolvedCtgs, setDeck, setGameStatus);
   } else {
-    if (result === 'oneAway' && mistakesCounter !== 1) {
-      setMessage(BOARD_MESSAGES['oneAway']);
-    }
-    showLoss(selection, prevGuesses, mistakesCounter,
-      setMistakesCounter, setPrevGuesses, setGameStatus);
+    if (result === 'oneAway' && mistakesCounter !== 1) setMessage(BOARD_MESSAGES['oneAway']);
+
+    showLoss(selection, prevGuesses, mistakesCounter, setMistakesCounter,
+      setPrevGuesses);
+
+    if (mistakesCounter === 1) revealCategories(solvedCtgs, allCtgs,
+      setSolvedCtgs, setGameStatus, setDeck);
   }
 }
 
 const boardUtils = {
   createDeck,
-  handleShuffle,
-  updateSelection,
-  handleDeselectAll,
-  toggleCardSelect,
-  duplicateGuess,
-  checkSelection,
-  getCategory,
-  updateCategories,
-  updateDeck,
   checkCards,
+  updateSelection,
+  toggleCardSelect,
+  handleShuffle,
+  handleDeselectAll,
 };
 
 export default boardUtils;
