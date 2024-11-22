@@ -1,4 +1,3 @@
-// TODO: Delete after database is set up
 import { GameData } from "@/app/lib/definitions";
 
 export const tempDeckData: GameData = {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { GameStatus, GameData, DeckData, CategoryDetail } from '../lib/definitions';
 import Message from '@/app/components/message/Message';
 import Board from '@/app/components/board/Board';
-import { tempDeckData } from "@/app/components/deck/tempDeckData";
+import { tempDeckData } from "@/app/lib/tempDeckData";
 
 function getCategories(gameData: GameData): CategoryDetail[] {
   return gameData.categories.map(cat => {
