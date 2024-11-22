@@ -57,4 +57,21 @@ export type WordleGuess = {
   setMessage: (message: string) => void
 }
 
+export type ConnectionsState = {
+  selection: CardState[],
+  prevGuesses: string[][],
+  allCtgs: CategoryDetail[],
+  solvedCtgs: CategoryDetail[],
+  deck: CardState[],
+  mistakesCounter: number,
+  setMessage: (message: string) => void,
+  setPrevGuesses: (guesses: string[][]) => void,
+  setAllCtgs: (categories: CategoryDetail[]) => void,
+  setSolvedCtgs: (categories: CategoryDetail[]) => void,
+  setDeck: (deck: CardState[]) => void,
+  setMistakesCounter: (count: number) => void,
+  setSelection: (selection: CardState[]) => void,
+  setGameStatus: (status: GameStatus) => void
+}
+
 export type ClickHandler = (event: React.MouseEvent<HTMLInputElement>) => void;

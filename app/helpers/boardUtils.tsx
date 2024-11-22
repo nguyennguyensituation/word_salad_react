@@ -1,5 +1,6 @@
-import { DeckData, CardState, CategoryDetail, ConnectionsResult } from '@/app/lib/definitions';
+import { DeckData, CardState, CategoryDetail, ConnectionsResult, GameStatus, ConnectionsState } from '@/app/lib/definitions';
 import shuffle from '@/app/helpers/shuffle';
+import { BOARD_MESSAGES } from "@/app/lib/messages";
 
 function createDeck(deckData: DeckData): CardState[] {
   return deckData.map(card => {
@@ -129,6 +130,56 @@ function updateDeck(categoryName: string,
   setSelection([]);
 }
 
+function showWin(selection: CardState[],
+  allCtgs: CategoryDetail[],
+  solvedCtgs: CategoryDetail[],
+  deck: CardState[],
+  setSelection: (selection: CardState[]) => void,
+  setAllCtgs: (categories: CategoryDetail[]) => void,
+  setSolvedCtgs: (categories: CategoryDetail[]) => void,
+  setDeck: (deck: CardState[]) => void,
+  setGameStatus: (status: GameStatus) => void): void {
+  const category = getCategory(selection[0].category, allCtgs);
+  const isLastCategory = solvedCtgs.length === 3;
+
+  updateCategories(category, solvedCtgs, allCtgs, setSolvedCtgs, setAllCtgs);
+  updateDeck(category.name, deck, setDeck, setSelection);
+
+  if (isLastCategory) setGameStatus('gameWon');
+}
+
+function showLoss(selection: CardState[],
+  prevGuesses: string[][],
+  mistakesCounter: number,
+  setMistakesCounter: (count: number) => void,
+  setPrevGuesses: (guesses: string[][]) => void,
+  setGameStatus: (status: GameStatus) => void): void {
+  setMistakesCounter(mistakesCounter - 1);
+  setPrevGuesses([...prevGuesses, selection.map(card => card.word)]);
+
+  if (mistakesCounter === 1) setGameStatus('gameLost');
+}
+
+function checkCards(connectionsState: ConnectionsState): void {
+  const {selection, prevGuesses, allCtgs, solvedCtgs, deck, mistakesCounter,
+    setMessage, setPrevGuesses, setAllCtgs, setSolvedCtgs, setDeck,
+    setMistakesCounter, setSelection, setGameStatus} = connectionsState;
+  const result = checkSelection(selection, prevGuesses);
+
+  if (result === 'duplicate') {
+    setMessage(BOARD_MESSAGES['duplicateGuess']);
+  } else if (result === 'solved') {
+    showWin(selection, allCtgs, solvedCtgs, deck,
+      setSelection, setAllCtgs, setSolvedCtgs, setDeck, setGameStatus);
+  } else {
+    if (result === 'oneAway' && mistakesCounter !== 1) {
+      setMessage(BOARD_MESSAGES['oneAway']);
+    }
+    showLoss(selection, prevGuesses, mistakesCounter,
+      setMistakesCounter, setPrevGuesses, setGameStatus);
+  }
+}
+
 const boardUtils = {
   createDeck,
   handleShuffle,
@@ -140,6 +191,7 @@ const boardUtils = {
   getCategory,
   updateCategories,
   updateDeck,
+  checkCards,
 };
 
 export default boardUtils;

@@ -14,7 +14,7 @@ export default function Crossword(props: { card: CardState }) {
   const handleKeyDown = (event: KeyboardEvent) => {
     xWordKeyDown(event, props.card, letters, prevGuesses, mistakesCount,
       setMessage, setLetters, setPrevGuesses, setMistakesCount);
-  }
+  };
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
