@@ -10,7 +10,8 @@ import boardUtils from "@/app/helpers/boardUtils";
 
 export default function Board(props: {deckData: DeckData,
   categories: CategoryDetail[],
-  setGameStatus: (status: GameStatus) => void}) {
+  setGameStatus: (status: GameStatus) => void,
+  setNewGameIdx: () => void}) {
   const [deck, setDeck] =
     useState<CardState[]>((boardUtils.createDeck(props.deckData)));
   const [mistakesCounter, setMistakesCounter] = useState(4);
@@ -60,12 +61,15 @@ export default function Board(props: {deckData: DeckData,
       <Mistakes remainingMistakes={mistakesCounter} puzzle={false}/>
       <Controller
         disableSubmit={selection.length !== 4}
+        disableDeselect={selection.length === 0}
+        gamePlayed={solvedCtgs.length === 4}
         submitCards={checkCards}
         handleShuffle={() => {
           boardUtils.handleShuffle(deck, setDeck, setMessage);
         }}
         handleDeselectAll={() => boardUtils.handleDeselectAll(selection,
-          deck, setSelection, setMessage)}/>
+          deck, setSelection, setMessage)}
+        playAgain={() => props.setNewGameIdx()}/>
       {currentPuzzle && <Puzzle
         card={currentPuzzle}
         closePuzzle={() => setCurrentPuzzle(null)} />}

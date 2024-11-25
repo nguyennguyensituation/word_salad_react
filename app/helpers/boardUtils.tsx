@@ -139,8 +139,8 @@ function showWin(selection: CardState[],
   setSolvedCtgs: (categories: CategoryDetail[]) => void,
   setDeck: (deck: CardState[]) => void,
   setGameStatus: (status: GameStatus) => void): void {
-  const category = getCategory(selection[0].category, allCtgs);
-  const isLastCategory = solvedCtgs.length === 3;
+  const category: CategoryDetail = getCategory(selection[0].category, allCtgs);
+  const isLastCategory: boolean = solvedCtgs.length === 3;
 
   updateCategories(category, solvedCtgs, allCtgs, setSolvedCtgs, setAllCtgs);
   updateDeck(category.name, deck, setDeck, setSelection);
