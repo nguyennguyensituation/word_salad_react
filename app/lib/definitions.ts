@@ -6,13 +6,11 @@ export type LetterResult = 'correct' | 'incorrectLetter' | 'incorrectPosition';
 
 export type ConnectionsResult = 'duplicate' | 'noMatch' |'solved' |'oneAway';
 
-export type Word = {
+export type CardData = {
   word: string,
   puzzleType?: 'crossword' | 'wordle'
   crosswordClue?: string,
-}
-export type CardData = Word & {
-  category: string,
+  category?: string,
 }
 
 export type DeckData = CardData[];
@@ -20,7 +18,7 @@ export type DeckData = CardData[];
 export type CategoryData = {
   difficulty: number,
   categoryName: string,
-  categoryWords: Word[],
+  categoryWords: CardData[],
 }
 
 export type GameData = {
