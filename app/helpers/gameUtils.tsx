@@ -1,12 +1,10 @@
 import shuffle from "@/app/helpers/shuffle";
 import { GameData, DeckData, CategoryDetail } from '../lib/definitions';
 
-function setNewGameIdx(gameIdx: number,
-  prevGamesIdx: number[],
-  setGameIdx: (idx: number) => void,
-  setPrevGamesIdx: (games: number[]) => void): void {
+
+function playAgain(gameIdx: number,
+  setGameIdx: (idx: number) => void): void {
   setGameIdx(gameIdx + 1);
-  setPrevGamesIdx([...prevGamesIdx, gameIdx])
 }
 
 function getCategories(gameData: GameData): CategoryDetail[] {
@@ -31,7 +29,7 @@ function parseGameData(data: GameData): DeckData {
 }
 
 const gameUtils = {
-  setNewGameIdx,
+  playAgain,
   getCategories,
   parseGameData,
 };

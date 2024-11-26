@@ -8,16 +8,13 @@ import connectionsData from "@/app/lib/connectionsData";
 import gameUtils from "../helpers/gameUtils";
 
 export default function Page() {
-  const [isClient, setIsClient] = useState(false);
+  const [isClient, setIsClient] = useState<boolean>(false);
   const [gameStatus, setGameStatus] = useState<GameStatus>('cardsNotSolved');
   const [gameIdx, setGameIdx] = useState<number>(0);
-  const [prevGamesIdx, setPrevGamesIdx] = useState<number[]>([]);
   const data: GameData = connectionsData[gameIdx];
   const deckData: DeckData = gameUtils.parseGameData(data);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  useEffect(() => setIsClient(true), []);
 
   if (!isClient) return null;
 
@@ -27,7 +24,8 @@ export default function Page() {
       <Board deckData={deckData}
         categories={gameUtils.getCategories(data)}
         setGameStatus={(status: GameStatus) => setGameStatus(status)}
-        setNewGameIdx={() => gameUtils.setNewGameIdx(gameIdx, prevGamesIdx, setGameIdx, setPrevGamesIdx)}/>
+        playAgain={() => gameUtils.playAgain(gameIdx, setGameIdx)}
+        gameIdx={gameIdx}/>
     </main>
   );
 }

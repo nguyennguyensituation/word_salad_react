@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from '@/app/components/board/Board.module.css';
 import Card from '@/app/components/board/card/Card';
 import Categories from '@/app/components/board/Categories';
@@ -11,7 +11,8 @@ import boardUtils from "@/app/helpers/boardUtils";
 export default function Board(props: {deckData: DeckData,
   categories: CategoryDetail[],
   setGameStatus: (status: GameStatus) => void,
-  setNewGameIdx: () => void}) {
+  playAgain: () => void,
+  gameIdx: number}) {
   const [deck, setDeck] =
     useState<CardState[]>((boardUtils.createDeck(props.deckData)));
   const [mistakesCounter, setMistakesCounter] = useState(4);
@@ -43,6 +44,22 @@ export default function Board(props: {deckData: DeckData,
     }
   }
 
+  useEffect(() => {
+    resetBoard();
+    props.setGameStatus('cardsNotSolved');
+  }, [props.gameIdx]);
+
+  function resetBoard() {
+    setMistakesCounter(4);
+    setSelection([]);
+    setCurrentPuzzle(null);
+    setAllCtgs(props.categories);
+    setSolvedCtgs([]);
+    setPrevGuesses([]);
+    setPuzzleCount(0);
+    setDeck(boardUtils.createDeck(props.deckData));
+  }
+
   return (
     <>
       <Categories categories={solvedCtgs}/>
@@ -58,7 +75,8 @@ export default function Board(props: {deckData: DeckData,
       <section>
         {message && <p className={styles.message}>{message}</p>}
       </section>
-      <Mistakes remainingMistakes={mistakesCounter} puzzle={false}/>
+      {solvedCtgs.length !== 4 &&
+        < Mistakes remainingMistakes={mistakesCounter} puzzle={false}/>}
       <Controller
         disableSubmit={selection.length !== 4}
         disableDeselect={selection.length === 0}
@@ -69,7 +87,7 @@ export default function Board(props: {deckData: DeckData,
         }}
         handleDeselectAll={() => boardUtils.handleDeselectAll(selection,
           deck, setSelection, setMessage)}
-        playAgain={() => props.setNewGameIdx()}/>
+        playAgain={() => props.playAgain()}/>
       {currentPuzzle && <Puzzle
         card={currentPuzzle}
         closePuzzle={() => setCurrentPuzzle(null)} />}

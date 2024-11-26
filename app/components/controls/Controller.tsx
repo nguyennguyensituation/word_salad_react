@@ -13,7 +13,7 @@ export default function Controller(props: { disableSubmit: boolean,
 
   return (
     <fieldset className={styles.controller}>
-      {!props.gamePlayed && 
+      {!props.gamePlayed &&
         <>
           <Button id="shuffle-btn" value="Shuffle" onClick={props.handleShuffle}/>
           <Button id="deselect-btn" value="Deselect All" onClick={props.handleDeselectAll} disabled={props.disableDeselect}/>
@@ -22,7 +22,6 @@ export default function Controller(props: { disableSubmit: boolean,
       }
 
       {props.gamePlayed && <Button id="play-again-btn" value="Play Again" onClick={props.playAgain}/>}
-      
     </fieldset>
   );
 }
