@@ -1,4 +1,4 @@
-import { DeckData, CardState, CategoryDetail, ConnectionsResult, GameStatus, ConnectionsState } from '@/app/lib/definitions';
+import { DeckData, CardState, CategoryDetail, ConnectionsResult, GameStatus, GameState } from '@/app/lib/definitions';
 import shuffle from '@/app/helpers/shuffle';
 import { BOARD_MESSAGES } from "@/app/lib/messages";
 
@@ -16,37 +16,20 @@ function createDeck(deckData: DeckData): CardState[] {
   });
 }
 
-function handleShuffle(deck: CardState[],
-  setDeck: (deck: CardState[]) => void,
-  setMessage: (message: string) => void): void {
-  setMessage('');
-  setDeck(shuffle(deck));
-}
-
-function updateSelection(card: CardState,
-  cardAction: string,
-  selection: CardState[],
-  setSelection: (cards: CardState[]) => void): void {
-  const updated = (cardAction === 'removeCard') ?
-    selection.filter(selected => selected.word !== card.word) :
-    [...selection, card];
-
-  setSelection(updated);
-}
-
-function toggleCardSelect(word: string,
-  deck: CardState[]): void {
-  const idx = deck.findIndex(card => card.word === word);
-  deck[idx].isSelected = !deck[idx].isSelected;
-}
-
-function handleDeselectAll(selectedCards: CardState[],
-  deck: CardState[],
-  setSelection: (selection: CardState[]) => void,
-  setMessage: (message: string) => void): void {
-  setMessage('');
-  selectedCards.forEach(card => toggleCardSelect(card.word, deck));
-  setSelection([]);
+function defaultGameState(deckData: DeckData,
+  categories: CategoryDetail[],
+): GameState {
+  return {
+    deck: createDeck(deckData),
+    mistakesCounter: 4,
+    selection: [],
+    currentPuzzle: null,
+    message: '',
+    allCtgs: categories,
+    solvedCtgs: [],
+    prevGuesses: [],
+    puzzleCount: 0,
+  };
 }
 
 export function selectCard(card: CardState,
@@ -66,14 +49,56 @@ export function selectCard(card: CardState,
   if (cardAction) onSelection(card, cardAction);
 }
 
+function handleShuffle(gameState: GameState,
+  setGameState: (state: GameState) => void): void {
+  const gameCopy = {...gameState};
+
+  gameCopy.message = '';
+  gameCopy.deck = shuffle(gameState.deck);
+  setGameState(gameCopy);
+}
+
+function updateSelection(card: CardState,
+  cardAction: string,
+  gameState: GameState,
+  setGameState: (state: GameState) => void): void {
+  const gameCopy = {...gameState};
+  const updatedSelection = cardAction === 'removeCard' ?
+    gameState.selection.filter(selected => selected.word !== card.word) :
+    [...gameState.selection, card];
+
+  gameCopy.selection = updatedSelection;
+  setGameState(gameCopy);
+}
+
+function toggleCardSelect(word: string,
+  deck: CardState[]): void {
+  const idx = deck.findIndex(card => card.word === word);
+
+  deck[idx].isSelected = !deck[idx].isSelected;
+}
+
+function handleDeselectAll(gameState: GameState,
+  setGameState: (state: GameState) => void): void {
+  const gameCopy = {...gameState};
+  gameState.selection.forEach(card => {
+    toggleCardSelect(card.word, gameState.deck);
+  });
+
+  gameCopy.message = '';
+  gameCopy.selection = [];
+  setGameState(gameCopy);
+}
+
 function duplicateGuess(selection: CardState[],
   prevGuesses: string[][]): boolean {
-  const wordString = selection.map(card => card.word).sort().join(',');
+  const guessStr = selection.map(card => card.word).sort().join(',');
 
   for (let guessIdx = 0; guessIdx < prevGuesses.length; guessIdx++) {
     const guess = prevGuesses[guessIdx].sort().join(',');
-    if (guess === wordString) return true;
+    if (guess === guessStr) return true;
   }
+
   return false;
 }
 
@@ -85,7 +110,7 @@ function checkSelection(selection: CardState[],
   let result: ConnectionsResult = 'noMatch';
 
   selection.forEach((card, idx) => {
-    const category = card.category;
+    const category = card.category || '';
 
     if (categoryCount[category]) {
       categoryCount[category] += 1;
@@ -108,98 +133,135 @@ function getCategory(name: string,
 }
 
 function updateCategories(category: CategoryDetail,
-  solvedCtgs: CategoryDetail[],
-  allCtgs: CategoryDetail[],
-  setSolvedCtgs: (categories: CategoryDetail[]) => void,
-  setAllCtgs: (categories: CategoryDetail[]) => void): void {
-  const filtered = allCtgs.filter(cat => {
+  gameState: GameState,
+  setGameState: (state: GameState) => void): void {
+  const gameCopy = {...gameState};
+  const filtered = gameState.allCtgs.filter(cat => {
     return cat.name !== category.name;
   });
 
-  setSolvedCtgs([...solvedCtgs, category]);
-  setAllCtgs(filtered);
+  gameCopy.allCtgs = filtered;
+  gameCopy.solvedCtgs = [...gameState.solvedCtgs, category];
+  setGameState(gameCopy);
 }
 
 function updateDeck(categoryName: string,
-  deck: CardState[],
-  setDeck: (deck: CardState[]) => void,
-  setSelection: (cards: CardState[]) => void): void {
-  const filtered = deck.filter(card => card.category !== categoryName);
+  gameState: GameState,
+  setGameState: (state: GameState) => void): void {
+  const gameCopy = {...gameState};
 
-  setDeck(filtered);
-  setSelection([]);
+  gameCopy.deck = gameState.deck.filter(card => card.category !== categoryName);
+  gameCopy.selection = [];
+  setGameState(gameCopy);
 }
 
-function showWin(selection: CardState[],
-  allCtgs: CategoryDetail[],
-  solvedCtgs: CategoryDetail[],
-  deck: CardState[],
-  setSelection: (selection: CardState[]) => void,
-  setAllCtgs: (categories: CategoryDetail[]) => void,
-  setSolvedCtgs: (categories: CategoryDetail[]) => void,
-  setDeck: (deck: CardState[]) => void,
+function showWin(gameState: GameState,
+  setGameState: (state: GameState) => void,
   setGameStatus: (status: GameStatus) => void): void {
-  const category: CategoryDetail = getCategory(selection[0].category, allCtgs);
-  const isLastCategory: boolean = solvedCtgs.length === 3;
+  const categoryName = gameState.selection[0].category || '';
+  const category: CategoryDetail = getCategory(categoryName, gameState.allCtgs);
+  const isLastCategory: boolean = gameState.solvedCtgs.length === 3;
 
-  updateCategories(category, solvedCtgs, allCtgs, setSolvedCtgs, setAllCtgs);
-  updateDeck(category.name, deck, setDeck, setSelection);
+  updateCategories(category, gameState, setGameState);
+  updateDeck(category.name, gameState, setGameState);
 
   if (isLastCategory) setGameStatus('gameWon');
 }
 
-function showLoss(selection: CardState[],
-  prevGuesses: string[][],
-  mistakesCounter: number,
-  setMistakesCounter: (count: number) => void,
-  setPrevGuesses: (guesses: string[][]) => void): void {
-  const guess = selection.map(card => card.word);
+function showLoss(gameState: GameState,
+  setGameState: (state: GameState) => void): void {
+  const guess = gameState.selection.map(card => card.word);
+  const gameCopy = {...gameState};
 
-  setPrevGuesses([...prevGuesses, guess]);
-  setMistakesCounter(mistakesCounter - 1);
+  gameCopy.prevGuesses = [...gameState.prevGuesses, guess];
+  gameCopy.mistakesCounter -= 1;
+  setGameState(gameCopy);
 }
 
-function revealCategories(solvedCtgs: CategoryDetail[],
-  allCtgs: CategoryDetail[],
-  setSolvedCtgs: (categories: CategoryDetail[]) => void,
-  setGameStatus: (status: GameStatus) => void,
-  setDeck: (deck: CardState[]) => void): void {
-  const revealedCtgs = [...solvedCtgs, allCtgs].flat();
+function revealCategories(gameState: GameState,
+  setGameState: (state: GameState) => void,
+  setGameStatus: (status: GameStatus) => void): void {
+  const gameCopy = {...gameState};
 
-  setSolvedCtgs(revealedCtgs);
+  gameCopy.message = '';
+  gameCopy.solvedCtgs = [...gameState.solvedCtgs, gameState.allCtgs].flat();
+  gameCopy.deck = [];
+  setGameState(gameCopy);
   setGameStatus('gameLost');
-  setDeck([]);
 }
 
-function checkCards(connectionsState: ConnectionsState): void {
-  const {selection, prevGuesses, allCtgs, solvedCtgs, deck, mistakesCounter,
-    setMessage, setPrevGuesses, setAllCtgs, setSolvedCtgs, setDeck,
-    setMistakesCounter, setSelection, setGameStatus} = connectionsState;
-  const result = checkSelection(selection, prevGuesses);
+function checkCards(gameState: GameState,
+  setGameState: (state: GameState) => void,
+  setGameStatus: (status: GameStatus) => void): void {
+  const result = checkSelection(gameState.selection, gameState.prevGuesses);
+  const gameCopy = {...gameState};
+  const isLastGuess = gameState.mistakesCounter === 1;
 
+  console.log([result, isLastGuess]);
   if (result === 'duplicate') {
-    setMessage(BOARD_MESSAGES['duplicateGuess']);
+    gameCopy.message = (BOARD_MESSAGES['duplicateGuess']);
+    setGameState(gameCopy);
   } else if (result === 'solved') {
-    showWin(selection, allCtgs, solvedCtgs, deck, setSelection, setAllCtgs,
-      setSolvedCtgs, setDeck, setGameStatus);
+    showWin(gameState, setGameState, setGameStatus);
   } else {
-    if (result === 'oneAway' && mistakesCounter !== 1) setMessage(BOARD_MESSAGES['oneAway']);
+    const msg = result === 'oneAway' && !isLastGuess ? 'oneAway' : 'noMatch';
 
-    showLoss(selection, prevGuesses, mistakesCounter, setMistakesCounter,
-      setPrevGuesses);
+    gameCopy.message = BOARD_MESSAGES[msg];
+    showLoss(gameCopy, setGameState);
 
-    if (mistakesCounter === 1) revealCategories(solvedCtgs, allCtgs,
-      setSolvedCtgs, setGameStatus, setDeck);
+    if (isLastGuess) revealCategories(gameCopy, setGameState, setGameStatus);
   }
 }
 
+function handleCardSelection(card: CardState,
+  cardAction: string,
+  gameState: GameState,
+  setGameState: (state: GameState) => void,
+  setGameStatus: (status: GameStatus) => void): void {
+  const gameCopy = {...gameState};
+  const allPuzzlesSolved = gameState.puzzleCount === 7;
+
+  gameCopy.message = '';
+
+  if (cardAction === 'playPuzzle') {
+    gameCopy.currentPuzzle = card;
+    gameCopy.puzzleCount += 1;
+    setGameState(gameCopy);
+
+    if (allPuzzlesSolved) setGameStatus('cardsSolved');
+  } else {
+    updateSelection(card, cardAction, gameCopy, setGameState);
+    toggleCardSelect(card.word, gameState.deck);
+  }
+}
+
+function resetPuzzle(gameState: GameState,
+  setGameState: (state: GameState) => void) {
+  const gameCopy = {...gameState};
+
+  gameCopy.currentPuzzle = null;
+  setGameState(gameCopy);
+}
+
+function resetGame(deckData: DeckData,
+  categories: CategoryDetail[],
+  setGameState: (state: GameState) => void,
+  setGameStatus: (status: GameStatus) => void): void {
+  setGameState(defaultGameState(deckData, categories));
+  setGameStatus('cardsNotSolved');
+}
+
 const boardUtils = {
+  defaultGameState,
   createDeck,
   checkCards,
   updateSelection,
   toggleCardSelect,
   handleShuffle,
   handleDeselectAll,
+  handleCardSelection,
+  resetPuzzle,
+  resetGame,
 };
 
 export default boardUtils;

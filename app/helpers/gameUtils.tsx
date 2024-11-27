@@ -1,13 +1,7 @@
 import shuffle from "@/app/helpers/shuffle";
 import { GameData, DeckData, CategoryDetail } from '../lib/definitions';
 
-
-function playAgain(gameIdx: number,
-  setGameIdx: (idx: number) => void): void {
-  setGameIdx(gameIdx + 1);
-}
-
-function getCategories(gameData: GameData): CategoryDetail[] {
+function parseCategories(gameData: GameData): CategoryDetail[] {
   return gameData.categories.map(cat => {
     return {
       difficulty: cat.difficulty,
@@ -28,10 +22,15 @@ function parseGameData(data: GameData): DeckData {
   return shuffle(deck);
 }
 
+function playAgain(gameIdx: number,
+  setGameIdx: (idx: number) => void): void {
+  setGameIdx(gameIdx + 1);
+}
+
 const gameUtils = {
-  playAgain,
-  getCategories,
+  parseCategories,
   parseGameData,
+  playAgain,
 };
 
 export default gameUtils;

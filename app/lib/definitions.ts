@@ -6,6 +6,8 @@ export type LetterResult = 'correct' | 'incorrectLetter' | 'incorrectPosition';
 
 export type ConnectionsResult = 'duplicate' | 'noMatch' |'solved' |'oneAway';
 
+export type ClickHandler = (event: React.MouseEvent<HTMLInputElement>) => void;
+
 export type CardData = {
   word: string,
   puzzleType?: 'crossword' | 'wordle'
@@ -14,6 +16,30 @@ export type CardData = {
 }
 
 export type DeckData = CardData[];
+
+export type CardState = CardData & {
+  isSelected: boolean,
+  puzzlePlayed: boolean,
+  puzzleSolved: boolean,
+}
+
+export type CategoryDetail = {
+  name: string,
+  difficulty: number,
+  words: string[],
+}
+
+export type GameState = {
+  deck: CardState[],
+  mistakesCounter: number,
+  selection: CardState[],
+  currentPuzzle: CardState | null,
+  message: string,
+  allCtgs: CategoryDetail[],
+  solvedCtgs: CategoryDetail[],
+  prevGuesses: string[][],
+  puzzleCount: number,
+}
 
 export type CategoryData = {
   difficulty: number,
@@ -26,23 +52,11 @@ export type GameData = {
   categories: CategoryData[],
 }
 
-export type CardState = CardData & {
-  isSelected: boolean,
-  puzzlePlayed: boolean,
-  puzzleSolved: boolean,
-}
-
 export type TileData = {
   word: string,
   puzzleType?: string,
   puzzlePlayed: boolean,
   puzzleSolved: boolean,
-}
-
-export type CategoryDetail = {
-  name: string,
-  difficulty: number,
-  words: string[],
 }
 
 export type WordleGuess = {
@@ -56,22 +70,3 @@ export type WordleGuess = {
   setResults: (results: string[][]) => void,
   setMessage: (message: string) => void
 }
-
-export type ConnectionsState = {
-  selection: CardState[],
-  prevGuesses: string[][],
-  allCtgs: CategoryDetail[],
-  solvedCtgs: CategoryDetail[],
-  deck: CardState[],
-  mistakesCounter: number,
-  setMessage: (message: string) => void,
-  setPrevGuesses: (guesses: string[][]) => void,
-  setAllCtgs: (categories: CategoryDetail[]) => void,
-  setSolvedCtgs: (categories: CategoryDetail[]) => void,
-  setDeck: (deck: CardState[]) => void,
-  setMistakesCounter: (count: number) => void,
-  setSelection: (selection: CardState[]) => void,
-  setGameStatus: (status: GameStatus) => void
-}
-
-export type ClickHandler = (event: React.MouseEvent<HTMLInputElement>) => void;

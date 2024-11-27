@@ -22,7 +22,7 @@ export default function Page() {
     <main>
       <Message status={gameStatus} />
       <Board deckData={deckData}
-        categories={gameUtils.getCategories(data)}
+        categories={gameUtils.parseCategories(data)}
         setGameStatus={(status: GameStatus) => setGameStatus(status)}
         playAgain={() => gameUtils.playAgain(gameIdx, setGameIdx)}
         gameIdx={gameIdx}/>

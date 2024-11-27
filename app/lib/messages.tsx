@@ -13,6 +13,7 @@ export const GAME_STATUSES = {
 export const BOARD_MESSAGES = {
   duplicateGuess: "Already guessed!",
   oneAway: "One away!",
+  noMatch: "Try again!"
 };
 
 export const PUZZLE_MESSAGES = {
