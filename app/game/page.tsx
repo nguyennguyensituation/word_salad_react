@@ -5,7 +5,7 @@ import { GameStatus, GameData, DeckData } from '../lib/definitions';
 import Message from '@/app/components/message/Message';
 import Board from '@/app/components/board/Board';
 import connectionsData from "@/app/lib/connectionsData";
-import gameUtils from "../helpers/gameUtils";
+import gameUtils from "@/app/utils/gameUtils";
 
 export default function Page() {
   const [isClient, setIsClient] = useState<boolean>(false);
