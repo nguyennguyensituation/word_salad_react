@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from '@/app/components/board/puzzle/Wordle.module.css';
 import { CardState } from '@/app/lib/definitions';
 import Row from '@/app/components/board/puzzle/Row';
-import wordleKeyDown from '@/app/helpers/wordleUtils';
+import wordleKeyDown from '@/app/utils/wordleUtils';
 
 export default function Wordle(props: { card: CardState }) {
   const [message, setMessage] = useState<string>('');

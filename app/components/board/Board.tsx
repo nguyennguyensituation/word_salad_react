@@ -6,7 +6,7 @@ import Mistakes from '@/app/components/board/mistakes/Mistakes';
 import Controller from '@/app/components/controls/Controller';
 import { DeckData, GameStatus, CardState, CategoryDetail, GameState } from '@/app/lib/definitions';
 import Puzzle from "@/app/components/board/puzzle/Puzzle";
-import boardUtils from "@/app/helpers/boardUtils";
+import boardUtils from "@/app/utils/boardUtils";
 
 export default function Board(props: { gameIdx: number,
   deckData: DeckData,

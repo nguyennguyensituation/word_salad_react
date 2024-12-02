@@ -1,4 +1,4 @@
-import puzzUtils from '@/app/helpers/puzzleUtils';
+import puzzUtils from '@/app/utils/puzzleUtils';
 import { CardState } from '@/app/lib/definitions';
 import { PUZZLE_MESSAGES } from '../lib/messages';
 

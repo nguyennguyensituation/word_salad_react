@@ -1,7 +1,7 @@
 import { LetterResult, CardState, WordleGuess} from '../lib/definitions';
 import WORDLE_DICTIONARY from '@/app/lib/wordleDictionary';
 import { PUZZLE_MESSAGES } from '@/app/lib/messages';
-import puzzUtils from '@/app/helpers/puzzleUtils';
+import puzzUtils from '@/app/utils/puzzleUtils';
 
 function updateRow(row: string[],
   rows: string[][],

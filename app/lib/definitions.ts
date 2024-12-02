@@ -70,3 +70,10 @@ export type WordleGuess = {
   setResults: (results: string[][]) => void,
   setMessage: (message: string) => void
 }
+
+export type CrosswordState = {
+  letters: string[],
+  mistakesCount: number,
+  message: string,
+  prevGuesses: string[],
+}

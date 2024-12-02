@@ -3,7 +3,7 @@ import Crossword from '@/app/components/board/puzzle/Crossword';
 import Wordle from '@/app/components/board/puzzle/Wordle';
 import { CardState } from '@/app/lib/definitions';
 import { PUZZLE_INSTRUCTIONS } from '@/app/lib/messages';
-import { confirmClose } from '@/app/helpers/puzzleUtils';
+import { confirmClose } from '@/app/utils/puzzleUtils';
 
 export default function Puzzle(props: { card: CardState,
   closePuzzle: () => void }) {

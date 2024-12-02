@@ -1,5 +1,5 @@
 import { DeckData, CardState, CategoryDetail, ConnectionsResult, GameStatus, GameState } from '@/app/lib/definitions';
-import shuffle from '@/app/helpers/shuffle';
+import shuffle from '@/app/utils/shuffle';
 import { BOARD_MESSAGES } from "@/app/lib/messages";
 
 function createDeck(deckData: DeckData): CardState[] {
