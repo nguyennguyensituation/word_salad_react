@@ -59,21 +59,18 @@ export type TileData = {
   puzzleSolved: boolean,
 }
 
-export type WordleGuess = {
-  card: CardState,
-  rows: string[][],
-  activeIdx: number,
-  prevGuesses: string[],
-  results: string[][],
-  setActiveIdx: (idx: number) => void,
-  setPrevGuesses: (guesses: string[]) => void,
-  setResults: (results: string[][]) => void,
-  setMessage: (message: string) => void
-}
-
 export type CrosswordState = {
   letters: string[],
   mistakesCount: number,
   message: string,
   prevGuesses: string[],
+}
+
+export type WordleState = {
+  card: CardState,
+  activeIdx: number,
+  rows: string[][],
+  message: string,
+  prevGuesses: string[],
+  results: string[][],
 }

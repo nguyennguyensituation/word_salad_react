@@ -1,19 +1,14 @@
 import { useState, useEffect } from 'react';
 import styles from '@/app/components/board/puzzle/Wordle.module.css';
-import { CardState } from '@/app/lib/definitions';
+import { CardState, WordleState } from '@/app/lib/definitions';
 import Row from '@/app/components/board/puzzle/Row';
-import wordleKeyDown from '@/app/utils/wordleUtils';
+import {wordleKeyDown, defaultWordle} from '@/app/utils/wordleUtils';
 
 export default function Wordle(props: { card: CardState }) {
-  const [message, setMessage] = useState<string>('');
-  const [rows, setRows] = useState<string[][]>(new Array(6).fill(['', '', '', '', '']));
-  const [activeIdx, setActiveIdx] = useState<number>(0);
-  const [prevGuesses, setPrevGuesses] = useState<string[]>([]);
-  const [results, setResults] = useState<string[][]>(new Array(6).fill([]));
+  const [wordleState, setWordleState] = useState<WordleState>(defaultWordle(props.card));
+  const {rows, prevGuesses, results, message} = wordleState;
   const handleKeyDown = (event: KeyboardEvent): void => {
-    wordleKeyDown(event, setRows, { card: props.card, rows, activeIdx,
-      prevGuesses, results, setActiveIdx, setPrevGuesses, setResults,
-      setMessage });
+    wordleKeyDown(event, wordleState, setWordleState);
   };
 
   useEffect(() => {

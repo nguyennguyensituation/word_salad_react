@@ -103,6 +103,11 @@ function showLoss(card: CardState,
   setMessage(`${PUZZLE_MESSAGES['noMatch']} ${card.word.toUpperCase()}`);
 }
 
+function setPuzzleComplete(card: CardState, isWinner: boolean) {
+  card.puzzlePlayed = true;
+  card.puzzleSolved = isWinner;
+}
+
 const puzzUtils = {
   confirmClose,
   resetMessage,
@@ -115,6 +120,7 @@ const puzzUtils = {
   decrementMistakes,
   showWin,
   showLoss,
+  setPuzzleComplete
 };
 
 export default puzzUtils;
