@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from '@/app/components/board/Board.module.css';
 import Card from '@/app/components/board/card/Card';
-import Categories from '@/app/components/board/Categories';
+import Categories from '@/app/components/board/categories/Categories';
 import Mistakes from '@/app/components/board/mistakes/Mistakes';
 import Controller from '@/app/components/controls/Controller';
 import { DeckData, GameStatus, CardState, CategoryDetail, GameState } from '@/app/lib/definitions';
@@ -15,7 +15,7 @@ export default function Board(props: { gameIdx: number,
   playAgain: () => void}) {
   const { gameIdx, deckData, categories, setGameStatus, playAgain} = props;
   const [gameState, setGameState] =
-    useState<GameState>(boardUtils.defaultGameState(deckData, categories));
+    useState<GameState>(boardUtils.defaultGame(deckData, categories));
 
   useEffect(() => {
     boardUtils.resetGame(deckData, categories, setGameState, setGameStatus);

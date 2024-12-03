@@ -1,4 +1,4 @@
-import styles from '@/app/components/board/Categories.module.css';
+import styles from '@/app/components/board/categories/Categories.module.css';
 import { CategoryDetail } from '@/app/lib/definitions';
 
 function Category(props: {name: string,
@@ -15,6 +15,7 @@ function Category(props: {name: string,
 }
 
 export default function Categories(props: {categories: CategoryDetail[]}) {
+
   return (
     <>
       <article className={styles.categories}>

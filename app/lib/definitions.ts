@@ -59,18 +59,18 @@ export type TileData = {
   puzzleSolved: boolean,
 }
 
-export type CrosswordState = {
-  letters: string[],
-  mistakesCount: number,
+export type PuzzleState = {
+  card: CardState,
   message: string,
   prevGuesses: string[],
 }
+export type CrosswordState = PuzzleState & {
+  letters: string[],
+  mistakesCount: number,
+}
 
-export type WordleState = {
-  card: CardState,
+export type WordleState = PuzzleState & {
   activeIdx: number,
   rows: string[][],
-  message: string,
-  prevGuesses: string[],
   results: string[][],
 }

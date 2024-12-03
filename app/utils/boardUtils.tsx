@@ -1,5 +1,5 @@
 import { DeckData, CardState, CategoryDetail, ConnectionsResult, GameStatus, GameState } from '@/app/lib/definitions';
-import shuffle from '@/app/utils/shuffle';
+import { shuffle, filterArr} from '@/app/utils/generalUtils';
 import { BOARD_MESSAGES } from "@/app/lib/messages";
 
 function createDeck(deckData: DeckData): CardState[] {
@@ -16,7 +16,7 @@ function createDeck(deckData: DeckData): CardState[] {
   });
 }
 
-function defaultGameState(deckData: DeckData,
+function defaultGame(deckData: DeckData,
   categories: CategoryDetail[],
 ): GameState {
   return {
@@ -34,8 +34,8 @@ function defaultGameState(deckData: DeckData,
 
 export function selectCard(card: CardState,
   numSelectedCards: number,
-  onSelection: (card: CardState, cardAction: string) => void): void {
-  const {puzzlePlayed, isSelected} = card;
+  handleSelection: (card: CardState, cardAction: string) => void): void {
+  const { puzzlePlayed, isSelected } = card;
   let cardAction = '';
 
   if (!puzzlePlayed) {
@@ -46,7 +46,7 @@ export function selectCard(card: CardState,
     cardAction = 'addCard';
   }
 
-  if (cardAction) onSelection(card, cardAction);
+  if (cardAction) handleSelection(card, cardAction);
 }
 
 function handleShuffle(gameState: GameState,
@@ -64,7 +64,7 @@ function updateSelection(card: CardState,
   setGameState: (state: GameState) => void): void {
   const gameCopy = {...gameState};
   const updatedSelection = cardAction === 'removeCard' ?
-    gameState.selection.filter(selected => selected.word !== card.word) :
+    filterArr(gameState.selection, 'word', card.word, false) :
     [...gameState.selection, card];
 
   gameCopy.selection = updatedSelection;
@@ -127,31 +127,20 @@ function checkSelection(selection: CardState[],
   return result;
 }
 
-function getCategory(name: string,
+function getCategory(categoryName: string,
   allCtgs: CategoryDetail[]): CategoryDetail {
-  return allCtgs.filter(cat => cat.name === name)[0];
+  return filterArr(allCtgs, 'name', categoryName, true)[0];
 }
 
 function updateCategories(category: CategoryDetail,
   gameState: GameState,
   setGameState: (state: GameState) => void): void {
   const gameCopy = {...gameState};
-  const filtered = gameState.allCtgs.filter(cat => {
-    return cat.name !== category.name;
-  });
 
-  gameCopy.allCtgs = filtered;
-  gameCopy.solvedCtgs = [...gameState.solvedCtgs, category];
-  setGameState(gameCopy);
-}
-
-function updateDeck(categoryName: string,
-  gameState: GameState,
-  setGameState: (state: GameState) => void): void {
-  const gameCopy = {...gameState};
-
-  gameCopy.deck = gameState.deck.filter(card => card.category !== categoryName);
   gameCopy.selection = [];
+  gameCopy.solvedCtgs = [...gameState.solvedCtgs, category];
+  gameCopy.allCtgs = filterArr(gameState.allCtgs, 'name', category.name, false);
+  gameCopy.deck = filterArr(gameState.deck, 'category', category.name, false);
   setGameState(gameCopy);
 }
 
@@ -163,7 +152,6 @@ function showWin(gameState: GameState,
   const isLastCategory: boolean = gameState.solvedCtgs.length === 3;
 
   updateCategories(category, gameState, setGameState);
-  updateDeck(category.name, gameState, setGameState);
 
   if (isLastCategory) setGameStatus('gameWon');
 }
@@ -197,7 +185,6 @@ function checkCards(gameState: GameState,
   const gameCopy = {...gameState};
   const isLastGuess = gameState.mistakesCounter === 1;
 
-  console.log([result, isLastGuess]);
   if (result === 'duplicate') {
     gameCopy.message = (BOARD_MESSAGES['duplicateGuess']);
     setGameState(gameCopy);
@@ -247,12 +234,12 @@ function resetGame(deckData: DeckData,
   categories: CategoryDetail[],
   setGameState: (state: GameState) => void,
   setGameStatus: (status: GameStatus) => void): void {
-  setGameState(defaultGameState(deckData, categories));
+  setGameState(defaultGame(deckData, categories));
   setGameStatus('cardsNotSolved');
 }
 
 const boardUtils = {
-  defaultGameState,
+  defaultGame,
   createDeck,
   checkCards,
   updateSelection,

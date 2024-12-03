@@ -1,26 +1,23 @@
 import { useState, useEffect } from 'react';
 import styles from '@/app/components/board/puzzle/Crossword.module.css';
 import { CrosswordCells } from '@/app/components/board/puzzle/Cells';
-import { CardState } from '@/app/lib/definitions';
+import { CardState, CrosswordState } from '@/app/lib/definitions';
 import Mistakes from '../mistakes/Mistakes';
-import xWordKeyDown from '@/app/utils/xWordUtils';
+import {xWordKeyDown, defaultXWord} from '@/app/utils/xWordUtils';
 
 export default function Crossword(props: { card: CardState }) {
-  const { word, puzzleSolved, crosswordClue} = props.card;
-  const [letters, setLetters] = useState<string[]>(new Array(word.length).fill(''));
-  const [mistakesCount, setMistakesCount] = useState<number>(4);
-  const [message, setMessage] = useState<string>('');
-  const [prevGuesses, setPrevGuesses] = useState<string[]>([]);
+  const { puzzleSolved, crosswordClue} = props.card;
+  const [xWordState, setXWordState] = useState<CrosswordState>(defaultXWord(props.card));
+  const {letters, mistakesCount, message} = xWordState;
   const handleKeyDown = (event: KeyboardEvent) => {
-    xWordKeyDown(event, props.card, letters, prevGuesses, mistakesCount,
-      setMessage, setLetters, setPrevGuesses, setMistakesCount);
+    xWordKeyDown(event, xWordState, setXWordState);
   };
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [letters]);
+  }, [xWordState]);
 
   return (
     <>

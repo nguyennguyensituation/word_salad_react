@@ -47,6 +47,7 @@ function updateLetterStyles(activeRow: string[],
   const wordleCopy = {...wordleState};
 
   wordleCopy.results[wordleState.activeIdx] = result;
+  wordleCopy.activeIdx = wordleState.activeIdx + 1;
   setWordleState(wordleCopy);
 }
 
@@ -54,15 +55,13 @@ function showNoMatch(activeRow: string[],
   isLastRow: boolean,
   wordleState: WordleState,
   setWordleState: (state: WordleState) => void) {
-  const word = wordleState.card.word;
   const wordleCopy = {...wordleState};
   const guess = activeRow.join('');
+  const word = wordleState.card.word.toUpperCase();
+  const message = !isLastRow ? '' : `${PUZZLE_MESSAGES['noMatch']} ${word}`;
 
   wordleCopy.prevGuesses = [...wordleState.prevGuesses, guess];
-  wordleCopy.activeIdx = wordleState.activeIdx + 1;
-  wordleCopy.message = !isLastRow ? '' :
-    `${PUZZLE_MESSAGES['noMatch']} ${word.toUpperCase()}`;
-
+  wordleCopy.message = message;
   updateLetterStyles(activeRow, wordleCopy, setWordleState);
 }
 
@@ -70,9 +69,8 @@ function showMatch(activeRow: string[],
   wordleState: WordleState,
   setWordleState: (state: WordleState) => void): void {
   const wordleCopy = {...wordleState};
-  const message = PUZZLE_MESSAGES['wordleMatch'];
 
-  wordleCopy.message = message;
+  wordleCopy.message = PUZZLE_MESSAGES['wordleMatch'];
   updateLetterStyles(activeRow, wordleCopy, setWordleState);
 }
 
@@ -111,7 +109,6 @@ function getWordValidity(word: string,
   wordleState: WordleState): {isValid: boolean,
     isUnique: boolean,
     isMatch: boolean} {
-
   return { isValid: isValidWordle(activeRow),
     isUnique: puzzUtils.isUniqueWord(activeRow, wordleState.prevGuesses),
     isMatch: puzzUtils.isMatch(word, activeRow)};
@@ -150,7 +147,6 @@ function updateLetter(move: string,
   updatedRow[activeCell] = move === 'deleteLetter' ? '' : input;
   wordleCopy.rows[wordleState.activeIdx] = updatedRow;
   wordleCopy.message = '';
-
   setWordleState(wordleCopy);
 }
 

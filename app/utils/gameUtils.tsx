@@ -1,4 +1,4 @@
-import shuffle from "@/app/utils/shuffle";
+import { shuffle } from "@/app/utils/generalUtils";
 import { GameData, DeckData, CategoryDetail } from '../lib/definitions';
 
 function parseCategories(gameData: GameData): CategoryDetail[] {
