@@ -2,6 +2,10 @@ import { LetterResult, CardState, WordleState} from '../lib/definitions';
 import WORDLE_DICTIONARY from '@/app/lib/wordleDictionary';
 import { PUZZLE_MESSAGES } from '@/app/lib/messages';
 import puzzUtils from '@/app/utils/puzzleUtils';
+import { shake, bounce } from '@/app/utils/animations';
+
+const { isUniqueWord, isMatch, setPuzzleComplete, getActiveCell,
+  getMove } = puzzUtils;
 
 export function defaultWordle(card: CardState): WordleState {
   return {
@@ -72,6 +76,9 @@ function showMatch(activeRow: string[],
 
   wordleCopy.message = PUZZLE_MESSAGES['wordleMatch'];
   updateLetterStyles(activeRow, wordleCopy, setWordleState);
+
+  const row = document.getElementById(`row-${wordleState.activeIdx}`);
+  if (row) bounce([...row.children]);
 }
 
 function invalidGuess(isValid: boolean,
@@ -110,8 +117,8 @@ function getWordValidity(word: string,
     isUnique: boolean,
     isMatch: boolean} {
   return { isValid: isValidWordle(activeRow),
-    isUnique: puzzUtils.isUniqueWord(activeRow, wordleState.prevGuesses),
-    isMatch: puzzUtils.isMatch(word, activeRow)};
+    isUnique: isUniqueWord(activeRow, wordleState.prevGuesses),
+    isMatch: isMatch(word, activeRow)};
 }
 
 function checkGuess(activeRow: string[],
@@ -121,16 +128,20 @@ function checkGuess(activeRow: string[],
   const { isValid, isUnique, isMatch } = getWordValidity(word, activeRow,
     wordleState);
   const isLastRow = wordleState.activeIdx === 5;
+  const row = document.getElementById(`row-${wordleState.activeIdx}`);
 
   if (!isValid || !isUnique) {
     invalidGuess(isValid, wordleState, setWordleState);
+
+    if (row) shake([...row.children]);
   } else if (isMatch) {
     showMatch(activeRow, wordleState, setWordleState);
-    puzzUtils.setPuzzleComplete(wordleState.card, true);
+    if (row) bounce([...row.children]);
+    setPuzzleComplete(wordleState.card, true);
   } else {
     showNoMatch(activeRow, isLastRow, wordleState, setWordleState);
 
-    if (isLastRow) puzzUtils.setPuzzleComplete(wordleState.card, false);
+    if (isLastRow) setPuzzleComplete(wordleState.card, false);
   }
 }
 
@@ -140,7 +151,7 @@ function updateLetter(move: string,
   wordleState: WordleState,
   setWordleState: (state: WordleState) => void): void {
   const word = wordleState.card.word;
-  const activeCell = puzzUtils.getActiveCell(move, activeRow, word);
+  const activeCell = getActiveCell(move, activeRow, word);
   const wordleCopy = {...wordleState};
   const updatedRow = [...activeRow];
 
@@ -159,7 +170,7 @@ export function wordleKeyDown(event: KeyboardEvent,
 
   const input = event.key.toLowerCase();
   const activeRow = wordleState.rows[wordleState.activeIdx];
-  const move = puzzUtils.getMove(input, activeRow, word);
+  const move = getMove(input, activeRow, word);
 
   if (move === 'addLetter' || move === 'deleteLetter') {
     updateLetter(move, input, activeRow, wordleState, setWordleState);

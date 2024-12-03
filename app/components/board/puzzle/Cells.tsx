@@ -5,7 +5,7 @@ export function CrosswordCells(props: {
   puzzleSolved: boolean,
 }) {
   return (
-    <section className={styles.crossword}>
+    <section className={styles.crossword} id="crossword-row">
       {props.letters.map((ltr, idx) => {
         return <div className={`${styles.cell} ${props.puzzleSolved && styles.solved}`}
           key={idx}>{ltr}</div>;

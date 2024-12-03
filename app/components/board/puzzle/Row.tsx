@@ -12,7 +12,7 @@ export default function Row(props: {row: string[],
   results?: string[]}) {
 
   return (
-    <div className={styles.row} key={`row-${props.idx}`}>
+    <div className={styles.row} key={`row-${props.idx}`} id={`row-${props.idx}`}>
       { props.row.map((ltr, rowIdx) => {
         return <Cell
           key={`${props.idx}-${rowIdx}`}

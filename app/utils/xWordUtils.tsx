@@ -1,6 +1,10 @@
 import puzzUtils from '@/app/utils/puzzleUtils';
 import { CardState, CrosswordState } from '@/app/lib/definitions';
 import { PUZZLE_MESSAGES } from '../lib/messages';
+import { shake, bounce } from '@/app/utils/animations';
+
+const { isUniqueWord, isMatch, setPuzzleComplete, getActiveCell,
+  getMove } = puzzUtils;
 
 function showNoMatch(isLastGuess: boolean,
   xWordState: CrosswordState,
@@ -10,6 +14,9 @@ function showNoMatch(isLastGuess: boolean,
   const word = xWordState.card.word.toUpperCase();
   const message = !isLastGuess ? '' : `${PUZZLE_MESSAGES['noMatch']} ${word}`;
   const xWordCopy = {...xWordState};
+  const row = document.getElementById('crossword-row');
+
+  if (row) shake([...row.children]);
 
   xWordCopy.prevGuesses = [...prevGuesses, guess];
   xWordCopy.mistakesCount = mistakesCount - 1;
@@ -20,6 +27,9 @@ function showNoMatch(isLastGuess: boolean,
 function showMatch(xWordState: CrosswordState,
   setXWordState: (state: CrosswordState) => void): void {
   const xWordCopy = {...xWordState};
+  const row = document.getElementById('crossword-row');
+
+  if (row) bounce([...row.children]);
 
   xWordCopy.message = PUZZLE_MESSAGES['crosswordMatch'];
   setXWordState(xWordCopy);
@@ -28,6 +38,9 @@ function showMatch(xWordState: CrosswordState,
 function invalidGuess(xWordState: CrosswordState,
   setXWordState: (state: CrosswordState) => void): void {
   const xWordCopy = {...xWordState};
+  const row = document.getElementById('crossword-row');
+
+  if (row) shake([...row.children]);
 
   xWordCopy.message = PUZZLE_MESSAGES['duplicate'];
   setXWordState(xWordCopy);
@@ -36,19 +49,19 @@ function invalidGuess(xWordState: CrosswordState,
 function checkGuess(xWordState: CrosswordState,
   setXWordState: (state: CrosswordState) => void): void {
   const {letters, prevGuesses, card} = xWordState;
-  const isUnique = puzzUtils.isUniqueWord(letters, prevGuesses);
-  const isMatch = puzzUtils.isMatch(card.word, letters);
+  const isUnique = isUniqueWord(letters, prevGuesses);
+  const isMatching = isMatch(card.word, letters);
   const isLastGuess = xWordState.mistakesCount === 1;
 
   if (!isUnique) {
     invalidGuess(xWordState, setXWordState);
-  } else if (isMatch) {
+  } else if (isMatching) {
     showMatch(xWordState, setXWordState);
-    puzzUtils.setPuzzleComplete(xWordState.card, true);
+    setPuzzleComplete(xWordState.card, true);
   } else {
     showNoMatch(isLastGuess, xWordState, setXWordState);
 
-    if (isLastGuess) puzzUtils.setPuzzleComplete(xWordState.card, false);
+    if (isLastGuess) setPuzzleComplete(xWordState.card, false);
   }
 }
 
@@ -57,7 +70,7 @@ function updateLetter(move: string,
   xWordState: CrosswordState,
   setXWordState: (state: CrosswordState) => void): void {
   const {card, letters} = xWordState;
-  const activeCell = puzzUtils.getActiveCell(move, letters, card.word);
+  const activeCell = getActiveCell(move, letters, card.word);
   const xWordCopy = {...xWordState};
   const lettersCopy = [...letters];
 
@@ -74,7 +87,7 @@ export function xWordKeyDown(event: KeyboardEvent,
 
   const input = event.key.toLowerCase();
   const {letters, card} = xWordState;
-  const move = puzzUtils.getMove(input, letters, card.word);
+  const move = getMove(input, letters, card.word);
 
   if (move === 'addLetter' || move === 'deleteLetter') {
     updateLetter(move, input, xWordState, setXWordState);
