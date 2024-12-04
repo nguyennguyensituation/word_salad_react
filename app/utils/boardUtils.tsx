@@ -194,7 +194,11 @@ function checkCards(gameState: GameState,
   } else if (result === 'solved') {
     showWin(gameState, setGameState, setGameStatus);
   } else {
-    if (result === 'oneAway') gameCopy.message = BOARD_MESSAGES['oneAway'];
+    const isLastGuess = gameState.mistakesCounter === 1;
+
+    if (result === 'oneAway' && !isLastGuess) {
+      gameCopy.message = BOARD_MESSAGES['oneAway'];
+    }
 
     showLoss(gameCopy, setGameState, setGameStatus);
   }
