@@ -29,10 +29,8 @@ export default function Board(props: { gameIdx: number,
           return <Card card={card}
             key={card.word}
             onSelection={(card: CardState, cardAction: string) => {
-              return boardUtils.handleCardSelection(card, cardAction, gameState,
-                setGameState, setGameStatus);
-            }
-            }
+              return boardUtils.handleCardSelection(card, cardAction, gameState, setGameState, setGameStatus);
+            }}
             numSelectedCards={gameState.selection.length}/>;
         })}
       </article>

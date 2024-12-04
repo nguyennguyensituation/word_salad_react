@@ -16,11 +16,13 @@ export default function Card(props: {
     ${puzzleType === 'crossword' ? styles.crossword : ''}`;
 
   return (
-    <article className={cardClasses} onClick={() => {
-      selectCard(card, numSelectedCards, onSelection);
-    }}>
-      {!puzzleType && <p>{word}</p>}
-      {puzzleType && <Tiles tileData={card} />}
-    </article>
+    <>
+      <article className={cardClasses} onClick={() => {
+        selectCard(card, numSelectedCards, onSelection);
+      }}>
+        {!puzzleType && <p>{word}</p>}
+        {puzzleType && <Tiles tileData={card} />}
+      </article>
+    </>
   );
 }

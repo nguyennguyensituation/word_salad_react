@@ -1,6 +1,7 @@
 import { DeckData, CardState, CategoryDetail, ConnectionsResult, GameStatus, GameState } from '@/app/lib/definitions';
 import { shuffle, filterArr} from '@/app/utils/generalUtils';
 import { BOARD_MESSAGES } from "@/app/lib/messages";
+import {shake, bounce } from "@/app/utils/animations"; 
 
 function createDeck(deckData: DeckData): CardState[] {
   return deckData.map(card => {
@@ -150,32 +151,35 @@ function showWin(gameState: GameState,
   const categoryName = gameState.selection[0].category || '';
   const category: CategoryDetail = getCategory(categoryName, gameState.allCtgs);
   const isLastCategory: boolean = gameState.solvedCtgs.length === 3;
+  const selection = [...document.querySelectorAll('[class*="selected"]')];
 
-  updateCategories(category, gameState, setGameState);
+  bounce(selection);
 
-  if (isLastCategory) setGameStatus('gameWon');
+  setTimeout(() => {
+    updateCategories(category, gameState, setGameState);
+
+    if (isLastCategory) setGameStatus('gameWon');
+  }, 2500);
+  
 }
 
 function showLoss(gameState: GameState,
-  setGameState: (state: GameState) => void): void {
+  setGameState: (state: GameState) => void,
+  setGameStatus: (status: GameStatus) => void): void {
   const guess = gameState.selection.map(card => card.word);
   const gameCopy = {...gameState};
+  const isLastGuess = gameState.mistakesCounter === 1;
 
   gameCopy.prevGuesses = [...gameState.prevGuesses, guess];
   gameCopy.mistakesCounter -= 1;
-  setGameState(gameCopy);
-}
 
-function revealCategories(gameState: GameState,
-  setGameState: (state: GameState) => void,
-  setGameStatus: (status: GameStatus) => void): void {
-  const gameCopy = {...gameState};
+  if (isLastGuess) {
+    gameCopy.solvedCtgs = [...gameState.solvedCtgs, gameState.allCtgs].flat();
+    gameCopy.deck = [];
+    setGameStatus('gameLost');
+  };
 
-  gameCopy.message = '';
-  gameCopy.solvedCtgs = [...gameState.solvedCtgs, gameState.allCtgs].flat();
-  gameCopy.deck = [];
   setGameState(gameCopy);
-  setGameStatus('gameLost');
 }
 
 function checkCards(gameState: GameState,
@@ -183,7 +187,6 @@ function checkCards(gameState: GameState,
   setGameStatus: (status: GameStatus) => void): void {
   const result = checkSelection(gameState.selection, gameState.prevGuesses);
   const gameCopy = {...gameState};
-  const isLastGuess = gameState.mistakesCounter === 1;
 
   if (result === 'duplicate') {
     gameCopy.message = (BOARD_MESSAGES['duplicateGuess']);
@@ -191,12 +194,9 @@ function checkCards(gameState: GameState,
   } else if (result === 'solved') {
     showWin(gameState, setGameState, setGameStatus);
   } else {
-    const msg = result === 'oneAway' && !isLastGuess ? 'oneAway' : 'noMatch';
+    if (result === 'oneAway') gameCopy.message = BOARD_MESSAGES['oneAway'];
 
-    gameCopy.message = BOARD_MESSAGES[msg];
-    showLoss(gameCopy, setGameState);
-
-    if (isLastGuess) revealCategories(gameCopy, setGameState, setGameStatus);
+    showLoss(gameCopy, setGameState, setGameStatus);
   }
 }
 
