@@ -1,7 +1,7 @@
 import { DeckData, CardState, CategoryDetail, ConnectionsResult, GameStatus, GameState } from '@/app/lib/definitions';
 import { shuffle, filterArr} from '@/app/utils/generalUtils';
 import { BOARD_MESSAGES } from "@/app/lib/messages";
-import {shake, bounce } from "@/app/utils/animations"; 
+import {shake, bounce } from "@/app/utils/animations";
 
 function createDeck(deckData: DeckData): CardState[] {
   return deckData.map(card => {
@@ -160,7 +160,7 @@ function showWin(gameState: GameState,
 
     if (isLastCategory) setGameStatus('gameWon');
   }, 2500);
-  
+
 }
 
 function showLoss(gameState: GameState,
@@ -169,17 +169,24 @@ function showLoss(gameState: GameState,
   const guess = gameState.selection.map(card => card.word);
   const gameCopy = {...gameState};
   const isLastGuess = gameState.mistakesCounter === 1;
+  const selection = [...document.querySelectorAll('[class*="selected"]')];
 
-  gameCopy.prevGuesses = [...gameState.prevGuesses, guess];
-  gameCopy.mistakesCounter -= 1;
+  bounce(selection);
 
-  if (isLastGuess) {
-    gameCopy.solvedCtgs = [...gameState.solvedCtgs, gameState.allCtgs].flat();
-    gameCopy.deck = [];
-    setGameStatus('gameLost');
-  };
+  setTimeout(() => shake(selection), 1400);
 
-  setGameState(gameCopy);
+  setTimeout(() => {
+    gameCopy.prevGuesses = [...gameState.prevGuesses, guess];
+    gameCopy.mistakesCounter -= 1;
+
+    if (isLastGuess) {
+      gameCopy.solvedCtgs = [...gameState.solvedCtgs, gameState.allCtgs].flat();
+      gameCopy.deck = [];
+      setGameStatus('gameLost');
+    }
+
+    setGameState(gameCopy);
+  }, 2400);
 }
 
 function checkCards(gameState: GameState,
