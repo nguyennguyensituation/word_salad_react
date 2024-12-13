@@ -40,8 +40,9 @@ export default function Board(props: { gameIdx: number,
       {gameState.solvedCtgs.length !== 4 &&
         <Mistakes remainingMistakes={gameState.mistakesCounter}
           puzzle={false}/>}
-      <Controller disableSubmit={gameState.selection.length !== 4}
+      <Controller disableShuffle={gameState.selection.length === 0}
         disableDeselect={gameState.selection.length === 0}
+        disableSubmit={gameState.selection.length !== 4}
         gamePlayed={gameState.solvedCtgs.length === 4}
         submitCards={() => {
           boardUtils.checkCards(gameState, setGameState, setGameStatus);
