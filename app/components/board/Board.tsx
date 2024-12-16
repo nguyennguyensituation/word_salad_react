@@ -16,6 +16,7 @@ export default function Board(props: { gameIdx: number,
   const { gameIdx, deckData, categories, setGameStatus, playAgain} = props;
   const [gameState, setGameState] =
     useState<GameState>(boardUtils.defaultGame(deckData, categories));
+  const [checkCardMode, setCheckCardMode] = useState<boolean>(false);
 
   useEffect(() => {
     boardUtils.resetGame(deckData, categories, setGameState, setGameStatus);
@@ -29,7 +30,7 @@ export default function Board(props: { gameIdx: number,
           return <Card card={card}
             key={card.word}
             onSelection={(card: CardState, cardAction: string) => {
-              return boardUtils.handleCardSelection(card, cardAction, gameState, setGameState, setGameStatus);
+              return boardUtils.handleCardSelection(card, cardAction, gameState, checkCardMode, setGameState, setGameStatus);
             }}
             numSelectedCards={gameState.selection.length}/>;
         })}
@@ -37,15 +38,16 @@ export default function Board(props: { gameIdx: number,
       <section> {gameState.message &&
         <p className={styles.message}>{gameState.message}</p>}
       </section>
-      {gameState.solvedCtgs.length !== 4 &&
-        <Mistakes remainingMistakes={gameState.mistakesCounter}
-          puzzle={false}/>}
-      <Controller disableShuffle={gameState.selection.length === 0}
+      <Mistakes remainingMistakes={gameState.mistakesCounter}
+          puzzle={false}/>
+      <Controller 
+        checkCardMode={checkCardMode}
+        disableShuffle={gameState.selection.length === 0}
         disableDeselect={gameState.selection.length === 0}
         disableSubmit={gameState.selection.length !== 4}
         gamePlayed={gameState.solvedCtgs.length === 4}
         submitCards={() => {
-          boardUtils.checkCards(gameState, setGameState, setGameStatus);
+          boardUtils.checkCards(gameState, setGameState, setGameStatus, setCheckCardMode);
         }}
         handleShuffle={() => {
           boardUtils.handleShuffle(gameState, setGameState);

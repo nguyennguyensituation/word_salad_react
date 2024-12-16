@@ -36,6 +36,8 @@ function defaultGame(deckData: DeckData,
 export function selectCard(card: CardState,
   numSelectedCards: number,
   handleSelection: (card: CardState, cardAction: string) => void): void {
+
+
   const { puzzlePlayed, isSelected } = card;
   let cardAction = '';
 
@@ -145,30 +147,32 @@ function updateCategories(category: CategoryDetail,
   setGameState(gameCopy);
 }
 
-function showWin(gameState: GameState,
+function showWin(gameCopy: GameState,
   setGameState: (state: GameState) => void,
-  setGameStatus: (status: GameStatus) => void): void {
-  const categoryName = gameState.selection[0].category || '';
-  const category: CategoryDetail = getCategory(categoryName, gameState.allCtgs);
-  const isLastCategory: boolean = gameState.solvedCtgs.length === 3;
+  setGameStatus: (status: GameStatus) => void,
+  setCheckCardMode: (isChecking: boolean) => void): void {
+  const categoryName = gameCopy.selection[0].category || '';
+  const category: CategoryDetail = getCategory(categoryName, gameCopy.allCtgs);
+  const isLastCategory: boolean = gameCopy.solvedCtgs.length === 3;
   const selection = [...document.querySelectorAll('[class*="selected"]')];
 
   bounce(selection);
 
   setTimeout(() => {
-    updateCategories(category, gameState, setGameState);
+    updateCategories(category, gameCopy, setGameState);
+    setCheckCardMode(false);
 
     if (isLastCategory) setGameStatus('gameWon');
   }, 2500);
 
 }
 
-function showLoss(gameState: GameState,
+function showLoss(gameCopy: GameState,
   setGameState: (state: GameState) => void,
-  setGameStatus: (status: GameStatus) => void): void {
-  const guess = gameState.selection.map(card => card.word);
-  const gameCopy = {...gameState};
-  const isLastGuess = gameState.mistakesCounter === 1;
+  setGameStatus: (status: GameStatus) => void,
+  setCheckCardMode: (isChecking: boolean) => void): void {
+  const guess = gameCopy.selection.map(card => card.word);
+  const isLastGuess = gameCopy.mistakesCounter === 1;
   const selection = [...document.querySelectorAll('[class*="selected"]')];
 
   bounce(selection);
@@ -176,30 +180,35 @@ function showLoss(gameState: GameState,
   setTimeout(() => shake(selection), 1400);
 
   setTimeout(() => {
-    gameCopy.prevGuesses = [...gameState.prevGuesses, guess];
+    gameCopy.prevGuesses = [...gameCopy.prevGuesses, guess];
     gameCopy.mistakesCounter -= 1;
 
     if (isLastGuess) {
-      gameCopy.solvedCtgs = [...gameState.solvedCtgs, gameState.allCtgs].flat();
+      gameCopy.solvedCtgs = [...gameCopy.solvedCtgs, gameCopy.allCtgs].flat();
       gameCopy.deck = [];
       setGameStatus('gameLost');
     }
 
     setGameState(gameCopy);
+    setCheckCardMode(false);
   }, 2400);
 }
 
 function checkCards(gameState: GameState,
   setGameState: (state: GameState) => void,
-  setGameStatus: (status: GameStatus) => void): void {
+  setGameStatus: (status: GameStatus) => void,
+  setCheckCardMode: (status: boolean) => void): void {
   const result = checkSelection(gameState.selection, gameState.prevGuesses);
   const gameCopy = {...gameState};
+
+  setCheckCardMode(true);
 
   if (result === 'duplicate') {
     gameCopy.message = (BOARD_MESSAGES['duplicateGuess']);
     setGameState(gameCopy);
+    setCheckCardMode(false);
   } else if (result === 'solved') {
-    showWin(gameState, setGameState, setGameStatus);
+    showWin(gameCopy, setGameState, setGameStatus, setCheckCardMode);
   } else {
     const isLastGuess = gameState.mistakesCounter === 1;
 
@@ -207,15 +216,18 @@ function checkCards(gameState: GameState,
       gameCopy.message = BOARD_MESSAGES['oneAway'];
     }
 
-    showLoss(gameCopy, setGameState, setGameStatus);
+    showLoss(gameCopy, setGameState, setGameStatus, setCheckCardMode);
   }
 }
 
 function handleCardSelection(card: CardState,
   cardAction: string,
   gameState: GameState,
+  checkCardMode: boolean,
   setGameState: (state: GameState) => void,
   setGameStatus: (status: GameStatus) => void): void {
+  if (checkCardMode) return;
+
   const gameCopy = {...gameState};
   const allPuzzlesSolved = gameState.puzzleCount === 7;
 
@@ -228,8 +240,8 @@ function handleCardSelection(card: CardState,
 
     if (allPuzzlesSolved) setGameStatus('cardsSolved');
   } else {
-    updateSelection(card, cardAction, gameCopy, setGameState);
     toggleCardSelect(card.word, gameState.deck);
+    updateSelection(card, cardAction, gameCopy, setGameState);
   }
 }
 

@@ -2,7 +2,8 @@ import styles from '@/app/components/controls/Controller.module.css';
 import Button from '@/app/components/controls/Button';
 import { ClickHandler } from '@/app/lib/definitions';
 
-export default function Controller(props: { disableShuffle: boolean,
+export default function Controller(props: { checkCardMode:boolean,
+  disableShuffle: boolean,
   disableDeselect: boolean,
   disableSubmit: boolean,
   gamePlayed: boolean,
@@ -14,9 +15,9 @@ export default function Controller(props: { disableShuffle: boolean,
   return (
     <fieldset className={styles.controller}>
       {!props.gamePlayed && <>
-        <Button id="shuffle-btn" value="Shuffle" onClick={props.handleShuffle} disabled={props.disableShuffle}/>
-        <Button id="deselect-btn" value="Deselect All" onClick={props.handleDeselectAll} disabled={props.disableDeselect}/>
-        <Button id="submit-btn" value="Submit" onClick={props.submitCards} disabled={props.disableSubmit}/>
+        <Button id="shuffle-btn" value="Shuffle" onClick={props.handleShuffle} disabled={props.checkCardMode || props.disableShuffle}/>
+        <Button id="deselect-btn" value="Deselect All" onClick={props.handleDeselectAll} disabled={props.checkCardMode || props.disableDeselect}/>
+        <Button id="submit-btn" value="Submit" onClick={props.submitCards} disabled={props.checkCardMode || props.disableSubmit}/>
       </>}
       {props.gamePlayed && <Button id="play-again-btn" value="Play Again" onClick={props.playAgain}/>}
     </fieldset>
