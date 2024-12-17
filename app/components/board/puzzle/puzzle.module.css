@@ -1,7 +1,7 @@
 .puzzle {
-  width: 80%;
-  max-width: 800px;
+  min-width: 90%;
   height: 800px;
+  grid-template-columns: repeat(auto-fill, 50px);
   background-color: white;
   border-radius: 6px;
   border: 1px solid black;
@@ -46,4 +46,27 @@
   font-size: 2em;
   cursor: pointer;
   justify-self: right;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .puzzle {
+    min-width: 95%;
+    max-width: 652px;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+   .puzzle {
+    min-width: 85%;
+    max-width: 800px;
+   }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .puzzle {
+    min-width: 800px;
+  }
 }

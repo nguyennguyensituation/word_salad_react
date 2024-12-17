@@ -172,7 +172,6 @@ function showLoss(gameCopy: GameState,
   setGameStatus: (status: GameStatus) => void,
   setCheckCardMode: (isChecking: boolean) => void): void {
   const guess = gameCopy.selection.map(card => card.word);
-  const isLastGuess = gameCopy.mistakesCounter === 1;
   const selection = [...document.querySelectorAll('[class*="selected"]')];
 
   bounce(selection);
@@ -183,7 +182,7 @@ function showLoss(gameCopy: GameState,
     gameCopy.prevGuesses = [...gameCopy.prevGuesses, guess];
     gameCopy.mistakesCounter -= 1;
 
-    if (isLastGuess) {
+    if (gameCopy.mistakesCounter === 1) {
       gameCopy.solvedCtgs = [...gameCopy.solvedCtgs, gameCopy.allCtgs].flat();
       gameCopy.deck = [];
       setGameStatus('gameLost');
@@ -199,7 +198,7 @@ function showDuplicate(gameCopy: GameState,
   setCheckCardMode: (isChecking: boolean) => void): void {
   const selection = [...document.querySelectorAll('[class*="selected"]')];
 
-  shake(selection)
+  shake(selection);
 
   setTimeout(() => {
     gameCopy.message = (BOARD_MESSAGES['duplicateGuess']);

@@ -6,6 +6,12 @@ h1, h2 {
   font-family: var(--font-bevan);
 }
 
+#play {
+  display: block;
+  text-align: center;
+  padding: 20px;
+}
+
 .violet {
   color: rgb(186, 129, 197);
 }
@@ -46,13 +52,4 @@ h1, h2 {
 	0%, 100% {transform: translateX(0);}
 	10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);}
 	20%, 40%, 60%, 80% {transform: translateX(10px);}
-}
-
-.flip {
-  animation: flip 0.7s ease-out 1;
-}
-
-@keyframes flip {
-  from {transform: rotateX(0deg);}
-  to {transform: rotateX(360deg);}
 }

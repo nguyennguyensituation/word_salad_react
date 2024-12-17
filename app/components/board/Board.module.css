@@ -2,7 +2,7 @@
   display: grid;
   margin: auto;
   border: none;
-  width: calc(3 * 8px + 4 * 150px);
+  width: calc(3 * 8px + 4 * 100px);
   grid-template-columns: auto auto auto auto;
   gap: 8px;
 }
@@ -18,4 +18,18 @@
   width: 200px;
   padding: 10px;
   border-radius: 6px;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .board {
+    width: calc(3 * 8px + 4 * 125px);
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .board {
+    width: calc(3 * 8px + 4 * 150px);
+  }
 }

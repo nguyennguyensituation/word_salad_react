@@ -1,7 +1,7 @@
 .categories {
   padding-top: 20px;
   display: grid;
-  width: calc(3 * 8px + 4 * 150px);
+  width: calc(3 * 8px + 4 * 100px);
   margin: auto;
   margin-bottom: 8px;
   grid-template-columns: auto;
@@ -17,7 +17,7 @@
 }
 
 .category p {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 6px;
 }
 
@@ -40,4 +40,18 @@
 
 .difficulty4 {
   background-color: rgb(186, 129, 197);
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .categories {
+    width: calc(3 * 8px + 4 * 125px);
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .categories {
+    width: calc(3 * 8px + 4 * 150px);
+  }
 }

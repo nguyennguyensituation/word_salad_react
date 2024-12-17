@@ -1,14 +1,14 @@
 .card {
   background-color: rgb(239, 239, 230);
-  width: 150px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
+  font-size: 14px;
+  font-weight: 700;
   border-radius: 6px;
   justify-content: center;
   align-content: center;
   display: flex;
   flex-wrap: wrap;
-  font-size: 20px;
-  font-weight: 700;
   cursor: pointer;
   text-transform: uppercase;
 }
@@ -16,4 +16,21 @@
 .selected {
   background-color: rgb(90, 89, 78);
   color: white;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .card {
+    width: 125px;
+    font-size: 16px;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .card {
+    width: 150px;
+    height: 80px;
+    font-size: 20px;
+  }
 }
