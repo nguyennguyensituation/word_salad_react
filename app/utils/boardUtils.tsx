@@ -194,6 +194,20 @@ function showLoss(gameCopy: GameState,
   }, 2400);
 }
 
+function showDuplicate(gameCopy: GameState,
+  setGameState: (state: GameState) => void,
+  setCheckCardMode: (isChecking: boolean) => void): void {
+  const selection = [...document.querySelectorAll('[class*="selected"]')];
+
+  shake(selection)
+
+  setTimeout(() => {
+    gameCopy.message = (BOARD_MESSAGES['duplicateGuess']);
+    setGameState(gameCopy);
+    setCheckCardMode(false);
+  }, 700);
+}
+
 function checkCards(gameState: GameState,
   setGameState: (state: GameState) => void,
   setGameStatus: (status: GameStatus) => void,
@@ -204,9 +218,7 @@ function checkCards(gameState: GameState,
   setCheckCardMode(true);
 
   if (result === 'duplicate') {
-    gameCopy.message = (BOARD_MESSAGES['duplicateGuess']);
-    setGameState(gameCopy);
-    setCheckCardMode(false);
+    showDuplicate(gameCopy, setGameState, setCheckCardMode);
   } else if (result === 'solved') {
     showWin(gameCopy, setGameState, setGameStatus, setCheckCardMode);
   } else {
