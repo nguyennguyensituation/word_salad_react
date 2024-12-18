@@ -46,7 +46,7 @@ function invalidGuess(xWordState: CrosswordState,
   setXWordState(xWordCopy);
 }
 
-function checkGuess(xWordState: CrosswordState,
+export function checkGuess(xWordState: CrosswordState,
   setXWordState: (state: CrosswordState) => void): void {
   const {letters, prevGuesses, card} = xWordState;
   const isUnique = isUniqueWord(letters, prevGuesses);

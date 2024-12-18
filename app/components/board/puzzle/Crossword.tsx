@@ -3,12 +3,15 @@ import styles from '@/app/components/board/puzzle/Crossword.module.css';
 import { CrosswordCells } from '@/app/components/board/puzzle/Cells';
 import { CardState, CrosswordState } from '@/app/lib/definitions';
 import Mistakes from '../mistakes/Mistakes';
-import {xWordKeyDown, defaultXWord} from '@/app/utils/xWordUtils';
+import Button from '@/app/components/controls/Button'
+import {xWordKeyDown, defaultXWord, checkGuess} from '@/app/utils/xWordUtils';
 
 export default function Crossword(props: { card: CardState }) {
   const { puzzleSolved, crosswordClue} = props.card;
   const [xWordState, setXWordState] = useState<CrosswordState>(defaultXWord(props.card));
   const {letters, mistakesCount, message} = xWordState;
+  const disableSubmit = xWordState.letters.join('').length !== props.card.word.length ||
+    props.card.puzzlePlayed;
   const handleKeyDown = (event: KeyboardEvent) => {
     xWordKeyDown(event, xWordState, setXWordState);
   };
@@ -24,6 +27,12 @@ export default function Crossword(props: { card: CardState }) {
       <p className={styles.clue}>{crosswordClue}</p>
       <CrosswordCells letters={letters} puzzleSolved={puzzleSolved}/>
       <Mistakes remainingMistakes={mistakesCount} puzzle={true}/>
+      <Button
+        id=""
+        value="Submit"
+        disabled={disableSubmit}
+        onClick={() => checkGuess(xWordState, setXWordState)}
+        isXWord={true}/>
       {message && <div className={styles.message}>{message}</div>}
     </>
   );

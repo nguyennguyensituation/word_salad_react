@@ -30,7 +30,8 @@ export default function Board(props: { gameIdx: number,
           return <Card card={card}
             key={card.word}
             onSelection={(card: CardState, cardAction: string) => {
-              return boardUtils.handleCardSelection(card, cardAction, gameState, checkCardMode, setGameState, setGameStatus);
+              return boardUtils.handleCardSelection(card, cardAction, gameState,
+                checkCardMode, setGameState, setGameStatus);
             }}
             numSelectedCards={gameState.selection.length}/>;
         })}
@@ -39,15 +40,16 @@ export default function Board(props: { gameIdx: number,
         <p className={styles.message}>{gameState.message}</p>}
       </section>
       <Mistakes remainingMistakes={gameState.mistakesCounter}
-          puzzle={false}/>
-      <Controller 
+        puzzle={false}/>
+      <Controller
         checkCardMode={checkCardMode}
         disableShuffle={gameState.selection.length === 0}
         disableDeselect={gameState.selection.length === 0}
         disableSubmit={gameState.selection.length !== 4}
         gamePlayed={gameState.solvedCtgs.length === 4}
         submitCards={() => {
-          boardUtils.checkCards(gameState, setGameState, setGameStatus, setCheckCardMode);
+          boardUtils.checkCards(gameState, setGameState, setGameStatus,
+            setCheckCardMode);
         }}
         handleShuffle={() => {
           boardUtils.handleShuffle(gameState, setGameState);
