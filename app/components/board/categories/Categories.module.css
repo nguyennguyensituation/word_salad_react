@@ -54,4 +54,8 @@
   .categories {
     width: calc(3 * 8px + 4 * 150px);
   }
+
+  .category p {
+    font-size: 18px;
+  }
 }
