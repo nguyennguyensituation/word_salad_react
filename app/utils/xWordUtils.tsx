@@ -47,12 +47,14 @@ function invalidGuess(xWordState: CrosswordState,
 }
 
 export function checkGuess(xWordState: CrosswordState,
-  setXWordState: (state: CrosswordState) => void): void {
+  setXWordState: (state: CrosswordState) => void,
+  setDisableSubmit: (isDisabled: boolean) => void): void {
   const {letters, prevGuesses, card} = xWordState;
   const isUnique = isUniqueWord(letters, prevGuesses);
   const isMatching = isMatch(card.word, letters);
   const isLastGuess = xWordState.mistakesCount === 1;
 
+  setDisableSubmit(true);
   if (!isUnique) {
     invalidGuess(xWordState, setXWordState);
   } else if (isMatching) {
@@ -61,14 +63,17 @@ export function checkGuess(xWordState: CrosswordState,
   } else {
     showNoMatch(isLastGuess, xWordState, setXWordState);
 
-    if (isLastGuess) setPuzzleComplete(xWordState.card, false);
+    if (isLastGuess) {
+      setPuzzleComplete(xWordState.card, false);
+    }
   }
 }
 
 function updateLetter(move: string,
   input: string,
   xWordState: CrosswordState,
-  setXWordState: (state: CrosswordState) => void): void {
+  setXWordState: (state: CrosswordState) => void,
+  setDisableSubmit: (isDisabled: boolean) => void): void {
   const {card, letters} = xWordState;
   const activeCell = getActiveCell(move, letters, card.word);
   const xWordCopy = {...xWordState};
@@ -78,11 +83,16 @@ function updateLetter(move: string,
   xWordCopy.letters = lettersCopy;
   xWordCopy.message = '';
   setXWordState(xWordCopy);
+
+  const isInvalidGuess = lettersCopy.join('').length !== xWordState.card.word.length;
+
+  setDisableSubmit(isInvalidGuess);
 }
 
 export function xWordKeyDown(event: KeyboardEvent,
   xWordState: CrosswordState,
-  setXWordState: (state: CrosswordState) => void): void {
+  setXWordState: (state: CrosswordState) => void,
+  setDisableSubmit: (isDisabled: boolean) => void): void {
   if (xWordState.card.puzzlePlayed) return;
 
   const input = event.key.toLowerCase();
@@ -90,9 +100,9 @@ export function xWordKeyDown(event: KeyboardEvent,
   const move = getMove(input, letters, card.word);
 
   if (move === 'addLetter' || move === 'deleteLetter') {
-    updateLetter(move, input, xWordState, setXWordState);
+    updateLetter(move, input, xWordState, setXWordState, setDisableSubmit);
   } else if (move === 'checkGuess') {
-    checkGuess(xWordState, setXWordState);
+    checkGuess(xWordState, setXWordState, setDisableSubmit);
   }
 }
 

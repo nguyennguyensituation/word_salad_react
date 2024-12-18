@@ -10,10 +10,9 @@ export default function Crossword(props: { card: CardState }) {
   const { puzzleSolved, crosswordClue} = props.card;
   const [xWordState, setXWordState] = useState<CrosswordState>(defaultXWord(props.card));
   const {letters, mistakesCount, message} = xWordState;
-  const disableSubmit = xWordState.letters.join('').length !== props.card.word.length ||
-    props.card.puzzlePlayed;
+  const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
   const handleKeyDown = (event: KeyboardEvent) => {
-    xWordKeyDown(event, xWordState, setXWordState);
+    xWordKeyDown(event, xWordState, setXWordState, setDisableSubmit);
   };
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export default function Crossword(props: { card: CardState }) {
         id=""
         value="Submit"
         disabled={disableSubmit}
-        onClick={() => checkGuess(xWordState, setXWordState)}
+        onClick={() => checkGuess(xWordState, setXWordState, setDisableSubmit)}
         isXWord={true}
         isSubmit={true}/>
       {message && <div className={styles.message}>{message}</div>}
