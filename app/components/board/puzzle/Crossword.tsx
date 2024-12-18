@@ -3,7 +3,7 @@ import styles from '@/app/components/board/puzzle/Crossword.module.css';
 import { CrosswordCells } from '@/app/components/board/puzzle/Cells';
 import { CardState, CrosswordState } from '@/app/lib/definitions';
 import Mistakes from '../mistakes/Mistakes';
-import Button from '@/app/components/controls/Button'
+import Button from '@/app/components/controls/Button';
 import {xWordKeyDown, defaultXWord, checkGuess} from '@/app/utils/xWordUtils';
 
 export default function Crossword(props: { card: CardState }) {

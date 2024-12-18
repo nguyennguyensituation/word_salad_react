@@ -64,13 +64,17 @@ function handleShuffle(gameState: GameState,
 function updateSelection(card: CardState,
   cardAction: string,
   gameState: GameState,
-  setGameState: (state: GameState) => void): void {
+  setGameState: (state: GameState) => void,
+  setDisableSubmit: (isDisabled: boolean) => void): void {
   const gameCopy = {...gameState};
   const updatedSelection = cardAction === 'removeCard' ?
     filterArr(gameState.selection, 'word', card.word, false) :
     [...gameState.selection, card];
 
   gameCopy.selection = updatedSelection;
+  if (gameCopy.selection.length === 4) {
+    setDisableSubmit(false);
+  }
   setGameState(gameCopy);
 }
 
@@ -182,7 +186,7 @@ function showLoss(gameCopy: GameState,
     gameCopy.prevGuesses = [...gameCopy.prevGuesses, guess];
     gameCopy.mistakesCounter -= 1;
 
-    if (gameCopy.mistakesCounter === 1) {
+    if (gameCopy.mistakesCounter === 0) {
       gameCopy.solvedCtgs = [...gameCopy.solvedCtgs, gameCopy.allCtgs].flat();
       gameCopy.deck = [];
       setGameStatus('gameLost');
@@ -210,7 +214,8 @@ function showDuplicate(gameCopy: GameState,
 function checkCards(gameState: GameState,
   setGameState: (state: GameState) => void,
   setGameStatus: (status: GameStatus) => void,
-  setCheckCardMode: (status: boolean) => void): void {
+  setCheckCardMode: (status: boolean) => void,
+  setDisableSubmit: (isDisabled: boolean) => void): void {
   const result = checkSelection(gameState.selection, gameState.prevGuesses);
   const gameCopy = {...gameState};
 
@@ -228,6 +233,7 @@ function checkCards(gameState: GameState,
     }
 
     showLoss(gameCopy, setGameState, setGameStatus, setCheckCardMode);
+    setDisableSubmit(true);
   }
 }
 
@@ -236,7 +242,8 @@ function handleCardSelection(card: CardState,
   gameState: GameState,
   checkCardMode: boolean,
   setGameState: (state: GameState) => void,
-  setGameStatus: (status: GameStatus) => void): void {
+  setGameStatus: (status: GameStatus) => void,
+  setDisableSubmit: (isDisabled: boolean) => void): void {
   if (checkCardMode) return;
 
   const gameCopy = {...gameState};
@@ -252,7 +259,7 @@ function handleCardSelection(card: CardState,
     if (allPuzzlesSolved) setGameStatus('cardsSolved');
   } else {
     toggleCardSelect(card.word, gameState.deck);
-    updateSelection(card, cardAction, gameCopy, setGameState);
+    updateSelection(card, cardAction, gameCopy, setGameState, setDisableSubmit);
   }
 }
 

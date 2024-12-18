@@ -17,6 +17,7 @@ export default function Board(props: { gameIdx: number,
   const [gameState, setGameState] =
     useState<GameState>(boardUtils.defaultGame(deckData, categories));
   const [checkCardMode, setCheckCardMode] = useState<boolean>(false);
+  const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
 
   useEffect(() => {
     boardUtils.resetGame(deckData, categories, setGameState, setGameStatus);
@@ -31,7 +32,7 @@ export default function Board(props: { gameIdx: number,
             key={card.word}
             onSelection={(card: CardState, cardAction: string) => {
               return boardUtils.handleCardSelection(card, cardAction, gameState,
-                checkCardMode, setGameState, setGameStatus);
+                checkCardMode, setGameState, setGameStatus, setDisableSubmit);
             }}
             numSelectedCards={gameState.selection.length}/>;
         })}
@@ -44,11 +45,11 @@ export default function Board(props: { gameIdx: number,
       <Controller
         checkCardMode={checkCardMode}
         disableDeselect={gameState.selection.length === 0}
-        disableSubmit={gameState.selection.length !== 4}
+        disableSubmit={gameState.selection.length !== 4 || disableSubmit}
         gamePlayed={gameState.solvedCtgs.length === 4}
         submitCards={() => {
           boardUtils.checkCards(gameState, setGameState, setGameStatus,
-            setCheckCardMode);
+            setCheckCardMode, setDisableSubmit);
         }}
         handleShuffle={() => {
           boardUtils.handleShuffle(gameState, setGameState);
