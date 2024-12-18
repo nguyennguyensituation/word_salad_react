@@ -14,7 +14,7 @@
   margin-left: 20px;
 }
 
-.button:not([disabled]):hover, .submit.button:not([disabled]) {
+.button:not([disabled]):hover, .primary.button:not([disabled]) {
   background-color: black;
   color: white;
 }

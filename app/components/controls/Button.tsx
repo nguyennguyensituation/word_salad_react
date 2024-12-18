@@ -6,7 +6,7 @@ export default function Button(props: {
   disabled?: boolean,
   onClick?: (event: React.MouseEvent<HTMLInputElement>) => void,
   isXWord?: boolean,
-  isSubmit?: boolean,
+  isPrimary?: boolean,
 }) {
   return (
     <input
@@ -15,7 +15,7 @@ export default function Button(props: {
       value={props.value}
       disabled={props.disabled}
       onClick={props.onClick}
-      className={`${styles.button} ${props.isXWord ? styles.xword : ''} ${props.isSubmit ? styles.submit : ''}`}
+      className={`${styles.button} ${props.isXWord ? styles.xword : ''} ${props.isPrimary ? styles.primary : ''}`}
     />
   );
 }

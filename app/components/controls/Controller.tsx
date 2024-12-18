@@ -16,9 +16,9 @@ export default function Controller(props: { checkCardMode:boolean,
       {!props.gamePlayed && <>
         <Button id="shuffle-btn" value="Shuffle" onClick={props.handleShuffle} disabled={props.checkCardMode}/>
         <Button id="deselect-btn" value="Deselect All" onClick={props.handleDeselectAll} disabled={props.checkCardMode || props.disableDeselect}/>
-        <Button id="submit-btn" value="Submit" onClick={props.submitCards} disabled={props.checkCardMode || props.disableSubmit} isSubmit={true}/>
+        <Button id="submit-btn" value="Submit" onClick={props.submitCards} disabled={props.checkCardMode || props.disableSubmit} isPrimary={true}/>
       </>}
-      {props.gamePlayed && <Button id="play-again-btn" value="Play Again" onClick={props.playAgain}/>}
+      {props.gamePlayed && <Button id="play-again-btn" value="Play Again" onClick={props.playAgain} isPrimary={true}/>}
     </fieldset>
   );
 }
