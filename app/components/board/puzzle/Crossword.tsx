@@ -32,7 +32,8 @@ export default function Crossword(props: { card: CardState }) {
         value="Submit"
         disabled={disableSubmit}
         onClick={() => checkGuess(xWordState, setXWordState)}
-        isXWord={true}/>
+        isXWord={true}
+        isSubmit={true}/>
       {message && <div className={styles.message}>{message}</div>}
     </>
   );

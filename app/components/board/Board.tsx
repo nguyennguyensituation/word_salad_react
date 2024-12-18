@@ -43,7 +43,6 @@ export default function Board(props: { gameIdx: number,
         puzzle={false}/>
       <Controller
         checkCardMode={checkCardMode}
-        disableShuffle={gameState.selection.length === 0}
         disableDeselect={gameState.selection.length === 0}
         disableSubmit={gameState.selection.length !== 4}
         gamePlayed={gameState.solvedCtgs.length === 4}
