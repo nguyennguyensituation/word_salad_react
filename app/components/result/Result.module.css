@@ -1,0 +1,106 @@
+.result {
+  min-width: 90%;
+  height: 600px;
+  grid-template-columns: repeat(auto-fill, 50px);
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid black;
+  position: fixed;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.hide {
+  display: none;
+}
+
+.title {
+  padding-left: 14px;
+  text-align: center;
+}
+
+.result header {
+  display: grid;
+  grid-template-columns: auto 50px;
+}
+
+.closeBtn {
+  background-color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: none;
+  font-size: 2em;
+  cursor: pointer;
+  justify-self: right;
+}
+
+.score {
+  font-weight: 800;
+  padding: 0 10%;
+  margin-bottom: 20px;
+}
+
+.result ul {
+  padding: 0 10%;
+  list-style: none;
+}
+
+.categories li {
+  padding: 0 0 10px 0;
+}
+
+.marker {
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  border-radius: 7px;
+  background-color: rgb(211, 214, 218);
+  margin: 0 1px;
+  border: solid 1px black;
+}
+
+.wordle .solved {
+  background-color: rgb(106, 170, 100);
+}
+
+.crossword .solved {
+  background-color: #a7d8ff;
+}
+
+.connections .solved {
+  background-color: rgb(186, 129, 197);
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .result {
+    min-width: 95%;
+    max-width: 652px;
+  }
+
+  .result ul, .score {
+    padding: 0 30%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+   .result {
+    min-width: 85%;
+    max-width: 800px;
+   }
+
+   .result ul, .score {
+    padding: 0 35%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .result, .score {
+    min-width: 800px;
+  }
+}

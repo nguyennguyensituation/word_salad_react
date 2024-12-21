@@ -74,3 +74,9 @@ export type WordleState = PuzzleState & {
   rows: string[][],
   results: string[][],
 }
+
+export type PuzzleResult = {
+  wordle: boolean[],
+  crossword: boolean[],
+  connections: boolean[],
+}

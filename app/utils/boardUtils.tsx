@@ -279,6 +279,12 @@ function resetGame(deckData: DeckData,
   setGameStatus('cardsNotSolved');
 }
 
+const defaultResult = {
+  wordle: [],
+  crossword: [],
+  connections: []
+};
+
 const boardUtils = {
   defaultGame,
   createDeck,
@@ -290,6 +296,7 @@ const boardUtils = {
   handleCardSelection,
   resetPuzzle,
   resetGame,
+  defaultResult,
 };
 
 export default boardUtils;

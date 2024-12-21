@@ -1,4 +1,4 @@
-import { Move, CardState } from '@/app/lib/definitions';
+import { Move, CardState, PuzzleResult } from '@/app/lib/definitions';
 import { PUZZLE_MESSAGES } from '@/app/lib/messages';
 
 function isUniqueWord(letters: string[],
@@ -50,10 +50,18 @@ function setPuzzleComplete(card: CardState, isWinner: boolean) {
   card.puzzleSolved = isWinner;
 }
 
-export function confirmClose(card: CardState, closePuzzle: () => void) {
+export function confirmClose(card: CardState,
+  closePuzzle: () => void,
+  puzzleResult: PuzzleResult,
+  setPuzzleResult: (result: PuzzleResult) => void) {
   const { puzzlePlayed, puzzleType } = card;
 
   if (!puzzlePlayed && puzzleType && confirm(PUZZLE_MESSAGES[puzzleType])) {
+    const resultCopy = {...puzzleResult};
+    if (card.puzzleType) {
+      resultCopy[card.puzzleType] = [...resultCopy[card.puzzleType], false];
+    }
+    setPuzzleResult(resultCopy);
     card.puzzlePlayed = true;
     closePuzzle();
   } else if (puzzlePlayed) {

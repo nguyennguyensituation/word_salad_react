@@ -4,34 +4,39 @@ import Card from '@/app/components/board/card/Card';
 import Categories from '@/app/components/board/categories/Categories';
 import Mistakes from '@/app/components/board/mistakes/Mistakes';
 import Controller from '@/app/components/controls/Controller';
-import { DeckData, GameStatus, CardState, CategoryDetail, GameState } from '@/app/lib/definitions';
+import { DeckData, GameStatus, CardState, CategoryDetail, GameState, PuzzleResult } from '@/app/lib/definitions';
 import Puzzle from "@/app/components/board/puzzle/Puzzle";
 import boardUtils from "@/app/utils/boardUtils";
+import Result from '@/app/components/result/Result';
 
 export default function Board(props: { gameIdx: number,
   deckData: DeckData,
   categories: CategoryDetail[],
   setGameStatus: (status: GameStatus) => void,
   playAgain: () => void}) {
+  const { defaultGame, defaultResult, resetGame, handleCardSelection, checkCards,
+    handleShuffle, handleDeselectAll, resetPuzzle } = boardUtils;
   const { gameIdx, deckData, categories, setGameStatus, playAgain} = props;
   const [gameState, setGameState] =
-    useState<GameState>(boardUtils.defaultGame(deckData, categories));
+    useState<GameState>(defaultGame(deckData, categories));
   const [checkCardMode, setCheckCardMode] = useState<boolean>(false);
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
+  const [puzzleResult, setPuzzleResult] = useState<PuzzleResult>(defaultResult);
 
   useEffect(() => {
-    boardUtils.resetGame(deckData, categories, setGameState, setGameStatus);
+    resetGame(deckData, categories, setGameState, setGameStatus);
   }, [gameIdx]);
 
   return (
     <>
+      <Result puzzleResult={puzzleResult} disabled={true}/>
       <Categories categories={gameState.solvedCtgs}/>
       <article className={styles.board}>
         {gameState.deck.map(card => {
           return <Card card={card}
             key={card.word}
             onSelection={(card: CardState, cardAction: string) => {
-              return boardUtils.handleCardSelection(card, cardAction, gameState,
+              return handleCardSelection(card, cardAction, gameState,
                 checkCardMode, setGameState, setGameStatus, setDisableSubmit);
             }}
             numSelectedCards={gameState.selection.length}/>;
@@ -48,18 +53,21 @@ export default function Board(props: { gameIdx: number,
         disableSubmit={gameState.selection.length !== 4 || disableSubmit}
         gamePlayed={gameState.solvedCtgs.length === 4}
         submitCards={() => {
-          boardUtils.checkCards(gameState, setGameState, setGameStatus,
+          checkCards(gameState, setGameState, setGameStatus,
             setCheckCardMode, setDisableSubmit);
         }}
         handleShuffle={() => {
-          boardUtils.handleShuffle(gameState, setGameState);
+          handleShuffle(gameState, setGameState);
         }}
         handleDeselectAll={() => {
-          boardUtils.handleDeselectAll(gameState, setGameState);
+          handleDeselectAll(gameState, setGameState);
         }}
         playAgain={() => playAgain()}/>
       {gameState.currentPuzzle && <Puzzle card={gameState.currentPuzzle}
-        closePuzzle={() => boardUtils.resetPuzzle(gameState, setGameState)}/>}
+        closePuzzle={() => resetPuzzle(gameState, setGameState)}
+        puzzleResult={puzzleResult}
+        setPuzzleResult={setPuzzleResult}
+      />}
     </>
   );
 }

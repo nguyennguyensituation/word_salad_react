@@ -1,4 +1,4 @@
-import { LetterResult, CardState, WordleState} from '../lib/definitions';
+import { LetterResult, CardState, WordleState, PuzzleResult} from '../lib/definitions';
 import WORDLE_DICTIONARY from '@/app/lib/wordleDictionary';
 import { PUZZLE_MESSAGES } from '@/app/lib/messages';
 import puzzUtils from '@/app/utils/puzzleUtils';
@@ -123,12 +123,15 @@ function getWordValidity(word: string,
 
 function checkGuess(activeRow: string[],
   wordleState: WordleState,
-  setWordleState: (state: WordleState) => void): void {
+  setWordleState: (state: WordleState) => void,
+  puzzleResult: PuzzleResult,
+  setPuzzleResult: (result: PuzzleResult) => void): void {
   const word = wordleState.card.word;
   const { isValid, isUnique, isMatch } = getWordValidity(word, activeRow,
     wordleState);
   const isLastRow = wordleState.activeIdx === 5;
   const row = document.getElementById(`row-${wordleState.activeIdx}`);
+  const resultCopy = {...puzzleResult};
 
   if (!isValid || !isUnique) {
     invalidGuess(isValid, wordleState, setWordleState);
@@ -137,11 +140,16 @@ function checkGuess(activeRow: string[],
   } else if (isMatch) {
     showMatch(activeRow, wordleState, setWordleState);
     if (row) bounce([...row.children]);
+    resultCopy.wordle = [...resultCopy.wordle, true];
+    setPuzzleResult(resultCopy);
     setPuzzleComplete(wordleState.card, true);
   } else {
     showNoMatch(activeRow, isLastRow, wordleState, setWordleState);
-
-    if (isLastRow) setPuzzleComplete(wordleState.card, false);
+    if (isLastRow) {
+      resultCopy.wordle = [...resultCopy.wordle, false];
+      setPuzzleResult(resultCopy);
+      setPuzzleComplete(wordleState.card, false);
+    }
   }
 }
 
@@ -163,7 +171,9 @@ function updateLetter(move: string,
 
 export function wordleKeyDown(event: KeyboardEvent,
   wordleState: WordleState,
-  setWordleState: (state: WordleState) => void): void {
+  setWordleState: (state: WordleState) => void,
+  puzzleResult: PuzzleResult,
+  setPuzzleResult: (result: PuzzleResult) => void): void {
   const { puzzlePlayed, word } = wordleState.card;
 
   if (puzzlePlayed) return;
@@ -175,6 +185,7 @@ export function wordleKeyDown(event: KeyboardEvent,
   if (move === 'addLetter' || move === 'deleteLetter') {
     updateLetter(move, input, activeRow, wordleState, setWordleState);
   } else if (move === 'checkGuess') {
-    checkGuess(activeRow, wordleState, setWordleState);
+    checkGuess(activeRow, wordleState, setWordleState, puzzleResult,
+      setPuzzleResult);
   }
 }

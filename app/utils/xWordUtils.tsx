@@ -1,5 +1,5 @@
 import puzzUtils from '@/app/utils/puzzleUtils';
-import { CardState, CrosswordState } from '@/app/lib/definitions';
+import { CardState, CrosswordState, PuzzleResult } from '@/app/lib/definitions';
 import { PUZZLE_MESSAGES } from '../lib/messages';
 import { shake, bounce } from '@/app/utils/animations';
 
@@ -48,22 +48,29 @@ function invalidGuess(xWordState: CrosswordState,
 
 export function checkGuess(xWordState: CrosswordState,
   setXWordState: (state: CrosswordState) => void,
-  setDisableSubmit: (isDisabled: boolean) => void): void {
+  setDisableSubmit: (isDisabled: boolean) => void,
+  puzzleResult: PuzzleResult,
+  setPuzzleResult: (result: PuzzleResult) => void): void {
   const {letters, prevGuesses, card} = xWordState;
   const isUnique = isUniqueWord(letters, prevGuesses);
   const isMatching = isMatch(card.word, letters);
   const isLastGuess = xWordState.mistakesCount === 1;
+  const resultCopy = {...puzzleResult};
 
   setDisableSubmit(true);
   if (!isUnique) {
     invalidGuess(xWordState, setXWordState);
   } else if (isMatching) {
+    resultCopy.crossword = [...resultCopy.crossword, true];
+    setPuzzleResult(resultCopy);
     showMatch(xWordState, setXWordState);
     setPuzzleComplete(xWordState.card, true);
   } else {
     showNoMatch(isLastGuess, xWordState, setXWordState);
 
     if (isLastGuess) {
+      resultCopy.crossword = [...resultCopy.crossword, true];
+      setPuzzleResult(resultCopy);
       setPuzzleComplete(xWordState.card, false);
     }
   }
@@ -92,7 +99,9 @@ function updateLetter(move: string,
 export function xWordKeyDown(event: KeyboardEvent,
   xWordState: CrosswordState,
   setXWordState: (state: CrosswordState) => void,
-  setDisableSubmit: (isDisabled: boolean) => void): void {
+  setDisableSubmit: (isDisabled: boolean) => void,
+  puzzleResult: PuzzleResult,
+  setPuzzleResult: (result: PuzzleResult) => void): void {
   if (xWordState.card.puzzlePlayed) return;
 
   const input = event.key.toLowerCase();
@@ -102,7 +111,8 @@ export function xWordKeyDown(event: KeyboardEvent,
   if (move === 'addLetter' || move === 'deleteLetter') {
     updateLetter(move, input, xWordState, setXWordState, setDisableSubmit);
   } else if (move === 'checkGuess') {
-    checkGuess(xWordState, setXWordState, setDisableSubmit);
+    checkGuess(xWordState, setXWordState, setDisableSubmit, puzzleResult,
+      setPuzzleResult);
   }
 }
 
