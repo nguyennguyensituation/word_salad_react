@@ -10,16 +10,16 @@ export function puzzleDisplayText(puzzleType: string, result: boolean[]) {
 }
 
 export function calculateScore(puzzleResult: PuzzleResult) {
-  const MAX_SCORE = 140;
-  let score = MAX_SCORE;
+  const MAX_SCORE = 120;
+  let score = 0;
 
   for (const puzzle in puzzleResult) {
     puzzleResult[puzzle as keyof PuzzleResult].forEach(result => {
       if (!result) {
-        score -= 10;
+        score += 10;
       }
     });
   }
 
-  return `${score} / 120 points`;
+  return `${score} / ${MAX_SCORE} points`;
 }

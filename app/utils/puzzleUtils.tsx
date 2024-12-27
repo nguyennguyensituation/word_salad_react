@@ -55,11 +55,11 @@ export function confirmClose(card: CardState,
   puzzleResult: PuzzleResult,
   setPuzzleResult: (result: PuzzleResult) => void) {
   const { puzzlePlayed, puzzleType } = card;
+  const resultCopy = {...puzzleResult};
 
   if (!puzzlePlayed && puzzleType && confirm(PUZZLE_MESSAGES[puzzleType])) {
-    const resultCopy = {...puzzleResult};
     if (card.puzzleType) {
-      resultCopy[card.puzzleType] = [...resultCopy[card.puzzleType], false];
+      resultCopy[card.puzzleType].push(false);
     }
     setPuzzleResult(resultCopy);
     card.puzzlePlayed = true;
