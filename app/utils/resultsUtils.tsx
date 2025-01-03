@@ -10,12 +10,13 @@ export function puzzleDisplayText(puzzleType: string, result: boolean[]) {
 }
 
 export function calculateScore(puzzleResult: PuzzleResult) {
+  console.log(puzzleResult);
   const MAX_SCORE = 120;
   let score = 0;
 
   for (const puzzle in puzzleResult) {
     puzzleResult[puzzle as keyof PuzzleResult].forEach(result => {
-      if (!result) {
+      if (result) {
         score += 10;
       }
     });
