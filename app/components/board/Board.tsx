@@ -24,6 +24,7 @@ export default function Board(props: { gameIdx: number,
   const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
   const [puzzleResult, setPuzzleResult] = useState<PuzzleResult>(defaultResult);
   const [hideResult, setHideResult] = useState<boolean>(true);
+  const gamePlayed = gameState.solvedCtgs.length === 4;
 
   useEffect(() => {
     resetGame(deckData, categories, setGameState, setGameStatus);
@@ -54,7 +55,7 @@ export default function Board(props: { gameIdx: number,
         checkCardMode={checkCardMode}
         disableDeselect={gameState.selection.length === 0}
         disableSubmit={props.gameStatus === 'cardsNotSolved' || gameState.selection.length !== 4 || disableSubmit}
-        gamePlayed={gameState.solvedCtgs.length === 4}
+        gamePlayed={gamePlayed}
         submitCards={() => {
           checkCards(gameState, setGameState, setGameStatus,
             setCheckCardMode, setDisableSubmit, setHideResult, puzzleResult,
@@ -69,7 +70,8 @@ export default function Board(props: { gameIdx: number,
         playAgain={() => {
           setPuzzleResult({wordle: [], crossword: [], connections: []});
           playAgain();
-        }}/>
+        }}
+        setHideResult={setHideResult}/>
       {gameState.currentPuzzle && <Puzzle card={gameState.currentPuzzle}
         resetPuzzle={() => resetPuzzle(gameState, setGameState)}
         puzzleResult={puzzleResult}

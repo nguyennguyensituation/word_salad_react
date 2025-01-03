@@ -10,6 +10,7 @@ export default function Controller(props: { checkCardMode:boolean,
   handleDeselectAll: ClickHandler,
   submitCards: ClickHandler,
   playAgain: ClickHandler,
+  setHideResult: (hide: boolean) => void,
 }) {
   return (
     <fieldset className={styles.controller}>
@@ -19,6 +20,7 @@ export default function Controller(props: { checkCardMode:boolean,
         <Button id="submit-btn" value="Submit" onClick={props.submitCards} disabled={props.checkCardMode || props.disableSubmit} isPrimary={true}/>
       </>}
       {props.gamePlayed && <Button id="play-again-btn" value="Play Again" onClick={props.playAgain} isPrimary={true}/>}
+      {props.gamePlayed && <Button id="results-btn" value="Show Results" onClick={() => props.setHideResult(false) } isPrimary={false}/>}
     </fieldset>
   );
 }

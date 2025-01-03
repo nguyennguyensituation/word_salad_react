@@ -10,7 +10,6 @@ export function puzzleDisplayText(puzzleType: string, result: boolean[]) {
 }
 
 export function calculateScore(puzzleResult: PuzzleResult) {
-  console.log(puzzleResult);
   const MAX_SCORE = 120;
   let score = 0;
 
