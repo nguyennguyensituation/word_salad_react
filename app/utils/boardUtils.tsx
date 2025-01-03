@@ -168,12 +168,12 @@ function showWin(gameCopy: GameState,
     setCheckCardMode(false);
 
     if (isLastCategory) {
-      setGameStatus('gameWon')
+      setGameStatus('gameWon');
       setTimeout(() => {
         setHideResult(false);
-      }, 1000)
-    };
-    
+      }, 1000);
+    }
+
   }, 2500);
 
 }
@@ -200,7 +200,7 @@ function showLoss(gameCopy: GameState,
       setGameStatus('gameLost');
       setTimeout(() => {
         setHideResult(false);
-      }, 1000)
+      }, 1000);
     }
 
     setGameState(gameCopy);
@@ -232,14 +232,15 @@ function checkCards(gameState: GameState,
   setPuzzleResult: (result: PuzzleResult) => void): void {
   const result = checkSelection(gameState.selection, gameState.prevGuesses);
   const gameCopy = {...gameState};
-  const puzzleResultCopy = {...puzzleResult}
+  const puzzleResultCopy = {...puzzleResult};
 
   setCheckCardMode(true);
 
   if (result === 'duplicate') {
     showDuplicate(gameCopy, setGameState, setCheckCardMode);
   } else if (result === 'solved') {
-    showWin(gameCopy, setGameState, setGameStatus, setCheckCardMode, setHideResult);
+    showWin(gameCopy, setGameState, setGameStatus,
+      setCheckCardMode, setHideResult);
     puzzleResultCopy['connections'].push(true);
     setPuzzleResult(puzzleResultCopy);
   } else {
@@ -249,7 +250,8 @@ function checkCards(gameState: GameState,
       gameCopy.message = BOARD_MESSAGES['oneAway'];
     }
 
-    showLoss(gameCopy, setGameState, setGameStatus, setCheckCardMode, setHideResult);
+    showLoss(gameCopy, setGameState, setGameStatus,
+      setCheckCardMode, setHideResult);
     puzzleResultCopy['connections'].push(false);
     setPuzzleResult(puzzleResultCopy);
     setDisableSubmit(true);
@@ -267,7 +269,6 @@ function handleCardSelection(card: CardState,
 
   const gameCopy = {...gameState};
   const allPuzzlesSolved = gameState.puzzleCount === 7;
-
   gameCopy.message = '';
 
   if (cardAction === 'playPuzzle') {

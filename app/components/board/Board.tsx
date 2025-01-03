@@ -15,8 +15,8 @@ export default function Board(props: { gameIdx: number,
   gameStatus: GameStatus,
   setGameStatus: (status: GameStatus) => void,
   playAgain: () => void}) {
-  const { defaultGame, defaultResult, resetGame, handleCardSelection, checkCards,
-    handleShuffle, handleDeselectAll, resetPuzzle } = boardUtils;
+  const { defaultGame, defaultResult, resetGame, handleCardSelection,
+    checkCards, handleShuffle, handleDeselectAll, resetPuzzle } = boardUtils;
   const { gameIdx, deckData, categories, setGameStatus, playAgain} = props;
   const [gameState, setGameState] =
     useState<GameState>(defaultGame(deckData, categories));
@@ -31,7 +31,8 @@ export default function Board(props: { gameIdx: number,
 
   return (
     <>
-      <Result puzzleResult={puzzleResult} disabled={hideResult} setHideResult={setHideResult}/>
+      <Result puzzleResult={puzzleResult} disabled={hideResult}
+        setHideResult={setHideResult}/>
       <Categories categories={gameState.solvedCtgs}/>
       <article className={styles.board}>
         {gameState.deck.map(card => {
@@ -56,7 +57,8 @@ export default function Board(props: { gameIdx: number,
         gamePlayed={gameState.solvedCtgs.length === 4}
         submitCards={() => {
           checkCards(gameState, setGameState, setGameStatus,
-            setCheckCardMode, setDisableSubmit, setHideResult, puzzleResult, setPuzzleResult);
+            setCheckCardMode, setDisableSubmit, setHideResult, puzzleResult,
+            setPuzzleResult);
         }}
         handleShuffle={() => {
           handleShuffle(gameState, setGameState);
@@ -66,10 +68,10 @@ export default function Board(props: { gameIdx: number,
         }}
         playAgain={() => {
           setPuzzleResult({wordle: [], crossword: [], connections: []});
-          playAgain()
-          }}/>
+          playAgain();
+        }}/>
       {gameState.currentPuzzle && <Puzzle card={gameState.currentPuzzle}
-        closePuzzle={() => resetPuzzle(gameState, setGameState)}
+        resetPuzzle={() => resetPuzzle(gameState, setGameState)}
         puzzleResult={puzzleResult}
         setPuzzleResult={setPuzzleResult}
       />}

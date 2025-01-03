@@ -50,8 +50,9 @@ function setPuzzleComplete(card: CardState, isWinner: boolean) {
   card.puzzleSolved = isWinner;
 }
 
-export function confirmClose(card: CardState,
-  closePuzzle: () => void,
+export function confirmClose(buttonRef: React.RefObject<HTMLElement>,
+  card: CardState,
+  resetPuzzle: () => void,
   puzzleResult: PuzzleResult,
   setPuzzleResult: (result: PuzzleResult) => void) {
   const { puzzlePlayed, puzzleType } = card;
@@ -63,9 +64,11 @@ export function confirmClose(card: CardState,
     }
     setPuzzleResult(resultCopy);
     card.puzzlePlayed = true;
-    closePuzzle();
+    resetPuzzle();
   } else if (puzzlePlayed) {
-    closePuzzle();
+    resetPuzzle();
+  } else if (buttonRef.current) {
+    buttonRef.current.blur();
   }
 }
 

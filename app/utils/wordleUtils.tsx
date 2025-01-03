@@ -126,9 +126,8 @@ function checkGuess(activeRow: string[],
   setWordleState: (state: WordleState) => void,
   puzzleResult: PuzzleResult,
   setPuzzleResult: (result: PuzzleResult) => void): void {
-  const word = wordleState.card.word;
-  const { isValid, isUnique, isMatch } = getWordValidity(word, activeRow,
-    wordleState);
+  const { isValid, isUnique, isMatch } =
+    getWordValidity(wordleState.card.word, activeRow, wordleState);
   const isLastRow = wordleState.activeIdx === 5;
   const row = document.getElementById(`row-${wordleState.activeIdx}`);
   const resultCopy = {...puzzleResult};
@@ -175,7 +174,6 @@ export function wordleKeyDown(event: KeyboardEvent,
   puzzleResult: PuzzleResult,
   setPuzzleResult: (result: PuzzleResult) => void): void {
   const { puzzlePlayed, word } = wordleState.card;
-
   if (puzzlePlayed) return;
 
   const input = event.key.toLowerCase();
