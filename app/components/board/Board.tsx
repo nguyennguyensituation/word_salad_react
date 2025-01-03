@@ -29,7 +29,6 @@ export default function Board(props: { gameIdx: number,
     resetGame(deckData, categories, setGameState, setGameStatus);
   }, [gameIdx]);
 
-  console.log(puzzleResult)
   return (
     <>
       <Result puzzleResult={puzzleResult} disabled={hideResult} setHideResult={setHideResult}/>
