@@ -9,17 +9,14 @@ export function puzzleDisplayText(puzzleType: string, result: boolean[]) {
   return `${numSolved} out of 4 ${puzzleName} solved`;
 }
 
-export function calculateScore(puzzleResult: PuzzleResult) {
+export function calculateScore(puzzleResults: PuzzleResult) {
   const MAX_SCORE = 120;
-  let score = 0;
+  const puzzleScore = (results: boolean[]) => results.filter(Boolean).length;
+  let totalScore = 0;
 
-  for (const puzzle in puzzleResult) {
-    puzzleResult[puzzle as keyof PuzzleResult].forEach(result => {
-      if (result) {
-        score += 10;
-      }
-    });
+  for (const puzz in puzzleResults) {
+    totalScore += puzzleScore(puzzleResults[puzz as keyof PuzzleResult]);
   }
 
-  return `${score} / ${MAX_SCORE} points`;
+  return `${totalScore * 10} / ${MAX_SCORE} points`;
 }

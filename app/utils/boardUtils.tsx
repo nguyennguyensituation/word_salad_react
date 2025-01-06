@@ -33,6 +33,12 @@ function defaultGame(deckData: DeckData,
   };
 }
 
+const defaultResult = {
+  wordle: [],
+  crossword: [],
+  connections: [],
+};
+
 export function selectCard(card: CardState,
   numSelectedCards: number,
   handleSelection: (card: CardState, cardAction: string) => void): void {
@@ -222,40 +228,54 @@ function showDuplicate(gameCopy: GameState,
   }, 700);
 }
 
+function setConnectionsResult(isMatch: boolean,
+  puzzleResult: PuzzleResult,
+  setPuzzleResult: (result: PuzzleResult) => void
+) {
+  const puzzleResultCopy = {...puzzleResult};
+  puzzleResultCopy['connections'].push(isMatch);
+  setPuzzleResult(puzzleResultCopy);
+}
+
 function checkCards(gameState: GameState,
   setGameState: (state: GameState) => void,
   setGameStatus: (status: GameStatus) => void,
-  setCheckCardMode: (status: boolean) => void,
+  setCheckCard: (status: boolean) => void,
   setDisableSubmit: (isDisabled: boolean) => void,
   setHideResult: (hide: boolean) => void,
   puzzleResult: PuzzleResult,
   setPuzzleResult: (result: PuzzleResult) => void): void {
   const result = checkSelection(gameState.selection, gameState.prevGuesses);
   const gameCopy = {...gameState};
-  const puzzleResultCopy = {...puzzleResult};
 
-  setCheckCardMode(true);
+  setCheckCard(true);
 
   if (result === 'duplicate') {
-    showDuplicate(gameCopy, setGameState, setCheckCardMode);
+    showDuplicate(gameCopy, setGameState, setCheckCard);
   } else if (result === 'solved') {
-    showWin(gameCopy, setGameState, setGameStatus,
-      setCheckCardMode, setHideResult);
-    puzzleResultCopy['connections'].push(true);
-    setPuzzleResult(puzzleResultCopy);
+    showWin(gameCopy, setGameState, setGameStatus, setCheckCard, setHideResult);
+    setConnectionsResult(true, puzzleResult, setPuzzleResult);
   } else {
-    const isLastGuess = gameState.mistakesCounter === 1;
+    const isOneAway = result === 'oneAway' && !(gameState.mistakesCounter !== 1);
+    if (isOneAway) gameCopy.message = BOARD_MESSAGES['oneAway'];
 
-    if (result === 'oneAway' && !isLastGuess) {
-      gameCopy.message = BOARD_MESSAGES['oneAway'];
-    }
-
-    showLoss(gameCopy, setGameState, setGameStatus,
-      setCheckCardMode, setHideResult);
-    puzzleResultCopy['connections'].push(false);
-    setPuzzleResult(puzzleResultCopy);
-    setDisableSubmit(true);
+    showLoss(gameCopy, setGameState, setGameStatus, setCheckCard, setHideResult);
+    setConnectionsResult(false, puzzleResult, setPuzzleResult);
   }
+  setDisableSubmit(true);
+}
+
+function playPuzzle(card: CardState,
+  gameCopy: GameState,
+  setGameState: (state: GameState) => void,
+  setGameStatus: (status: GameStatus) => void) {
+  const allPuzzlesSolved = gameCopy.puzzleCount === 7;
+
+  gameCopy.currentPuzzle = card;
+  gameCopy.puzzleCount += 1;
+  setGameState(gameCopy);
+
+  if (allPuzzlesSolved) setGameStatus('cardsSolved');
 }
 
 function handleCardSelection(card: CardState,
@@ -268,15 +288,10 @@ function handleCardSelection(card: CardState,
   if (checkCardMode) return;
 
   const gameCopy = {...gameState};
-  const allPuzzlesSolved = gameState.puzzleCount === 7;
   gameCopy.message = '';
 
   if (cardAction === 'playPuzzle') {
-    gameCopy.currentPuzzle = card;
-    gameCopy.puzzleCount += 1;
-    setGameState(gameCopy);
-
-    if (allPuzzlesSolved) setGameStatus('cardsSolved');
+    playPuzzle(card, gameCopy, setGameState, setGameStatus);
   } else {
     toggleCardSelect(card.word, gameState.deck);
     updateSelection(card, cardAction, gameCopy, setGameState, setDisableSubmit);
@@ -299,14 +314,9 @@ function resetGame(deckData: DeckData,
   setGameStatus('cardsNotSolved');
 }
 
-const defaultResult = {
-  wordle: [],
-  crossword: [],
-  connections: [],
-};
-
 const boardUtils = {
   defaultGame,
+  defaultResult,
   createDeck,
   checkCards,
   updateSelection,
@@ -316,7 +326,6 @@ const boardUtils = {
   handleCardSelection,
   resetPuzzle,
   resetGame,
-  defaultResult,
 };
 
 export default boardUtils;
