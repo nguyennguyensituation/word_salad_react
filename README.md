@@ -1,10 +1,10 @@
 ![Logo](public/images/logo.png)
 
-# Word Salad
+# What is Word Salad?
 
-**Word Salad** is a game for fans of _The New York Times_ Crossword, Connections, who have been clamoring to play all three games...simultaneously.
+**Word Salad** is a game for fans of **_The New York Times_ Crossword, Connections, and Wordle**, who have been clamoring to play all three games... simultaneously.
 
-Built with reusable React components, it features a responsive interface that easily transitions between puzzle modes within the same session, and real-time feedback and scoring. The application is fully responsive and designed to be intuitive and easy to play.
+Built with reusable React components, **Word Salad** features a responsive interface that easily transitions between different puzzles within the same session, providing real-time feedback and scoring. The application is fully responsive and designed to be intuitive and easy to play.
 
 Early, completely unsubstantiated data shows that **Word Salad** is 300% more fun than the originals.
 
@@ -21,7 +21,6 @@ pnpm dev
 # or
 bun dev
 ```
-
 Open [http://localhost:3000](http://localhost:3000) with your browser to play.
 
 ## Built with
@@ -31,47 +30,58 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to play.
 * TypeScript
 * HTML
 * CSS
-* React Hooks (useState, useEffect)
 
 ## How to Play
-
-To win Word Salad, first solve all the puzzles on the cards to reveal the words. Then, find the connections between the words and group them into 4 sets of 4 words.
 
 **1. The board contains 16 cards. Some of the cards already have words. Some of the cards contain a puzzle that you'll need to solve to reveal the word.**
 
 ![Game board](public/images/starting_board.png)
 
-**2. Click on a blank card to open a puzzle. The puzzle will be either a Wordle or a crossword. Solve the puzzle to reveal the word.**
+**2. Click on the card to open the puzzle. The puzzle will be either a Wordle or a crossword. Solve the puzzle to reveal the word.**
 
 ![Puzzles](public/images/puzzles.png)
 
-**3. After all the words have been revealed, you can play Connections. Select a set of four cards that have something in common.**
+**3. Once all the words have been revealed, you'll be able to play Connections.**
 
 ![Game board all puzzles solved](public/images/board_solved.png)
 
-**4. If you select the correct group of cards, the category will be revealed.**
+**4. Select a set of 4 cards that have something in common. If you select the correct group of cards, the category will be revealed.**
 
 ![Game board with cards selected](public/images/select_cards.png)
 
 ![Single category solved](public/images/single_category_solved.png)
 
 
-**5. Continue selecting groups of four cards until you've found all the categories.**
+**5. Continue selecting groups of 4 cards until you've found all the categories.**
 
 ![All categories solved](public/images/all_categories_solved.png)
+
+**6. At the end of the game, you'll see a summary of your results for each puzzle type and your final score.**
+
+![All categories solved](public/images/results.png)
 
 ## Features
 
 ### Overall
-* Seamlessly transition between different puzzle modes: Connections, Wordle, and the Crossword
+* Seamlessly transition between different puzzle modes:
+  * Connections
+  * Wordle
+  * Crossword
+* Real-time feedback to user input
+  * After you successfully solve a puzzle, the word will appear on the card in black text.
+  * If you are unable to solve the puzzle or you quit the puzzle without solving it, the word will appear on the card in red text.
+* Results summary at the end of the game:
+  * Shows the number of Wordles and Crosswords solved and the number of Connections categories found
+  * Calculates overall score
 
 ### Wordle
 * Real-time feedback to user input
-  * When you submit a word, tile colors change to show how close you are to guessing the correct word. The game takes into account letter position and checks for duplicate letters.
-  * You can only input valid letter characters
-  * Animations
+  * When you submit a word, tile colors change to show how close the guess is to the correct word. The game logic takes into account letter position duplicate letters.
+  * You can only input valid letter characters.
+  * You can't submit duplicate guesses.
+  * Different animations play based on user interactions.
 * State management - The game keeps track of previous guesses.
-* Binary search to confirm that the submitted word is in the 14,800+ word Wordle dictionary.
+* Binary search to efficiently confirm that the submitted word is in the 14,800+ word Wordle dictionary.
 
 ![Solved Wordle puzzle](public/images/wordle_solved.png)
 
@@ -79,9 +89,10 @@ To win Word Salad, first solve all the puzzles on the cards to reveal the words.
 
 ### Crossword
 * Real-time feedback to user input
-  * You can only input valid letter characters
-  * Animations
-  * Submit button is enabled/disabled according to user actions.
+  * You can only input valid letter characters.
+  * You can't submit duplicate guesses.
+  * Different animations play based on user interactions.
+  * The submit button is enabled/disabled according to user actions.
 * State management - The game keeps track of previous words guessed and the number of guesses made.
 
 ![Solved Wordle puzzle](public/images/xword_solved.png)
@@ -91,12 +102,11 @@ To win Word Salad, first solve all the puzzles on the cards to reveal the words.
 ### Connections
 **Solving puzzles**
 * Real-time feedback to user input
-  * After you successfully solve a puzzle, the word will appear on the card in black text.
-  * If you are unable to solve the puzzle or you quit the puzzle early, the word will appear on the card in red text.
   * Deselect and Submit buttons are enabled/disabled according to user actions.
-  * You cannot select more than four cards at a time.
-  * The game will tell you when you are one card away from completing a category.
-  * Animations
+  * You can't select more than 4 cards at a time.
+  * You can't submit duplicate guesses.
+  * The game will tell you when you are 1 card away from solving a category.
+  * Different animations play based on user interactions.
 * State management - The game keeps track of the sets of cards you have selected previously and the number of guesses made.
 * Shuffle cards or deselect all previously selected cards.
 
@@ -107,12 +117,11 @@ To win Word Salad, first solve all the puzzles on the cards to reveal the words.
 ---
 ## Potential Roadmap
 
-- [ ] Game summary that shows number of Wordles, Crosswords, and Connections solved
 - [ ] Wordle features
   - [ ] Hard mode - All successive guesses must contain previously guessed letters that were matches
 - [ ] Crossword features
   - [ ] After each guess, show the letters that are correct
-  - [ ] Give the option for Crossword hints
+  - [ ] Give an option for Crossword hints
 - [ ] After the connections game has been played, the board flips over and turns into different puzzles:
   - [ ] Sudoku
   - [ ] Spelling Bee
